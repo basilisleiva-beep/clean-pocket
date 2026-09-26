@@ -1,50 +1,58 @@
-# Round 2 report
+# Αναφορά 2ου γύρου
 
-## Files changed
-`js/i18n.js` (60+ keys), `js/app.js` (language-first onboarding + summary, tour prompt,
-coach-mark tour, sample-data demo, dismissible first-shift explainer, empty-state actions,
-share-the-app, aria-labels, CSV header fix), `js/calc.js` (+`realEntries`, untouched otherwise),
-`js/store.js` (`exportJSON` excludes samples), `index.html` (language toggle, tour/prompt/
-sample-banner/explainer/toast markup, Google Fonts links), `css/app.css` (Fira Sans/Condensed,
-4px spacing scale, hero glow, tile captions, tour overlay, staggered reveal, 44px touch targets,
-nav active state), `sw.js` (cache bump `v3.1.0`, runtime font caching), `tests/i18n.test.js`
-(new), `tests/calc.test.js` (+1 test), `tools/contrast.py` (new), `tools/smoke.py` (rewritten,
-runs twice), `README.md`, `package.json` (3.1.0).
+*Ελληνικά · [English](ROUND2_REPORT.en.md)*
+
+> Αναφορά του agent από τον 2ο γύρο, όπως παραδόθηκε. Ανεπαλήθευτη μέχρι να βαθμολογηθεί στο `STATUS.md`
+> (έγινε στις 2026-09-26 23:45).
+
+## Αρχεία που άλλαξαν
+`js/i18n.js` (60+ κλειδιά), `js/app.js` (αρχικές ερωτήσεις με πρώτη τη γλώσσα + σύνοψη, πρόταση
+ξενάγησης, ξενάγηση με επισημάνσεις, επίδειξη με δοκιμαστικά δεδομένα, εξήγηση πρώτης βάρδιας που
+κλείνει, ενέργειες σε άδειες καταστάσεις, κοινοποίηση της εφαρμογής, aria-labels, διόρθωση επικεφαλίδων
+CSV), `js/calc.js` (+`realEntries`, αλλιώς ανέγγιχτο), `js/store.js` (το `exportJSON` εξαιρεί τα
+δοκιμαστικά), `index.html` (διακόπτης γλώσσας, markup για ξενάγηση/πρόταση/μπάρα δείγματος/εξήγηση/toast,
+links για Google Fonts), `css/app.css` (Fira Sans/Condensed, κλίμακα αποστάσεων 4px, λάμψη στο κεντρικό
+ποσό, λεζάντες καρτών, overlay ξενάγησης, κλιμακωτή εμφάνιση, στόχοι αφής 44px, ενεργή κατάσταση
+πλοήγησης), `sw.js` (ανέβασμα cache σε `v3.1.0`, cache γραμματοσειρών κατά τη χρήση), `tests/i18n.test.js`
+(νέο), `tests/calc.test.js` (+1 test), `tools/contrast.py` (νέο), `tools/smoke.py` (ξαναγραμμένο, τρέχει
+δύο φορές), `README.md`, `package.json` (3.1.0).
 
 ## Tests
-`npm test`: **30/30 green** (26 existing + 1 calc sample-data test + 3 i18n tests: dictionary
-completeness, no hard-coded Greek in index.html, no hard-coded Greek in js/app.js). `js/tax.js`
-and `js/calc.js` behavior untouched, only additive.
+`npm test`: **30/30 πράσινα** (26 υπάρχοντα + 1 test στο calc για τα δοκιμαστικά δεδομένα + 3 tests i18n:
+πληρότητα λεξικού, κανένα ελληνικό γραμμένο απευθείας στο index.html, κανένα ελληνικό γραμμένο απευθείας
+στο js/app.js). Η συμπεριφορά των `js/tax.js` και `js/calc.js` δεν άλλαξε, μόνο προσθήκες.
 
-## Smoke (both languages, 25 checks each)
-Greek: `SMOKE: PASS` - language step, skip-to-summary (6 rows), tour 1/6 -> 6/6 -> Τέλος closes,
-sample add/remove, first-shift explainer, CSV import (3 rows), custom debt, reload persistence,
-service worker, share button, zero console errors.
-English: `SMOKE: PASS` - identical flow, English strings throughout. Screenshots in
-`_shots/round2/` (`onboarding_lang`, `onboarding_summary`, `home_empty`, `home`, `tour_step2`,
-`obligations`, `more`) x2 languages.
+## Smoke (και οι δύο γλώσσες, 25 έλεγχοι η καθεμία)
+Ελληνικά: `SMOKE: PASS` - βήμα γλώσσας, παράλειψη ως τη σύνοψη (6 γραμμές), ξενάγηση 1/6 -> 6/6 -> το
+«Τέλος» κλείνει, προσθήκη/αφαίρεση δείγματος, εξήγηση πρώτης βάρδιας, εισαγωγή CSV (3 γραμμές), δικό σου
+χρέος, διατήρηση μετά από ανανέωση, service worker, κουμπί κοινοποίησης, μηδέν σφάλματα στο console.
+Αγγλικά: `SMOKE: PASS` - ίδια ροή, αγγλικά κείμενα παντού. Screenshots στο `_shots/round2/`
+(`onboarding_lang`, `onboarding_summary`, `home_empty`, `home`, `tour_step2`, `obligations`, `more`) x2
+γλώσσες.
 
-## Contrast (`tools/contrast.py`)
-| theme | muted/surface | muted/bg |
+## Αντίθεση (`tools/contrast.py`)
+| θέμα | muted/surface | muted/bg |
 |---|---|---|
 | forest | 6.13 | 7.41 |
 | graphite | 5.93 | 6.69 |
 | black | 5.39 | 6.61 |
 | light | 5.82 | 5.10 |
-All 16 rows (muted + ink, x2 backgrounds, x4 themes) pass 4.5:1; no CSS changes were needed.
 
-## Em/long dash grep
-Zero hits across index.html, css/app.css, js/*.js, sw.js, manifest.webmanifest, README.md,
-tests/*.js, tools/*.py.
+Και οι 16 γραμμές (muted + ink, x2 φόντα, x4 θέματα) περνούν το 4.5:1· δεν χρειάστηκαν αλλαγές στο CSS.
 
-## Gaps / found-and-fixed
-- Manual browser QA (outside the smoke) caught a real bug: the Home stagger animation was tied
-  to fixed IDs, which restarts on every `display:none -> block`, so leaving Home via the bottom
-  nav and back flashed cards through their near-invisible "from" frame (worst on light theme).
-  Fixed with a one-shot `body.boot-reveal` class app.js drops ~900ms after boot; re-verified
-  visually and re-ran the full suite.
-- Tour spotlight uses a box-shadow cut-out, not an SVG mask; not checked on very small viewports.
-- Sample-data export exclusion has a calc test; the export payload itself (store.js) is reasoned
-  about, not separately tested.
-- Fixed two more pre-existing round-1 bugs in passing: a stray Cyrillic char in the "(ФΠΑ)"
-  suffix, and onboarding Skip/Back buttons that never had visible labels.
+## Αναζήτηση για μακριές παύλες (em/long dash)
+Μηδέν ευρήματα σε index.html, css/app.css, js/*.js, sw.js, manifest.webmanifest, README.md, tests/*.js,
+tools/*.py.
+
+## Κενά / βρέθηκαν και διορθώθηκαν
+- Ο χειροκίνητος έλεγχος στον browser (εκτός του smoke) έπιασε πραγματικό bug: η κλιμακωτή εμφάνιση της
+  Αρχικής ήταν δεμένη σε σταθερά IDs, που ξαναξεκινά σε κάθε `display:none -> block`, οπότε αν έφευγες
+  από την Αρχική από την κάτω πλοήγηση και γύριζες, οι κάρτες τρεμόπαιζαν περνώντας από το σχεδόν αόρατο
+  αρχικό καρέ τους (χειρότερα στο light θέμα). Διορθώθηκε με μια κλάση μίας χρήσης `body.boot-reveal` που
+  το app.js αφαιρεί ~900ms μετά την εκκίνηση· ξαναελέγχθηκε οπτικά και ξανάτρεξε όλη η σειρά tests.
+- Η επισήμανση της ξενάγησης χρησιμοποιεί «τρύπα» με box-shadow, όχι μάσκα SVG· δεν ελέγχθηκε σε πολύ
+  μικρές οθόνες.
+- Η εξαίρεση των δοκιμαστικών από την εξαγωγή έχει test στο calc· το ίδιο το περιεχόμενο της εξαγωγής
+  (store.js) τεκμηριώνεται με συλλογισμό, δεν έχει ξεχωριστό test.
+- Διορθώθηκαν στην πορεία δύο ακόμα bugs από τον 1ο γύρο: ένας χαμένος κυριλλικός χαρακτήρας στην κατάληξη
+  «(ФΠΑ)», και κουμπιά Παράλειψη/Πίσω στις αρχικές ερωτήσεις που δεν είχαν ποτέ ορατές ετικέτες.

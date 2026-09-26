@@ -69,7 +69,7 @@ package.json, README.md     app metadata and the app's README
 docs/
   HANDOFF.md                Greek version of this file (HANDOFF.en.md is this English one)
   FOR_YOUR_CLAUDE.md        technical brief and rules for whoever continues the build (Greek; .en.md in English)
-  progress/                 STATUS.md (verified truth; Greek, STATUS.en.md in English), CHANGELOG.md (Greek; CHANGELOG.en.md in English), agent reports
+  progress/                 STATUS.md (verified truth; Greek, STATUS.en.md in English), CHANGELOG.md, agent reports (all Greek, each with an .en.md English copy)
   screenshots/              phone-size screenshots, Greek and English
   original-v2.html          the single-file app this was rebuilt from
 ```
