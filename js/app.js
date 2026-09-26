@@ -40,7 +40,7 @@ var LABELS = {
   "h-pie": "more.pie", "h-settings": "more.settings", lblTheme: "more.theme", lblLang: "more.language",
   lblWeather: "more.weather", optWxOff: "more.weatherOff", optWxCity: "more.weatherCity", optWxGeo: "more.weatherLocation",
   lblWeatherCity: "more.weatherCity", reonboardBtn: "more.reonboard",
-  "h-about": "more.about", aboutDisclaimer: "more.disclaimer",
+  "h-about": "more.about", aboutDisclaimer: "more.disclaimer", aboutPrivacy: "more.privacy",
   lblDate: "sheet.date", lblIncome: "sheet.income", lblTips: "sheet.tips", lblHours: "sheet.hours", lblExp: "sheet.exp",
   lblDayOff: "sheet.dayOff", sheetCancel: "sheet.cancel", sheetDelete: "sheet.delete",
   csvConfirm: "csv.confirm", csvCancel: "csv.cancel",

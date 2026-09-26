@@ -5,6 +5,14 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.3 · 2026-09-27 (Google Play preparation)
+- New `privacy.html` (privacy policy, Greek and English) linked from More → "About"; the page is precached by
+  the service worker.
+- Android package (Trusted Web Activity, `io.github.basilisleivabeep.cleanpocket`, target SDK 36) built with
+  Bubblewrap; asset links served from the `basilisleiva-beep.github.io` repo; store material in `docs/play-store/`.
+- Verified: `npm test` 30/30; the APK is signed and `apksigner verify` shows the upload key; Google's Digital
+  Asset Links API returns the package and SHA-256.
+
 ## 3.1.2 · 2026-09-26 23:45
 - Tour spotlight clamped to the viewport and re-positioned on scroll/resize (tall targets, mid-scroll measurement).
 - Verified: `npm test` 30/30, smoke PASS in el and en, data preserved through the 3.1.1 → 3.1.2 update banner.

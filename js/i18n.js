@@ -148,6 +148,7 @@ export const STRINGS = {
   "more.weatherCity": { el: "Πόλη", en: "City" },
   "more.weatherLocation": { el: "Χρήση της τοποθεσίας μου", en: "Use my location" },
   "more.about": { el: "Σχετικά", en: "About" },
+  "more.privacy": { el: "Πολιτική απορρήτου", en: "Privacy policy" },
   "more.disclaimer": { el: "Εκτίμηση για ενημέρωση, όχι φορολογική συμβουλή. Επαλήθευσέ τα στοιχεία στο ΑΑΔΕ/ΕΦΚΑ ή με τον λογιστή σου πριν πάρεις αποφάσεις.", en: "An estimate for information, not tax advice. Verify with AADE/EFKA or your accountant before deciding anything." },
   "more.editOnboarding": { el: "Επεξεργασία αρχικών ερωτήσεων", en: "Edit onboarding answers" },
   "more.reonboard": { el: "Ξανά αρχικές ερωτήσεις", en: "Restart onboarding" },

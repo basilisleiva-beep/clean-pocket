@@ -5,6 +5,14 @@
 Οι εκδόσεις ακολουθούν το `CACHE_VERSION` στο `sw.js`. Κάθε καταχώριση λέει πώς επαληθεύτηκε.
 Κράτα αυτό το αρχείο και το `CHANGELOG.en.md` συγχρονισμένα.
 
+## 3.1.3 · 2026-09-27 (προετοιμασία για Google Play)
+- Νέα σελίδα `privacy.html` (πολιτική απορρήτου, ελληνικά και αγγλικά) και σύνδεσμος προς αυτήν στο
+  Περισσότερα → «Σχετικά»· η σελίδα μπαίνει στο cache του service worker.
+- Πακέτο Android (Trusted Web Activity, `io.github.basilisleivabeep.cleanpocket`, target SDK 36) χτισμένο με
+  Bubblewrap· asset links στο repo `basilisleiva-beep.github.io`· υλικό store στο `docs/play-store/`.
+- Επαλήθευση: `npm test` 30/30· το APK υπογράφεται και το `apksigner verify` δείχνει το upload key· το API
+  Digital Asset Links της Google επιστρέφει το package και το SHA-256.
+
 ## 3.1.2 · 2026-09-26 23:45
 - Η επισήμανση της ξενάγησης περιορίζεται στην οθόνη και ξανατοποθετείται σε scroll/αλλαγή μεγέθους (ψηλά
   στοιχεία, μέτρηση στη μέση του scroll).
