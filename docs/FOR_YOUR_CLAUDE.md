@@ -1,84 +1,109 @@
-# Clean Pocket · Brief for the Claude (or developer) who continues this
+# Clean Pocket · Οδηγίες για τον Claude (ή τον developer) που συνεχίζει
 
-You are picking up a working, verified v3.1.2. Read `docs/progress/STATUS.md` for the current truth and
-`docs/progress/CHANGELOG.md` for what changed per version. Then read `README.md` at the repository root.
-This file holds the rules and context that are not obvious from the code.
+*Ελληνικά · [English](FOR_YOUR_CLAUDE.en.md)*
 
-**Layout:** the handoff package had the app in `app/`. In this repository the app is at the **repository
-root** and the handoff material is in `docs/`. All app paths below are relative to the root. The live site is
-GitHub Pages from `main`, root: https://basilisleiva-beep.github.io/clean-pocket/
+Παραλαμβάνεις μια λειτουργική, επαληθευμένη v3.1.2. Διάβασε το `docs/progress/STATUS.md` για την τρέχουσα
+κατάσταση και το `docs/progress/CHANGELOG.md` για το τι άλλαξε σε κάθε έκδοση. Μετά διάβασε το `README.md`
+στη ρίζα του repo. Αυτό το αρχείο έχει τους κανόνες και το πλαίσιο που δεν φαίνονται από τον κώδικα.
 
-## What it is, in one paragraph
-Mobile-first offline PWA for Greek freelance food-delivery couriers (efood/Wolt style, paid per half-month,
-freelance tax registration, usually VAT-registered). Vanilla ES modules, no build step, no dependencies.
-Per shift: platform income, tips, hours, expenses. Per half-month/month/year: net after expenses, fixed costs,
-EFKA (prorated in the current period), income-tax reserve (effective rate on a projected annual profit) and
-VAT shown separately (never deducted from net). Obligations: EFKA monthly (due end of next month), VAT per
-quarter (due end of the month after the quarter), income tax in 8 installments from July of the next year,
-custom debts. Goals: annual net (with hours still needed) and savings goals.
+**Δομή:** στο πακέτο παράδοσης η εφαρμογή ήταν στο `app/`. Σε αυτό το repo η εφαρμογή είναι στη **ρίζα του
+repo** και το υλικό παράδοσης στο `docs/`. Όλες οι διαδρομές της εφαρμογής παρακάτω είναι σε σχέση με τη
+ρίζα. Η online έκδοση είναι στο GitHub Pages από το `main`, ρίζα: https://basilisleiva-beep.github.io/clean-pocket/
 
-## Architecture (repository root)
-- `js/tax.js`: the ONLY place with tax law. Pure. Tax year 2026: brackets 9/20/26/34/39/44 at 10k/20k/30k/40k/60k;
-  age ≤ 25 pays 0% on the first 20k, 26–30 pays 9%; child reductions on brackets 1–3; prepayment 55%, or 27.5%
-  for the first 3 years; presumed minimum income applies from year 4 when higher than real profit; EFKA
-  160.46 (special category, first 5 years) or 250.77 (1st category). Sources: Ν. 5246/2025 art. 15 ΚΦΕ,
-  ΕΦΚΑ εγκ. 6/2026. Re-verify every January.
-- `js/calc.js`: pure `(db, todayISO) → numbers`. Period totals, projection (average of completed half-months × 24,
-  or profit-per-shift × daysPerWeek × 48 when fewer than 2 completed), EFKA proration, obligations with stable
-  keys (`efka-2026-09`, `vat-2026-Q3`, `tax-2026-0`, `debt-<id>-<date>`), set-aside, goals, `realEntries()`
-  (excludes sample data).
-- `js/store.js`: storage adapter (LocalStorage now). Schema v3: every record has `id`, `updatedAt`, deletes keep
-  `deleted: true` tombstones, so a RemoteAdapter can merge later. Imports v3 and the original app's v2 backups.
-- `js/csv.js`: pure CSV parser (delimiter, decimal comma, 4 date formats, EL/EN headers).
-- `js/i18n.js`: every user-visible string, `{ el, en }`. `tests/i18n.test.js` fails if a key lacks a language or
-  if Greek is hard-coded in `index.html`/`js/app.js` outside `I.t(...)`.
-- `js/app.js`: UI only. Bottom nav (Home, Calendar, +, Debts & Goals, More), onboarding (language first, 5
-  skippable questions, summary), 6-step coach-mark tour, sample data, banners (install, update, backup, sample).
-- `sw.js`: cache-first app shell, runtime caching of Google Fonts, network-only for open-meteo.
+## Τι είναι, σε μία παράγραφο
+Offline PWA με προτεραιότητα στο κινητό για ελεύθερους επαγγελματίες διανομείς φαγητού στην Ελλάδα (τύπου
+efood/Wolt, πληρωμή ανά δεκαπενθήμερο, έναρξη ως ελεύθεροι επαγγελματίες, συνήθως με ΦΠΑ). Σκέτα ES
+modules, χωρίς build, χωρίς εξαρτήσεις. Ανά βάρδια: έσοδα πλατφόρμας, tips, ώρες, έξοδα. Ανά
+δεκαπενθήμερο/μήνα/έτος: καθαρά μετά από έξοδα, πάγια, ΕΦΚΑ (αναλογικά στην τρέχουσα περίοδο), κράτηση για
+φόρο εισοδήματος (πραγματικός συντελεστής πάνω στο προβλεπόμενο ετήσιο κέρδος) και ΦΠΑ που εμφανίζεται
+χωριστά (δεν αφαιρείται ποτέ από τα καθαρά). Υποχρεώσεις: ΕΦΚΑ μηνιαία (λήξη στο τέλος του επόμενου μήνα),
+ΦΠΑ ανά τρίμηνο (λήξη στο τέλος του μήνα μετά το τρίμηνο), φόρος εισοδήματος σε 8 δόσεις από τον Ιούλιο του
+επόμενου έτους, δικά σου χρέη. Στόχοι: ετήσια καθαρά (με τις ώρες που ακόμα χρειάζονται) και στόχοι
+αποταμίευσης.
 
-## Rules that must not be broken
-1. **Bump `CACHE_VERSION` in `sw.js` on every deploy.** Installed phones keep the old shell until a new worker
-   installs; the page then shows "New version, tap to refresh" and reloads after `controllerchange`.
-2. **Tax math only in `tax.js`; behaviour changes only with a test.** `npm test` must stay green.
-3. **VAT default is ON.** "I don't know" and skipped onboarding count as normal regime; only "exempt" turns it off.
-   Under-reserving is the worse failure for this app.
-4. **No em dashes or long dashes in any copy** (use "·", ":" or "-"); empty values show "-". Both languages.
-5. **Every string through i18n**, both languages, formatted with the chosen locale (el-GR / en-GB).
-6. **No hard-coded city or location.** Weather is off unless the user picks a city or allows location.
-7. **Sample data** (`sample: true`) never reaches exports, cloud-ready counts or the backup reminder.
-8. Touch targets ≥ 44px, focus-visible everywhere, contrast ≥ 4.5 (`python tools/contrast.py`), reduced-motion respected.
-9. Verify claims by running things, not by reading reports. A screenshot or raw test output, or it did not happen.
+## Αρχιτεκτονική (ρίζα του repo)
+- `js/tax.js`: το ΜΟΝΟ σημείο με φορολογική νομοθεσία. Καθαρές συναρτήσεις. Φορολογικό έτος 2026: κλίμακα
+  9/20/26/34/39/44 στα 10k/20k/30k/40k/60k· ηλικία ≤ 25 πληρώνει 0% στα πρώτα 20k, 26-30 πληρώνει 9%·
+  μειώσεις για παιδιά στα κλιμάκια 1-3· προκαταβολή 55%, ή 27,5% για τα πρώτα 3 χρόνια· το τεκμαρτό
+  ελάχιστο εισόδημα εφαρμόζεται από το 4ο έτος όταν είναι μεγαλύτερο από το πραγματικό κέρδος· ΕΦΚΑ
+  160,46 (ειδική κατηγορία, πρώτα 5 χρόνια) ή 250,77 (1η κατηγορία). Πηγές: Ν. 5246/2025 άρθ. 15 ΚΦΕ,
+  ΕΦΚΑ εγκ. 6/2026. Ξαναέλεγξέ τα κάθε Ιανουάριο.
+- `js/calc.js`: καθαρό `(db, todayISO) → αριθμοί`. Σύνολα περιόδου, πρόβλεψη (μέσος όρος ολοκληρωμένων
+  δεκαπενθημέρων × 24, ή κέρδος ανά βάρδια × daysPerWeek × 48 όταν έχουν ολοκληρωθεί λιγότερα από 2),
+  αναλογικό ΕΦΚΑ, υποχρεώσεις με σταθερά κλειδιά (`efka-2026-09`, `vat-2026-Q3`, `tax-2026-0`,
+  `debt-<id>-<date>`), «βάλε στην άκρη», στόχοι, `realEntries()` (εξαιρεί τα δοκιμαστικά δεδομένα).
+- `js/store.js`: adapter αποθήκευσης (LocalStorage προς το παρόν). Σχήμα v3: κάθε εγγραφή έχει `id`,
+  `updatedAt`, οι διαγραφές κρατούν σημάδι `deleted: true` (tombstone), ώστε ένας RemoteAdapter να μπορεί
+  αργότερα να συγχωνεύσει. Εισάγει backup της v3 και της αρχικής v2.
+- `js/csv.js`: καθαρός parser CSV (διαχωριστικό, δεκαδική υποδιαστολή, 4 μορφές ημερομηνίας, επικεφαλίδες
+  ΕΛ/EN).
+- `js/i18n.js`: κάθε κείμενο που βλέπει ο χρήστης, `{ el, en }`. Το `tests/i18n.test.js` αποτυγχάνει αν
+  κάποιο κλειδί δεν έχει και τις δύο γλώσσες ή αν υπάρχουν ελληνικά γραμμένα απευθείας στο
+  `index.html`/`js/app.js` έξω από `I.t(...)`.
+- `js/app.js`: μόνο UI. Κάτω πλοήγηση (Αρχική, Ημερολόγιο, +, Υποχρεώσεις & Στόχοι, Περισσότερα), αρχικές
+  ερωτήσεις (πρώτα γλώσσα, 5 ερωτήσεις που παραλείπονται, σύνοψη), ξενάγηση 6 βημάτων με επισημάνσεις,
+  δοκιμαστικά δεδομένα, μπάρες ειδοποιήσεων (εγκατάσταση, ενημέρωση, backup, δείγμα).
+- `sw.js`: πρώτα cache για τον πυρήνα της εφαρμογής, cache κατά τη χρήση για τα Google Fonts, μόνο δίκτυο
+  για το open-meteo.
 
-## How to verify (from the repository root)
+## Κανόνες που δεν πρέπει να παραβιαστούν
+1. **Ανέβαζε το `CACHE_VERSION` στο `sw.js` σε κάθε ανέβασμα.** Τα εγκατεστημένα κινητά κρατούν τον παλιό
+   πυρήνα μέχρι να εγκατασταθεί νέο worker· τότε η σελίδα δείχνει «Νέα έκδοση, πάτα για ανανέωση» και
+   ξαναφορτώνει μετά το `controllerchange`.
+2. **Φορολογικοί υπολογισμοί μόνο στο `tax.js`· αλλαγές συμπεριφοράς μόνο μαζί με test.** Το `npm test`
+   πρέπει να μένει πράσινο.
+3. **Το ΦΠΑ είναι ενεργό από προεπιλογή.** Το «Δεν ξέρω» και η παράλειψη των αρχικών ερωτήσεων μετράνε ως
+   κανονικό καθεστώς· μόνο το «απαλλαγή» το απενεργοποιεί. Το να κρατήσει ο διανομέας λιγότερα από όσα
+   πρέπει είναι το χειρότερο λάθος για αυτή την εφαρμογή.
+4. **Καθόλου μακριές παύλες (em/en dash) σε κανένα κείμενο** (χρησιμοποίησε «·», «:» ή «-»)· οι κενές τιμές
+   δείχνουν «-». Και στις δύο γλώσσες.
+5. **Κάθε κείμενο μέσω i18n**, και στις δύο γλώσσες, μορφοποιημένο με την επιλεγμένη τοπική ρύθμιση
+   (el-GR / en-GB).
+6. **Καμία πόλη ή τοποθεσία γραμμένη απευθείας στον κώδικα.** Ο καιρός είναι κλειστός εκτός αν ο χρήστης
+   διαλέξει πόλη ή επιτρέψει την τοποθεσία.
+7. **Τα δοκιμαστικά δεδομένα** (`sample: true`) δεν φτάνουν ποτέ σε εξαγωγές, μετρήσεις για το cloud ή
+   την υπενθύμιση backup.
+8. Στόχοι αφής ≥ 44px, focus-visible παντού, αντίθεση ≥ 4.5 (`python tools/contrast.py`), σεβασμός του
+   reduced-motion.
+9. Επαλήθευε ισχυρισμούς τρέχοντας πράγματα, όχι διαβάζοντας αναφορές. Screenshot ή ωμή έξοδος των tests,
+   αλλιώς δεν έγινε.
+
+## Πώς γίνεται ο έλεγχος (από τη ρίζα του repo)
 ```
 npm test                                                  # 30 tests: tax 7, calc 13, csv 7, i18n 3
-python -m http.server 8791 --directory .                  # serve
-CP_BASE_URL=http://localhost:8791 python tools/smoke.py   # Playwright, 25 checks × el/en, screenshots to _shots/round2/
-python tools/contrast.py                                  # 16 contrast rows, all ≥ 4.5
-grep -rn -- "—" index.html css js sw.js README.md         # must be empty
+python -m http.server 8791 --directory .                  # σερβίρισμα
+CP_BASE_URL=http://localhost:8791 python tools/smoke.py   # Playwright, 25 έλεγχοι × el/en, screenshots στο _shots/round2/
+python tools/contrast.py                                  # 16 γραμμές αντίθεσης, όλες ≥ 4.5
+grep -rn -- "—" index.html css js sw.js README.md         # πρέπει να μη βγάλει τίποτα
 ```
-Playwright for Python and Pillow are needed for the tools; the app itself needs nothing.
+Για τα εργαλεία χρειάζονται Playwright για Python και Pillow· η ίδια η εφαρμογή δεν χρειάζεται τίποτα.
 
-## Open work, in order
-1. **Accountant validation**: three profiles (age 24 / years 1–3 / EFKA special; age 35 / years 6 / VAT normal /
-   presumed income set; VAT exempt). Compare annual tax, prepayment, VAT per quarter, EFKA. Fix `tax.js` with tests.
-2. **Deploy**: done. GitHub Pages from `main`, repository root (see `docs/HANDOFF.md`). Push to `main` to
-   redeploy, and bump `CACHE_VERSION` in `sw.js` first. Zero spend.
-3. **Measurement**: anonymous counts only (shifts logged per device, 7/14-day return) and a feedback link. No
-   personal data. Success signal: riders logging 8+ shifts in 14 days.
-4. **Name and identity** before public distribution; update `manifest.webmanifest`, `<title>`, About, icons.
-5. Later, SaaS path: a `RemoteAdapter` in `store.js` (same interface as `LocalStorageAdapter`), sign-in, merge by
-   `updatedAt` with tombstones. `tax.js` and `calc.js` run unchanged on a server.
+## Ανοιχτή δουλειά, με σειρά
+1. **Έλεγχος από λογιστή**: τρία προφίλ (ηλικία 24 / χρόνια 1-3 / ΕΦΚΑ ειδική κατηγορία· ηλικία 35 /
+   χρόνια 6 / ΦΠΑ κανονικό / με τεκμαρτό εισόδημα· απαλλαγή ΦΠΑ). Σύγκρινε ετήσιο φόρο, προκαταβολή, ΦΠΑ
+   ανά τρίμηνο, ΕΦΚΑ. Διόρθωσε το `tax.js` μαζί με tests.
+2. **Ανέβασμα online**: έγινε. GitHub Pages από το `main`, ρίζα του repo (βλ. `docs/HANDOFF.md`). Κάνε push
+   στο `main` για νέα έκδοση, αφού πρώτα ανεβάσεις το `CACHE_VERSION` στο `sw.js`. Μηδενικό κόστος.
+3. **Μέτρηση**: μόνο ανώνυμες μετρήσεις (βάρδιες ανά συσκευή, επιστροφή σε 7/14 μέρες) και ένα link για
+   σχόλια. Κανένα προσωπικό δεδομένο. Σήμα επιτυχίας: διανομείς που καταχωρίζουν 8+ βάρδιες σε 14 μέρες.
+4. **Όνομα και ταυτότητα** πριν από δημόσια διάθεση· ενημέρωσε `manifest.webmanifest`, `<title>`,
+   «Σχετικά», εικονίδια.
+5. Αργότερα, δρόμος προς SaaS: ένας `RemoteAdapter` στο `store.js` (ίδιο interface με τον
+   `LocalStorageAdapter`), σύνδεση χρήστη, συγχώνευση με βάση το `updatedAt` και τα tombstones. Τα `tax.js`
+   και `calc.js` τρέχουν αυτούσια σε server.
 
-## Known gaps (from `docs/progress/STATUS.md`)
-- Weather picker is best-effort and untested by automation.
-- Tour spotlight uses a large box-shadow; re-check on a low-end Android.
-- One unexplained wiped-profile observation during review, not reproduced; both user paths (reload, update)
-  were then tested and preserve data. If it recurs, capture localStorage before and after.
+## Γνωστά κενά (από το `docs/progress/STATUS.md`)
+- Η επιλογή πόλης για τον καιρό λειτουργεί «όσο γίνεται» και δεν ελέγχεται αυτόματα.
+- Η επισήμανση της ξενάγησης χρησιμοποιεί τεράστιο box-shadow· ξαναέλεγξέ το σε φθηνό Android.
+- Μία ανεξήγητη παρατήρηση με σβησμένο προφίλ κατά τον έλεγχο, που δεν επαναλήφθηκε· και οι δύο δρόμοι του
+  χρήστη (ανανέωση σελίδας, ενημέρωση) ελέγχθηκαν μετά και κρατούν τα δεδομένα. Αν ξανασυμβεί, κράτα το
+  localStorage πριν και μετά.
 
-## Decisions already made (do not reopen without a reason)
-- Half-month periods (1–14, 15–end) match how platforms pay; kept from the original.
-- VAT is shown but never deducted from net (it is not the rider's money).
-- The first shift must not show a large negative number: current-period EFKA is prorated by days elapsed.
-- Backup reminder only after 10 shifts or 7 days of history.
-- Fonts: Fira Sans Condensed for numbers and headings, Fira Sans for body, system fallback, cached at runtime.
+## Αποφάσεις που έχουν ήδη παρθεί (μην τις ξανανοίγεις χωρίς λόγο)
+- Περίοδοι δεκαπενθημέρου (1-14, 15-τέλος), όπως πληρώνουν οι πλατφόρμες· κρατήθηκαν από την αρχική.
+- Το ΦΠΑ εμφανίζεται αλλά δεν αφαιρείται ποτέ από τα καθαρά (δεν είναι λεφτά του διανομέα).
+- Η πρώτη βάρδια δεν πρέπει να δείχνει μεγάλο αρνητικό ποσό: το ΕΦΚΑ της τρέχουσας περιόδου μοιράζεται
+  αναλογικά με τις μέρες που πέρασαν.
+- Υπενθύμιση backup μόνο μετά από 10 βάρδιες ή 7 μέρες ιστορικού.
+- Γραμματοσειρές: Fira Sans Condensed για αριθμούς και τίτλους, Fira Sans για το κείμενο, εναλλακτική του
+  συστήματος, cache κατά τη χρήση.

@@ -77,8 +77,8 @@ tests/, tools/              unit tests (npm test) και scripts ελέγχου
 package.json, README.md     στοιχεία της εφαρμογής και το README της (README.en.md στα αγγλικά)
 docs/
   HANDOFF.md                αυτό το αρχείο (HANDOFF.en.md στα αγγλικά)
-  FOR_YOUR_CLAUDE.md        τεχνική περιγραφή και κανόνες για όποιον συνεχίσει την ανάπτυξη
-  progress/                 STATUS.md (επαληθευμένη κατάσταση), CHANGELOG.md, αναφορές
+  FOR_YOUR_CLAUDE.md        τεχνική περιγραφή και κανόνες για όποιον συνεχίσει την ανάπτυξη (.en.md στα αγγλικά)
+  progress/                 STATUS.md (επαληθευμένη κατάσταση, .en.md στα αγγλικά), CHANGELOG.md, αναφορές
   screenshots/              screenshots σε μέγεθος κινητού, ελληνικά και αγγλικά
   original-v2.html          η εφαρμογή ενός αρχείου από την οποία ξαναχτίστηκε
 ```

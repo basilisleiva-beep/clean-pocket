@@ -1,81 +1,96 @@
-# Clean Pocket · STATUS
+# Clean Pocket · ΚΑΤΑΣΤΑΣΗ
 
-> Current truth for this project. Update the "Last verified" stamp whenever a claim below is re-checked.
-> Conventions: verification means a command or a browser run whose raw output was seen, not a report.
+*Ελληνικά · [English](STATUS.en.md)*
 
-**Last verified:** 2026-09-26 23:45 (Athens)
-**Version:** 3.1.2 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
-**Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
-handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
-`docs/original-v2.html`
-**Deployed:** 2026-09-27, GitHub Pages from `main` (root): https://basilisleiva-beep.github.io/clean-pocket/
-(`npm test` 30/30 before deploy; live page loaded with 0 console errors and SW registered) · **Users:** 0 ·
-**Revenue:** EUR 0
+> Η τρέχουσα αλήθεια για το project. Ενημέρωνε τη σφραγίδα «Τελευταία επαλήθευση» κάθε φορά που
+> ξαναελέγχεται κάποιος ισχυρισμός παρακάτω.
+> Σύμβαση: επαλήθευση σημαίνει εντολή ή εκτέλεση σε browser της οποίας είδαμε την ωμή έξοδο, όχι αναφορά.
+> Κράτα αυτό το αρχείο και το `STATUS.en.md` συγχρονισμένα.
 
-## What it is
-Mobile-first offline PWA for Greek freelance food-delivery couriers, in Greek or English by the user's choice.
-Shows what a shift really leaves after expenses, EFKA, income tax and VAT, per half-month / month / year, plus
-upcoming obligations (EFKA monthly, VAT quarterly, 8 income-tax installments, custom debts) and goals (annual net,
-savings). First run: language, 5 setup questions (all skippable), summary, then an optional 6-step guided tour
-and "try with sample data".
+**Τελευταία επαλήθευση:** 2026-09-26 23:45 (Αθήνα)
+**Έκδοση:** 3.1.2 (sw.js CACHE_VERSION) · **Γύροι που έγιναν:** 1 (ξαναχτίσιμο), 2 (UI/UX, γλώσσα, αρχικές
+ερωτήσεις, ξενάγηση)
+**Τοποθεσία:** GitHub repo `basilisleiva-beep/clean-pocket`: η εφαρμογή στη ρίζα του repo (ήταν στο `app/`
+στο πακέτο παράδοσης), αυτό το αρχείο και το υπόλοιπο υλικό παράδοσης στο `docs/`· η αρχική εφαρμογή ενός
+αρχείου κρατιέται ως `docs/original-v2.html`
+**Online:** 2026-09-27, GitHub Pages από το `main` (ρίζα): https://basilisleiva-beep.github.io/clean-pocket/
+(`npm test` 30/30 πριν το ανέβασμα· η online σελίδα φόρτωσε με 0 σφάλματα στο console και καταχωρημένο SW) ·
+**Χρήστες:** 0 · **Έσοδα:** EUR 0
 
-## Verified state (2026-09-26 23:45)
-| Claim | How verified | Result |
+## Τι είναι
+Offline PWA με προτεραιότητα στο κινητό για ελεύθερους επαγγελματίες διανομείς φαγητού στην Ελλάδα, στα
+ελληνικά ή στα αγγλικά κατά την επιλογή του χρήστη. Δείχνει τι πραγματικά αφήνει μια βάρδια μετά από έξοδα,
+ΕΦΚΑ, φόρο εισοδήματος και ΦΠΑ, ανά δεκαπενθήμερο / μήνα / έτος, μαζί με τις επόμενες υποχρεώσεις (ΕΦΚΑ
+μηνιαία, ΦΠΑ ανά τρίμηνο, 8 δόσεις φόρου εισοδήματος, δικά σου χρέη) και στόχους (ετήσια καθαρά,
+αποταμίευση). Πρώτη εκκίνηση: γλώσσα, 5 ερωτήσεις ρύθμισης (όλες παραλείπονται), σύνοψη, μετά προαιρετική
+ξενάγηση 6 βημάτων και «Δοκίμασε με δείγμα».
+
+## Επαληθευμένη κατάσταση (2026-09-26 23:45)
+| Ισχυρισμός | Πώς επαληθεύτηκε | Αποτέλεσμα |
 |---|---|---|
-| Tax engine matches Law 5246/2025 + EFKA circ. 6/2026 | `npm test` (tests/tax.test.js) | 7/7 |
-| Period totals, projection fallback, EFKA proration, obligations, v2 import, sample data excluded from real counts | `npm test` (tests/calc.test.js) | 13/13 |
-| CSV parser: delimiters, decimal comma, 4 date formats, EL/EN headers | `npm test` (tests/csv.test.js) | 7/7 |
-| Every i18n key has el + en; no hard-coded Greek in index.html or app.js outside i18n | `npm test` (tests/i18n.test.js) | 3/3 |
-| Full flow in Greek AND English at 390x844: language step, skip → summary (6 rows), tour 1/6 → 6/6 → close, sample add/remove, first-shift explainer, 2 shifts → hero + set-aside, CSV import via preview, custom debt, reload persists, SW registered, share button, 0 console errors | `python tools/smoke.py` (25 checks × 2) | PASS, PASS |
-| Contrast of --muted and --ink on --surface and --bg, 4 themes | `python tools/contrast.py` | 16/16 ≥ 4.5 (min 5.10) |
-| Hand run at 375px: language switch live on the same screen, summary, tour prompt, sample load, tour steps, obligations paid toggles, More/data | manual in the in-app browser | OK |
-| Data survives 2 plain reloads and a service-worker version update with the banner (3.1.1 → 3.1.2) | manual, 16 sample entries before/after | 16 / 16 |
-| No em/long dashes in shipped copy | grep | 0 |
+| Η φορολογική μηχανή συμφωνεί με τον Ν. 5246/2025 + την εγκ. ΕΦΚΑ 6/2026 | `npm test` (tests/tax.test.js) | 7/7 |
+| Σύνολα περιόδου, εναλλακτική πρόβλεψη, αναλογικό ΕΦΚΑ, υποχρεώσεις, εισαγωγή v2, δοκιμαστικά δεδομένα εκτός πραγματικών μετρήσεων | `npm test` (tests/calc.test.js) | 13/13 |
+| Parser CSV: διαχωριστικά, δεκαδική υποδιαστολή, 4 μορφές ημερομηνίας, επικεφαλίδες ΕΛ/EN | `npm test` (tests/csv.test.js) | 7/7 |
+| Κάθε κλειδί i18n έχει el + en· κανένα ελληνικό γραμμένο απευθείας στο index.html ή app.js έξω από το i18n | `npm test` (tests/i18n.test.js) | 3/3 |
+| Πλήρης ροή στα ελληνικά ΚΑΙ στα αγγλικά σε 390x844: βήμα γλώσσας, παράλειψη → σύνοψη (6 γραμμές), ξενάγηση 1/6 → 6/6 → κλείσιμο, προσθήκη/αφαίρεση δείγματος, εξήγηση πρώτης βάρδιας, 2 βάρδιες → κεντρικό ποσό + «βάλε στην άκρη», εισαγωγή CSV μέσω προεπισκόπησης, δικό σου χρέος, διατήρηση μετά από ανανέωση, καταχωρημένο SW, κουμπί κοινοποίησης, 0 σφάλματα στο console | `python tools/smoke.py` (25 έλεγχοι × 2) | PASS, PASS |
+| Αντίθεση του --muted και του --ink πάνω σε --surface και --bg, 4 θέματα | `python tools/contrast.py` | 16/16 ≥ 4.5 (ελάχ. 5.10) |
+| Χειροκίνητη δοκιμή σε 375px: αλλαγή γλώσσας ζωντανά στην ίδια οθόνη, σύνοψη, πρόταση ξενάγησης, φόρτωση δείγματος, βήματα ξενάγησης, διακόπτες «πληρώθηκε» στις υποχρεώσεις, Περισσότερα/δεδομένα | χειροκίνητα στον ενσωματωμένο browser | OK |
+| Τα δεδομένα μένουν μετά από 2 απλές ανανεώσεις και μια ενημέρωση έκδοσης του service worker με την μπάρα (3.1.1 → 3.1.2) | χειροκίνητα, 16 δοκιμαστικές εγγραφές πριν/μετά | 16 / 16 |
+| Καμία μακριά παύλα (em/en dash) στα κείμενα της εφαρμογής | grep | 0 |
 
-Hand-checked numbers still hold from round 1 (net 16.46, set-aside 278.97 for the 2-shift profile).
-With sample data and VAT status "I don't know": VAT Q3 2026 = 24% × 950.00 gross = 228.00. Matches the screen.
+Οι αριθμοί που ελέγχθηκαν με το χέρι στον 1ο γύρο ισχύουν ακόμα (καθαρά 16,46, «βάλε στην άκρη» 278,97 για
+το προφίλ με 2 βάρδιες). Με δοκιμαστικά δεδομένα και καθεστώς ΦΠΑ «Δεν ξέρω»: ΦΠΑ Γ' τριμήνου 2026 =
+24% × 950,00 μικτά = 228,00. Συμφωνεί με την οθόνη.
 
-## Found in round 2 review and fixed (3.1.1, 3.1.2)
-1. **VAT "I don't know" counted as exempt** (`vatRegime === "normal"` only), so an unsure rider saw no VAT
-   obligation and under-reserved. Now only "exempt" turns VAT off; the onboarding note says VAT is counted as
-   normal until confirmed. This reverses the agent's choice and matches the brief.
-2. Onboarding summary showed "Ηλικία - · τέκνα 0" when age was skipped; now "Ηλικία: δεν ορίστηκε".
-3. "Paid" checkboxes had no accessible name; now "Πληρώθηκε: <obligation>".
-4. Tour spotlight measured mid-scroll and could exceed the viewport on tall targets; now clamped to the viewport
-   and re-positioned on scroll/resize.
+## Βρέθηκαν στον έλεγχο του 2ου γύρου και διορθώθηκαν (3.1.1, 3.1.2)
+1. **Το ΦΠΑ «Δεν ξέρω» μετρούσε ως απαλλαγή** (μόνο `vatRegime === "normal"`), οπότε ένας διανομέας που
+   δεν ήξερε δεν έβλεπε υποχρέωση ΦΠΑ και κρατούσε λιγότερα. Τώρα μόνο το «απαλλαγή» απενεργοποιεί το ΦΠΑ·
+   η σημείωση στις αρχικές ερωτήσεις λέει ότι το ΦΠΑ μετράει ως κανονικό μέχρι να επιβεβαιωθεί. Αυτό
+   αναιρεί την επιλογή του agent και ταιριάζει με τις προδιαγραφές.
+2. Η σύνοψη των αρχικών ερωτήσεων έδειχνε «Ηλικία - · τέκνα 0» όταν η ηλικία παραλειπόταν· τώρα
+   «Ηλικία: δεν ορίστηκε».
+3. Τα κουτάκια «Πληρώθηκε» δεν είχαν προσβάσιμο όνομα· τώρα «Πληρώθηκε: <υποχρέωση>».
+4. Η επισήμανση της ξενάγησης μετριόταν στη μέση του scroll και μπορούσε να βγει έξω από την οθόνη σε ψηλά
+   στοιχεία· τώρα περιορίζεται στην οθόνη και ξανατοποθετείται σε scroll/αλλαγή μεγέθους.
 
-## Unexplained observation (logged, not hidden)
-During review the in-app browser tab once came back with a fresh English profile (onboarded, no entries) after a
-worker update while a Playwright smoke run was active on the same origin. Code review found no path that
-completes onboarding or clears entries without a user action, and the two user paths were then tested and
-preserve data (table above). Treat as an environment artifact until seen again; if it recurs, capture
-localStorage before and after.
+## Ανεξήγητη παρατήρηση (καταγεγραμμένη, όχι κρυμμένη)
+Κατά τον έλεγχο, η καρτέλα του ενσωματωμένου browser μία φορά επέστρεψε με καινούργιο αγγλικό προφίλ
+(ολοκληρωμένες αρχικές ερωτήσεις, καμία εγγραφή) μετά από ενημέρωση του worker, ενώ έτρεχε ταυτόχρονα
+smoke test με Playwright στην ίδια προέλευση. Ο έλεγχος του κώδικα δεν βρήκε δρόμο που να ολοκληρώνει τις
+αρχικές ερωτήσεις ή να σβήνει εγγραφές χωρίς ενέργεια του χρήστη, και οι δύο δρόμοι του χρήστη ελέγχθηκαν
+μετά και κρατούν τα δεδομένα (πίνακας παραπάνω). Να θεωρείται παρενέργεια του περιβάλλοντος μέχρι να
+ξαναφανεί· αν ξανασυμβεί, κράτα το localStorage πριν και μετά.
 
-## Tooling notes
-- The in-app browser's click coordinate frame flipped to 750x1624 after mobile emulation; ref-based taps then
-  landed at a quarter of the intended point. Drive the page with Playwright (`tools/smoke.py`) for anything that
-  must be proven; use the pane for looking.
-- Bump `CACHE_VERSION` in `sw.js` before handing out a new build, otherwise installed users never see it.
+## Σημειώσεις για τα εργαλεία
+- Το σύστημα συντεταγμένων κλικ του ενσωματωμένου browser άλλαξε σε 750x1624 μετά την εξομοίωση κινητού·
+  τα πατήματα με βάση ref τότε έπεφταν στο ένα τέταρτο του σωστού σημείου. Για ό,τι πρέπει να αποδειχθεί,
+  οδήγησε τη σελίδα με Playwright (`tools/smoke.py`)· το panel χρησιμοποίησέ το για να κοιτάς.
+- Ανέβαζε το `CACHE_VERSION` στο `sw.js` πριν δώσεις νέα έκδοση, αλλιώς οι εγκατεστημένοι χρήστες δεν τη
+  βλέπουν ποτέ.
 
-## Open items (ordered)
-1. **Accountant check** of three sample riders against the app before any stranger relies on a number. Not started.
-2. **Deploy** to free static HTTPS hosting (GitHub Pages or Netlify Drop, steps in README). Not started. Zero spend.
-3. **Measurement** before the 20-30 rider test: anonymous counts (shifts logged per device, 7/14-day return) + feedback link.
-4. **Brand decision**: the app needs its own name and public identity before it ships (the reviewer's own brand
-   cannot carry a Greece-market product). Owner's decision.
-5. Weather picker untested by automation (best-effort, silent on failure).
-6. Tour spotlight uses a 9999px box-shadow; fine on modern phones, re-check on a low-end Android.
-7. Re-verify tax constants every January against ΑΑΔΕ/ΕΦΚΑ.
+## Ανοιχτά θέματα (με σειρά)
+1. **Έλεγχος από λογιστή** τριών δοκιμαστικών διανομέων σε σύγκριση με την εφαρμογή, πριν κάποιος άγνωστος
+   βασιστεί σε κάποιο ποσό. Δεν έχει ξεκινήσει.
+2. **Ανέβασμα online** σε δωρεάν στατική φιλοξενία με HTTPS. Έγινε 2026-09-27 (GitHub Pages, βλ. παραπάνω).
+   Μηδενικό κόστος.
+3. **Μέτρηση** πριν από τη δοκιμή με 20-30 διανομείς: ανώνυμες μετρήσεις (βάρδιες ανά συσκευή, επιστροφή σε
+   7/14 μέρες) + link για σχόλια.
+4. **Απόφαση για brand**: η εφαρμογή χρειάζεται δικό της όνομα και δημόσια ταυτότητα πριν κυκλοφορήσει (το
+   brand του ελεγκτή δεν μπορεί να φέρει ένα προϊόν για την ελληνική αγορά). Απόφαση του ιδιοκτήτη.
+5. Η επιλογή πόλης για τον καιρό δεν ελέγχεται αυτόματα (λειτουργεί «όσο γίνεται», σιωπηλά αν αποτύχει).
+6. Η επισήμανση της ξενάγησης χρησιμοποιεί box-shadow 9999px· εντάξει σε σύγχρονα κινητά, ξαναέλεγξέ το σε
+   φθηνό Android.
+7. Ξαναέλεγξε τις φορολογικές σταθερές κάθε Ιανουάριο με ΑΑΔΕ/ΕΦΚΑ.
 
-## Success signal for the market test
-Share of riders who log 8+ shifts in 14 days. Installs do not count.
+## Σήμα επιτυχίας για τη δοκιμή στην αγορά
+Το ποσοστό διανομέων που καταχωρίζουν 8+ βάρδιες σε 14 μέρες. Οι εγκαταστάσεις δεν μετράνε.
 
-## How to work on it
+## Πώς δουλεύεις πάνω του
 ```
 npm test                                   # 30 unit tests
-python -m http.server 8791 --directory .   # serve (launch.json entry "clean-pocket", port 8791)
-CP_BASE_URL=http://localhost:8791 python tools/smoke.py    # both languages, screenshots to _shots/round2/
+python -m http.server 8791 --directory .   # σερβίρισμα (καταχώριση "clean-pocket" στο launch.json, θύρα 8791)
+CP_BASE_URL=http://localhost:8791 python tools/smoke.py    # και οι δύο γλώσσες, screenshots στο _shots/round2/
 python tools/contrast.py
 ```
-Progress notes live in this folder: `STATUS.md` (truth), `CHANGELOG.md` (what changed per version),
-`ROUND*_REPORT.md` (agent reports, unverified until graded here).
+Οι σημειώσεις προόδου είναι σε αυτόν τον φάκελο: `STATUS.md` (η αλήθεια), `CHANGELOG.md` (τι άλλαξε σε κάθε
+έκδοση), `ROUND*_REPORT.md` (αναφορές agent, ανεπαλήθευτες μέχρι να βαθμολογηθούν εδώ).
