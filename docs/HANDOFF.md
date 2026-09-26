@@ -1,73 +1,84 @@
-# Clean Pocket · Hand-off to the owner
+# Clean Pocket · Παράδοση στον ιδιοκτήτη
 
-Read this first. It tells you what you are holding, how to get it onto your phone today, and what is
-left before you hand it to riders. Everything technical for your Claude (or any developer) is in
-`docs/FOR_YOUR_CLAUDE.md`.
+*Ελληνικά · [English](HANDOFF.en.md)*
 
-> **Repository layout:** the handoff package had the app in an `app/` folder. In this repository the app
-> lives at the **repository root** (`index.html`, `js/`, `css/`, `icons/`, `sw.js`) and the handoff notes,
-> progress reports, screenshots and `original-v2.html` live in `docs/`. Paths below are relative to the root.
+Διάβασε πρώτα αυτό. Σου λέει τι έχεις στα χέρια σου, πώς να το βάλεις στο κινητό σου σήμερα, και τι
+μένει πριν το δώσεις σε διανομείς. Όλα τα τεχνικά για τον Claude σου (ή για οποιονδήποτε developer) είναι
+στο `docs/FOR_YOUR_CLAUDE.md`.
 
-## What you are holding
-Clean Pocket v3.1.2: a phone app (a "PWA", installs from the browser, works offline) for freelance
-food-delivery couriers in Greece. Greek or English, the user picks on the first screen. It answers one
-question after every shift: **how much of this is really mine** after fuel, EFKA, income tax and VAT, and
-what bills are coming and when. It also imports the data from the old single-file version you had.
+> **Δομή του repo:** στο πακέτο παράδοσης η εφαρμογή ήταν σε φάκελο `app/`. Σε αυτό το repo η εφαρμογή
+> βρίσκεται στη **ρίζα του repo** (`index.html`, `js/`, `css/`, `icons/`, `sw.js`), ενώ οι σημειώσεις
+> παράδοσης, οι αναφορές προόδου, τα screenshots και το `original-v2.html` είναι στο `docs/`. Οι διαδρομές
+> παρακάτω είναι σε σχέση με τη ρίζα.
 
-Everything is in this repository. No accounts, no servers, no subscriptions, no cost. The data stays on the
-rider's phone (backup and import are built in).
+## Τι έχεις στα χέρια σου
+Clean Pocket v3.1.2: εφαρμογή για κινητό (μια «PWA», εγκαθίσταται από τον browser, δουλεύει χωρίς
+σύνδεση) για ελεύθερους επαγγελματίες διανομείς φαγητού στην Ελλάδα. Ελληνικά ή αγγλικά, ο χρήστης
+διαλέγει στην πρώτη οθόνη. Απαντάει σε μία ερώτηση μετά από κάθε βάρδια: **πόσα από αυτά είναι πραγματικά
+δικά μου** μετά από βενζίνη, ΕΦΚΑ, φόρο εισοδήματος και ΦΠΑ, και ποιοι λογαριασμοί έρχονται και πότε.
+Επίσης εισάγει τα δεδομένα από την παλιά έκδοση (ένα αρχείο) που είχες.
 
-## Get it on your phone (15 minutes, free)
-The app needs to be reached over HTTPS to install and work offline. Opening `index.html` from a file will
-show the page but will not install.
+Όλα είναι σε αυτό το repo. Χωρίς λογαριασμούς, χωρίς servers, χωρίς συνδρομές, χωρίς κόστος. Τα δεδομένα
+μένουν στο κινητό του διανομέα (αντίγραφο ασφαλείας και εισαγωγή υπάρχουν μέσα στην εφαρμογή).
 
-**Live now · GitHub Pages:** https://basilisleiva-beep.github.io/clean-pocket/ (deployed from the `main`
-branch, repository root).
-1. Open the link on your phone.
-2. Android (Chrome): the app offers "Install" itself, or use the browser menu → "Add to Home screen".
-   iPhone (Safari): Share button → "Add to Home Screen".
+## Βάλ' το στο κινητό σου (15 λεπτά, δωρεάν)
+Η εφαρμογή πρέπει να ανοίγει μέσω HTTPS για να εγκατασταθεί και να δουλεύει χωρίς σύνδεση. Αν ανοίξεις
+το `index.html` ως αρχείο, θα δεις τη σελίδα αλλά δεν θα εγκαθίσταται.
 
-**Alternative · Netlify Drop (no account needed to start)**
-1. Open https://app.netlify.com/drop in a desktop browser.
-2. Drag the repository folder onto the page (the app is at its root).
-3. You get a link like `https://something-random.netlify.app`. Open it on your phone and install as above.
-4. The link is public but unlisted. Anyone with it can use the app.
+**Online τώρα · GitHub Pages:** https://basilisleiva-beep.github.io/clean-pocket/ (από το branch `main`,
+ρίζα του repo).
+1. Άνοιξε το link στο κινητό σου.
+2. Android (Chrome): η εφαρμογή προτείνει μόνη της «Εγκατάσταση», ή από το μενού του browser →
+   «Προσθήκη στην αρχική οθόνη».
+   iPhone (Safari): κουμπί Κοινοποίηση → «Προσθήκη στην οθόνη Αφετηρίας».
 
-**Updating later:** commit and push to `main`; GitHub Pages redeploys in 1 to 2 minutes. Whoever edits the
-app must raise the version in `sw.js` (`CACHE_VERSION`) or installed phones will keep the old version.
-`docs/FOR_YOUR_CLAUDE.md` covers it.
+**Εναλλακτικά · Netlify Drop (χωρίς λογαριασμό για αρχή)**
+1. Άνοιξε το https://app.netlify.com/drop σε browser υπολογιστή.
+2. Σύρε τον φάκελο του repo πάνω στη σελίδα (η εφαρμογή είναι στη ρίζα του).
+3. Παίρνεις ένα link όπως `https://something-random.netlify.app`. Άνοιξέ το στο κινητό και εγκατάστησέ
+   το όπως παραπάνω.
+4. Το link είναι δημόσιο αλλά δεν εμφανίζεται πουθενά. Όποιος το έχει μπορεί να χρησιμοποιήσει την εφαρμογή.
 
-## First minute in the app
-1. Choose language.
-2. Five quick questions: VAT status, age and children, years active, EFKA category, days per week. Skip
-   anything you are not sure about; defaults are safe (VAT is counted until an accountant says otherwise).
-3. Say yes to the one-minute tour, or tap "Try with sample data" to see it full.
-4. Log a shift with the big + button. The date moves forward by itself for the next one.
-5. "More → My data" has backup, CSV export for the accountant, and import (old app backups and spreadsheets).
+**Ενημερώσεις αργότερα:** commit και push στο `main`· το GitHub Pages ανεβάζει τη νέα έκδοση σε 1 με 2
+λεπτά. Όποιος αλλάζει την εφαρμογή πρέπει να ανεβάσει την έκδοση στο `sw.js` (`CACHE_VERSION`), αλλιώς τα
+κινητά που την έχουν εγκατεστημένη θα κρατήσουν την παλιά. Περισσότερα στο `docs/FOR_YOUR_CLAUDE.md`.
 
-## What has been checked, and what has not
-Checked (details in `docs/progress/STATUS.md`): the 2026 tax and EFKA rules from Law 5246/2025 and EFKA
-circular 6/2026, 30 automated tests, a scripted phone-size run in both languages, contrast in all four
-themes, data surviving reloads and app updates.
+## Το πρώτο λεπτό στην εφαρμογή
+1. Διάλεξε γλώσσα.
+2. Πέντε γρήγορες ερωτήσεις: καθεστώς ΦΠΑ, ηλικία και παιδιά, χρόνια δραστηριότητας, κατηγορία ΕΦΚΑ,
+   μέρες την εβδομάδα. Παράλειψε ό,τι δεν ξέρεις σίγουρα· οι προεπιλογές είναι ασφαλείς (το ΦΠΑ
+   υπολογίζεται μέχρι να πει ο λογιστής κάτι άλλο).
+3. Πες «ναι» στην ξενάγηση ενός λεπτού, ή πάτα «Δοκίμασε με δείγμα» για να τη δεις γεμάτη.
+4. Καταχώρισε μια βάρδια με το μεγάλο κουμπί +. Η ημερομηνία προχωράει μόνη της για την επόμενη.
+5. Στο «Περισσότερα → Τα δεδομένα μου» υπάρχουν αντίγραφο ασφαλείας, εξαγωγή CSV για τον λογιστή και
+   εισαγωγή (backup της παλιάς εφαρμογής και υπολογιστικά φύλλα).
 
-**Not checked, and required before riders rely on a number:**
-1. **An accountant** compares the app against three real riders (young/first years, VAT normal, VAT exempt).
-   The rules are in `js/tax.js`; the disclaimer in the app says "estimate, not tax advice" for this reason.
-2. **A name and identity** for the app if it ships under a brand.
-3. **Hosting** is done (GitHub Pages, above); next, **20 to 30 riders** from rider groups. The number to watch is how many log
-   8 or more shifts in 14 days, not how many install.
+## Τι έχει ελεγχθεί και τι όχι
+Ελέγχθηκαν (λεπτομέρειες στο `docs/progress/STATUS.md`): οι κανόνες φόρου και ΕΦΚΑ του 2026 από τον
+Ν. 5246/2025 και την εγκύκλιο ΕΦΚΑ 6/2026, 30 αυτόματα tests, αυτοματοποιημένη δοκιμή σε μέγεθος κινητού
+και στις δύο γλώσσες, αντίθεση χρωμάτων και στα τέσσερα θέματα, και ότι τα δεδομένα μένουν μετά από
+ανανέωση της σελίδας και ενημέρωση της εφαρμογής.
 
-## Folder map
+**Δεν έχουν ελεγχθεί, και χρειάζονται πριν οι διανομείς βασιστούν σε κάποιο ποσό:**
+1. **Ένας λογιστής** να συγκρίνει την εφαρμογή με τρεις πραγματικούς διανομείς (νέος/πρώτα χρόνια, ΦΠΑ
+   κανονικό, απαλλαγή ΦΠΑ). Οι κανόνες είναι στο `js/tax.js`· γι' αυτό η εφαρμογή γράφει «εκτίμηση, όχι
+   φορολογική συμβουλή».
+2. **Όνομα και ταυτότητα** για την εφαρμογή, αν κυκλοφορήσει με δικό της brand.
+3. **Η φιλοξενία** έγινε (GitHub Pages, παραπάνω)· επόμενο βήμα, **20 με 30 διανομείς** από ομάδες
+   διανομέων. Ο αριθμός που μετράει είναι πόσοι καταχωρίζουν 8 ή περισσότερες βάρδιες σε 14 μέρες, όχι
+   πόσοι την εγκαθιστούν.
+
+## Χάρτης φακέλων
 ```
-index.html, sw.js,         the deployable app, at the repository root
+index.html, sw.js,          η εφαρμογή που ανεβαίνει online, στη ρίζα του repo
 manifest.webmanifest,
 js/, css/, icons/
-tests/, tools/              unit tests (npm test) and verification scripts
-package.json, README.md     app metadata and the app's README
+tests/, tools/              unit tests (npm test) και scripts ελέγχου
+package.json, README.md     στοιχεία της εφαρμογής και το README της (README.en.md στα αγγλικά)
 docs/
-  HANDOFF.md                this file
-  FOR_YOUR_CLAUDE.md        technical brief and rules for whoever continues the build
-  progress/                 STATUS.md (verified truth), CHANGELOG.md, agent reports
-  screenshots/              phone-size screenshots, Greek and English
-  original-v2.html          the single-file app this was rebuilt from
+  HANDOFF.md                αυτό το αρχείο (HANDOFF.en.md στα αγγλικά)
+  FOR_YOUR_CLAUDE.md        τεχνική περιγραφή και κανόνες για όποιον συνεχίσει την ανάπτυξη
+  progress/                 STATUS.md (επαληθευμένη κατάσταση), CHANGELOG.md, αναφορές
+  screenshots/              screenshots σε μέγεθος κινητού, ελληνικά και αγγλικά
+  original-v2.html          η εφαρμογή ενός αρχείου από την οποία ξαναχτίστηκε
 ```
