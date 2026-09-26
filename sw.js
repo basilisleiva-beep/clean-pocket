@@ -1,70 +1,81 @@
-/* Clean Pocket service worker
- * - Precaches the app shell so the app opens offline.
- * - Pages: network first (so updates arrive), cache as fallback.
- * - Google Fonts: stale-while-revalidate.
- * - Everything else (e.g. the weather API) goes straight to the network.
- * Bump CACHE_VERSION on every release so old files are replaced.
- */
-const CACHE_VERSION = "v3";
-const CACHE = "clean-pocket-" + CACHE_VERSION;
-const CORE = [
+// Clean Pocket service worker. Cache-first for the app shell, network-only for open-meteo,
+// cache-first (runtime, opaque responses allowed) for the Google Fonts CSS + font files so the
+// app still renders in Fira Sans/Fira Sans Condensed offline after the first online load.
+// Bump CACHE_VERSION on every release; the app shows a refresh banner when a new one installs.
+var CACHE_VERSION = "clean-pocket-v3.1.2";
+var FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
+var SHELL = [
   "./",
   "./index.html",
+  "./css/app.css",
+  "./js/app.js",
+  "./js/calc.js",
+  "./js/csv.js",
+  "./js/i18n.js",
+  "./js/store.js",
+  "./js/tax.js",
   "./manifest.webmanifest",
-  "./icons/icon.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./icons/apple-touch-icon.png"
+  "./icons/icon-maskable-512.png",
+  "./icons/apple-touch-180.png"
 ];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(CORE)).then(() => self.skipWaiting()));
-});
-
-self.addEventListener("activate", (event) => {
+self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k.startsWith("clean-pocket-") && k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.open(CACHE_VERSION).then(function (cache) { return cache.addAll(SHELL); })
   );
 });
 
-self.addEventListener("fetch", (event) => {
-  const req = event.request;
-  if (req.method !== "GET") return;
-  const url = new URL(req.url);
+self.addEventListener("activate", function (event) {
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(keys.filter(function (k) { return k !== CACHE_VERSION; }).map(function (k) { return caches.delete(k); }));
+    }).then(function () { return self.clients.claim(); })
+  );
+});
 
-  if (url.origin === self.location.origin) {
-    if (req.mode === "navigate") {
-      event.respondWith(
-        fetch(req)
-          .then((res) => {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put("./index.html", copy));
-            return res;
-          })
-          .catch(() => caches.match("./index.html"))
-      );
-      return;
-    }
+self.addEventListener("message", function (event) {
+  if (event.data === "skipWaiting") self.skipWaiting();
+});
+
+function isFontRequest(url) {
+  return FONT_HOSTS.some(function (h) { return url.indexOf(h) !== -1; });
+}
+
+self.addEventListener("fetch", function (event) {
+  var url = event.request.url;
+  if (url.indexOf("open-meteo.com") !== -1) return; // network-only, never cached
+  if (event.request.method !== "GET") return;
+
+  if (isFontRequest(url)) {
+    // Cache-first: font CSS and font files rarely change and are cross-origin, so the response
+    // is opaque (status 0) - cache it anyway, that is the only way to have fonts offline.
     event.respondWith(
-      caches.match(req).then((hit) => hit || fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(req, copy));
-        return res;
-      }))
+      caches.match(event.request).then(function (cached) {
+        if (cached) return cached;
+        return fetch(event.request).then(function (resp) {
+          if (resp) {
+            var copy = resp.clone();
+            caches.open(CACHE_VERSION).then(function (cache) { cache.put(event.request, copy); });
+          }
+          return resp;
+        }).catch(function () { return cached; });
+      })
     );
     return;
   }
 
-  if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
-    event.respondWith(
-      caches.open(CACHE).then((cache) =>
-        cache.match(req).then((hit) => {
-          const net = fetch(req).then((res) => { cache.put(req, res.clone()); return res; }).catch(() => hit);
-          return hit || net;
-        })
-      )
-    );
-  }
+  event.respondWith(
+    caches.match(event.request).then(function (cached) {
+      if (cached) return cached;
+      return fetch(event.request).then(function (resp) {
+        if (resp && resp.status === 200 && resp.type === "basic") {
+          var copy = resp.clone();
+          caches.open(CACHE_VERSION).then(function (cache) { cache.put(event.request, copy); });
+        }
+        return resp;
+      }).catch(function () { return cached; });
+    })
+  );
 });

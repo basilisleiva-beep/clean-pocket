@@ -1,100 +1,128 @@
-# Clean Pocket 🛵
+# Clean Pocket
 
-**Net-income tracker for freelance delivery riders in Greece.**
-Log each shift right after it ends and see what you *actually* keep after expenses, EFKA (social security), income tax and VAT.
+A mobile-first, installable, offline PWA for Greek freelance food-delivery couriers (efood/Wolt
+riders on a freelance registration). Shows what a shift really leaves after expenses, EFKA,
+income tax and VAT, plus upcoming debts and goals.
 
-*Ελληνικά παρακάτω / Greek version below.*
+## Run it
 
----
+```
+npm test                                              # tax + calc + csv unit tests (node --test)
+python -m http.server 8790 --directory .              # serve the app
+```
 
-## What it does
+Then open `http://localhost:8790/index.html` on a phone-width viewport (or resize your browser).
+It works fully offline after the first load (service worker precaches the app shell).
 
-- **Shift log** with platform income, tips (tracked separately), hours and shift expenses.
-- **Net income per half-month (1–14, 15–end), per month and per year**, plus net per hour and per shift.
-- **VAT handling**: platform income is entered without VAT; the VAT collected is shown as "VAT payable" (minus deductible VAT on expenses) and does **not** reduce your net.
-- **Yearly net goal** with a scooter riding along a road. Progress counts only what you keep, and the app estimates how many hours and full-time days you need to reach the goal.
-- **Calendar** showing logged days, missed days, days off and monthly VAT obligations; **history by month**; **7-day chart**.
-- **Fixed monthly costs** split automatically across periods.
-- **Backup / restore** (JSON) and **CSV export** for your accountant.
-- **Greek and English**, and four colour themes.
-- **Installable (PWA)** and works offline.
+Smoke test (Playwright, needs a server running on port 8791, run twice: Greek then English):
 
-## Try it / install
+```
+python -m http.server 8791 --directory .
+python tools/smoke.py
+```
 
-Open the app's URL on your phone:
+Contrast check (prints a table, exits 1 if any theme's muted text fails 4.5:1):
 
-- **Android (Chrome):** use the *Install* button in the app, or menu → *Install app*.
-- **iPhone (Safari):** *Share* → *Add to Home Screen*.
+```
+python tools/contrast.py
+```
 
-## Deploy your own copy on GitHub Pages
+Regenerate icons (Pillow):
 
-1. Create a public repository, e.g. `clean-pocket`, and upload all files from this folder (keep the `icons` folder).
-2. In the repository go to **Settings → Pages**.
-3. Under *Build and deployment* choose **Deploy from a branch**, branch `main`, folder `/ (root)`, and save.
-4. After a minute or two the app is live at `https://<your-username>.github.io/clean-pocket/`.
+```
+python tools/make_icons.py
+```
 
-To run it locally: `python3 -m http.server` in this folder and open `http://localhost:8000`.
+## First run: language, onboarding, tour
 
-## Moving your data from another device
+- The very first screen is a language choice (Ελληνικά / English), preselected from the
+  browser's `navigator.language`. Every later screen, including the rest of onboarding, renders
+  in the chosen language immediately. An EL/EN toggle is always reachable in the Home top bar
+  and in Settings.
+- Onboarding asks VAT regime, age/children, years active, EFKA category and days/week, with a
+  "Παράλειψη" (skip) link on every step that jumps straight to a summary step applying whatever
+  defaults were not yet answered. The summary repeats every choice with an "Αλλαγή" (change) link
+  per row that jumps back into that step.
+- Finishing onboarding offers a one-minute guided tour (coach marks over the period switcher,
+  hero, + button, calendar, obligations/goals and My data). It can be replayed any time from
+  Περισσότερα → "Ξενάγηση". "Δοκίμασε με δείγμα" loads about three weeks of sample shifts
+  (flagged `sample: true`) so the tour has something to show; a thin banner lets you remove just
+  the sample records later. Sample shifts never appear in a JSON/CSV export or in the shift
+  counts shown in the backup banner (see `realEntries` in `js/calc.js`).
 
-Data is stored **on your device** (browser `localStorage`). To move it: in the old app open *Fixed costs and settings → Backup*, save the `.json` file, then import it in the new app.
+## Deploy for free
 
-## Files
+The app is static (no server, no build step) and only needs HTTPS for the service worker to
+register (installable PWAs and `serviceWorker.register` both require a secure origin; plain
+`http://` only works on `localhost`).
 
-| File | Purpose |
-|---|---|
-| `index.html` | The whole app (HTML, CSS and JavaScript). |
-| `manifest.webmanifest` | PWA metadata (name, icons, colours). |
-| `sw.js` | Service worker: offline support and caching. Bump `CACHE_VERSION` on each release. |
-| `icons/` | App icons. |
+**GitHub Pages**
+1. Push this folder to a GitHub repo (root, or a `/docs` folder on `main`).
+2. Repo Settings → Pages → Source → the branch/folder above.
+3. GitHub serves it over HTTPS at `https://<user>.github.io/<repo>/` within a minute or two.
+4. Re-push after bumping `CACHE_VERSION` in `sw.js` for every release, or installed users keep
+   seeing the old cached shell until the "new version" banner appears and they tap it.
 
-## Important notes
+**Netlify Drop**
+1. Open [app.netlify.com/drop](https://app.netlify.com/drop).
+2. Drag the whole `clean-pocket` folder onto the page. No account or build command needed.
+3. Netlify gives back an HTTPS URL immediately; drag the folder again for every release.
 
-- **This is an estimate, not tax advice.** Contribution amounts and tax scales (EFKA circular 6/2026, business-income scale) were taken from public sources and must be verified with AADE/EFKA or an accountant. They live in the `CONFIG` object at the top of the script.
-- VAT deductibility of expenses (fuel, servicing, phone) depends on your situation; the app leaves it at 0% until you set it.
-- The optional live weather banner uses the free [Open-Meteo](https://open-meteo.com) API. Check its terms before any commercial use.
-- **Built with AI assistance.** The code was written in conversation with an AI assistant (Claude) and reviewed and tested by the author.
+## Releasing a new version
 
-## Roadmap
+Bump `CACHE_VERSION` in `sw.js` on every deploy. Installed apps keep serving the cached shell
+until a new worker installs; the page then shows "Νέα έκδοση, πάτα για ανανέωση" and reloads
+after the new worker takes control. Forgetting the bump means users never see the update.
 
-- Orders and platform per shift, "same as yesterday" quick entry
-- Automated tests for the tax/VAT calculations and split into modules
-- Optional accounts and sync (e.g. with Supabase)
+## Architecture
 
----
+Vanilla ES modules, no build step, no npm dependencies.
 
-# Clean Pocket 🛵 (Ελληνικά)
+- `js/tax.js` - the 2026 Greek tax/EFKA/VAT engine (given, untouched, still covered by its own
+  7 tests). Pure functions, no DOM, no storage.
+- `js/calc.js` - pure calculation engine: period totals (half-month/month/year), the annual
+  profit projection (with its two fallback paths), EFKA proration for the period you're viewing,
+  the obligations list (EFKA/VAT/income-tax/custom debts) with stable keys, "set aside", the
+  annual goal and savings-goal math. Takes `(db, todayISO)`, returns numbers. No DOM.
+- `js/csv.js` - pure CSV parser for the shift importer (delimiter/decimal/date auto-detection,
+  Greek/English header mapping, duplicate detection).
+- `js/store.js` - the storage adapter (`LocalStorageAdapter`) behind a small interface
+  (`load/save/exportJSON/importJSON`) so a `RemoteAdapter` can be swapped in later for a SaaS
+  backend without touching the UI. Schema v3: every entry/fixed cost/debt/goal has a stable
+  `id` and `updatedAt`; deletes leave a `deleted: true` tombstone so a future sync can merge.
+  Import accepts both this app's v3 backup and the original app's v2 backup format.
+- `js/i18n.js` - the EL/EN dictionary (`t(key, vars)`) plus locale-aware number/date formatting.
+- `js/app.js` - UI only. Renders the four views (Home, Calendar, Obligations & Goals, More),
+  the bottom nav, the new-shift bottom sheet, the CSV import preview, the onboarding flow
+  (language → profile questions → summary), the tour prompt, the coach-mark guided tour and the
+  sample-data demo. Talks to the modules above; no tax/EFKA/VAT/date math lives here.
+- `css/app.css` - mobile-first "night-shift dashboard" styling, four themes (forest default,
+  graphite, black, light), a 4px spacing scale, bottom navigation, bottom sheets, the guided
+  tour's spotlight overlay. Fira Sans / Fira Sans Condensed from Google Fonts with a system
+  fallback stack, tabular numerals on every value that can change width.
+- `manifest.webmanifest`, `sw.js` - PWA install + offline shell caching (cache-first for the
+  shell, network-only for open-meteo, cache-first with opaque responses for the Google Fonts CSS
+  and font files so the chosen typeface still renders offline; a "new version" banner appears on
+  update).
+- `tests/` - `calc.test.js`, `csv.test.js`, `i18n.test.js` (this app) and `tax.test.js` (given).
+  `i18n.test.js` checks every dictionary key has both languages and scans `index.html`/`js/app.js`
+  for hard-coded Greek text outside `I.t(...)` calls, markup attributes and the settings city
+  list. `tests/fixtures/` holds the CSV smoke fixture.
+- `tools/make_icons.py` - draws the pocket/banknote/€ icon at the four required sizes.
+- `tools/contrast.py` - prints the WCAG contrast ratio of `--muted`/`--ink` against
+  `--surface`/`--bg` for every theme, straight out of `css/app.css`.
+- `tools/smoke.py` - Playwright end-to-end smoke test at 390x844, run twice (Greek, English):
+  language choice, skip-to-summary, the guided tour, sample data add/remove, the first-shift
+  explainer, CSV import, obligations, persistence and the service worker.
 
-**Εφαρμογή για ελεύθερους διανομείς: δες πόσα πραγματικά κρατάς.**
-Καταχωρείς κάθε βάρδια μόλις τελειώσει και βλέπεις τα καθαρά σου μετά από έξοδα, ΕΦΚΑ, φόρο και ΦΠΑ.
+## SaaS path
 
-## Τι κάνει
+The storage layer is already behind an adapter interface. To move to a backend: implement a
+`RemoteAdapter` with the same four methods, sync on the `id`/`updatedAt`/`deleted` fields already
+present on every record (last-write-wins or a proper CRDT merge), and swap the adapter instance
+in `js/app.js`. Nothing else in the app touches storage directly.
 
-- Καταγραφή βαρδιών με έσοδα πλατφόρμας, tips (ξεχωριστά), ώρες και έξοδα.
-- Καθαρά ανά **δεκαπενθήμερο (1–14, 15–τέλος)**, ανά μήνα και ανά έτος, καθώς και ανά ώρα και ανά βάρδια.
-- **ΦΠΑ**: καταχωρείς την αμοιβή χωρίς ΦΠΑ. Το ΦΠΑ εμφανίζεται ως «προς απόδοση» (μείον το ΦΠΑ εξόδων που εκπίπτει) και **δεν μειώνει τα καθαρά**.
-- **Ετήσιος στόχος** με μηχανάκι σε δρόμο. Μετράνε μόνο τα καθαρά, και υπολογίζεται πόσες ώρες και μέρες full-time χρειάζονται.
-- Ημερολόγιο (μέρες με καταχώριση, ρεπό, υποχρεώσεις ΦΠΑ), ιστορικό ανά μήνα, γράφημα 7 ημερών.
-- Αντίγραφο ασφαλείας (JSON) και εξαγωγή CSV για τον λογιστή.
-- Ελληνικά και αγγλικά, τέσσερα θέματα χρωμάτων, εγκατάσταση σαν εφαρμογή και χρήση χωρίς σύνδεση.
+## Tax/EFKA/VAT disclaimer
 
-## Εγκατάσταση στο κινητό
-
-- **Android (Chrome):** κουμπί «Εγκατάσταση» μέσα στην εφαρμογή, ή μενού → *Εγκατάσταση εφαρμογής*.
-- **iPhone (Safari):** *Κοινοποίηση* → *Προσθήκη στην αρχική οθόνη*.
-
-## Δική σου έκδοση στο GitHub Pages
-
-1. Φτιάξε δημόσιο repository (π.χ. `clean-pocket`) και ανέβασε όλα τα αρχεία (μαζί με τον φάκελο `icons`).
-2. **Settings → Pages → Deploy from a branch → main → / (root) → Save**.
-3. Σε 1–2 λεπτά η εφαρμογή είναι διαθέσιμη στο `https://<το-όνομά-σου>.github.io/clean-pocket/`.
-
-## Τα δεδομένα σου
-
-Αποθηκεύονται **στη συσκευή σου**. Για μεταφορά σε άλλη συσκευή: *Πάγια και ρυθμίσεις → Αντίγραφο ασφαλείας*, κατεβάζεις το `.json` και το εισάγεις στη νέα.
-
-## Σημαντικό
-
-- **Είναι εκτίμηση, όχι φορολογική συμβουλή.** Ποσά ΕΦΚΑ και φορολογικές κλίμακες πρέπει να επαληθεύονται με ΑΑΔΕ/ΕΦΚΑ ή λογιστή (βρίσκονται στο `CONFIG` στην κορυφή του script).
-- Το ΦΠΑ εξόδων που εκπίπτει το ορίζει ο χρήστης, μετά από συνεννόηση με τον λογιστή του.
-- **Φτιάχτηκε με τη βοήθεια AI** (Claude) και ελέγχθηκε από τον δημιουργό.
+All figures are an estimate for information, not tax advice (see the About panel, which surfaces
+`tax.RULES.source`). Verify with AADE/EFKA or an accountant before making decisions.

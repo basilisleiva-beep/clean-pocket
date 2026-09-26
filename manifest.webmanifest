@@ -1,38 +1,16 @@
 {
   "name": "Clean Pocket",
   "short_name": "Clean Pocket",
-  "description": "Net-income tracker for freelance delivery riders: shifts, tips, VAT, EFKA and a yearly goal.",
-  "lang": "el",
-  "dir": "ltr",
-  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#142b24",
   "theme_color": "#142b24",
-  "categories": [
-    "finance",
-    "productivity"
-  ],
+  "lang": "el",
   "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/apple-touch-180.png", "sizes": "180x180", "type": "image/png" }
   ]
 }

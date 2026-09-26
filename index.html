@@ -2,2568 +2,437 @@
 <html lang="el">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Clean Pocket</title>
+<meta name="description" content="Clean Pocket: τι σου μένει καθαρά μετά τα έξοδα, ΕΦΚΑ, φόρο και ΦΠΑ.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#142b24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Clean Pocket">
+<link rel="apple-touch-icon" href="icons/apple-touch-180.png">
+<link rel="icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@500;700;800&family=Fira+Sans:wght@400;500;600&display=swap&subset=greek" rel="stylesheet">
-<style>
-  :root {
-    /* Δάσος (προεπιλογή): σκούρο πράσινο */
-    color-scheme: dark;
-    --bg: #142b24; --surface: #1b3a30; --field: #24483c; --ink: #f0f7f3; --muted: #9fbdb0; --line: #2f5647; --edge: #45705f;
-    --road: #f2b705; --net: #5be3b0; --tips: #f4be55; --expense: #86a597; --efka: #8db8ff; --tax: #ff8474; --focus: #7fb0ff;
-    --track: #244a3c; --fill1: #1f9a72; --fill2: #5be3b0; --vat: #c3a0ff;
-    --g1: #5be3b0; --g2: #a5f0d3; --g3: #2fb88a;
-    --r1: #ffa89f; --r2: #ff8474; --r3: #f2584a; --r4: #d43f32; --r5: #a9332a; --r6: #7d2620;
-    box-sizing: border-box;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  :root[data-theme="graphite"] {
-    color-scheme: dark;
-    --bg: #1a1e25; --surface: #232830; --field: #2d333d; --ink: #f2f4f7; --muted: #9ba5b1; --line: #343c47; --edge: #4a5461;
-    --net: #35d3a2; --tips: #f2b64d; --expense: #7f8896; --efka: #78a6ff; --tax: #ff7a6b; --focus: #6ea2ff;
-    --track: #303743; --fill1: #17795f; --fill2: #35d3a2; --vat: #b48cff;
-    --g1: #35d3a2; --g2: #8be9c8; --g3: #1a9c78;
-    --r1: #ff9d93; --r2: #ff7f72; --r3: #f2584a;
-  }
-  :root[data-theme="black"] {
-    color-scheme: dark;
-    --bg: #000000; --surface: #191c1f; --field: #242830; --ink: #ffffff; --muted: #8b919a; --line: #2b3036; --edge: #3a4048;
-    --net: #2fd39a; --tips: #f5b84b; --expense: #7b828c; --efka: #6fa3ff; --tax: #ff6f61; --focus: #4d8dff;
-    --track: #262b31; --fill1: #17795f; --fill2: #2fd39a; --vat: #b48cff;
-    --g1: #2fd39a; --g2: #8be9c8; --g3: #1a9c78;
-  }
-  :root[data-theme="light"] {
-    color-scheme: light;
-    --bg: #eef0f3; --surface: #ffffff; --field: #eaedf0; --ink: #12161c; --muted: #5d6672; --line: #dde1e6; --edge: #c9ced5;
-    --road: #e2a400; --net: #0c8a68; --tips: #b87400; --expense: #8a929c; --efka: #2f5fd0; --tax: #d23b2e; --focus: #1a5fd0;
-    --track: #dfe3e8; --fill1: #0a7a5c; --fill2: #25c194; --vat: var(--vat);
-    --g1: #0c8a68; --g2: #5fcfab; --g3: #0a6e53;
-    --r1: #f4a094; --r2: #ea7c6e; --r3: #d23b2e; --r4: #b02d22; --r5: #8a2219; --r6: #66190f;
-  }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink);
-    font-family: "Fira Sans", "Segoe UI", Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.5;
-  }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
-  h1, h2, .num { font-family: "Fira Sans Condensed", "Arial Narrow", "Segoe UI", Arial, sans-serif; }
-  h1 { font-size: 30px; line-height: 1.1; margin: 8px 0 4px; font-weight: 800; }
-  .sub { color: var(--muted); margin: 0 0 20px; max-width: 46ch; }
-  h2 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
-
-  .panel { background: var(--surface); border: 0; border-radius: 20px; padding: 18px; margin-bottom: 12px; }
-
-  label { display: block; font-weight: 500; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
-  input[type="number"], input[type="month"], input[type="date"] {
-    width: 100%; font: inherit; color: var(--ink); background: var(--field);
-    border: 1px solid transparent; border-radius: 12px; padding: 10px 12px; min-height: 44px;
-  }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grid .full { grid-column: 1 / -1; }
-  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-
-  .btn {
-    font: inherit; font-weight: 600; min-height: 52px; padding: 10px 18px; border-radius: 999px;
-    border: 1px solid var(--ink); background: var(--ink); color: var(--surface); cursor: pointer;
-  }
-  .btn:disabled { opacity: .45; cursor: not-allowed; }
-  .btn.wide { width: 100%; }
-  .status { min-height: 22px; margin: 10px 0 0; font-size: 14px; color: var(--net); font-weight: 600; }
-
-  .picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .seg { display: inline-flex; background: var(--field); border-radius: 999px; overflow: hidden; padding: 3px; }
-  .seg button {
-    font: inherit; font-weight: 600; padding: 8px 18px; border: 0; background: transparent; border-radius: 999px;
-    color: var(--ink); cursor: pointer; min-height: 40px;
-  }
-  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
-  .picker input[type="month"] { width: auto; }
-
-  .result { background: var(--surface); }
-  .kicker { color: var(--muted); font-size: 14px; margin: 0; }
-  .big { font-size: 56px; line-height: 1; font-weight: 800; margin: 4px 0 2px; color: var(--net); }
-  .big.neg { color: var(--tax); }
-  .lane { position: relative; display: flex; height: 22px; border-radius: 4px; overflow: hidden; margin: 16px 0 10px; background: var(--line); }
-  .lane span { display: block; height: 100%; min-width: 0; transition: width .25s ease; }
-  .lane .s-exp { background: var(--expense); }
-  .lane .s-efka { background: var(--efka); }
-  .lane .s-tax { background: var(--tax); }
-  .lane .s-net { background: var(--net); }
-  .lane::after {
-    content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 0;
-    border-top: 2px dashed var(--road); opacity: .9; pointer-events: none;
-  }
-  .income2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 4px; }
-  .income2 > div { background: var(--field); border-radius: 12px; padding: 10px 12px; }
-  .income2 .num { font-size: 24px; font-weight: 800; line-height: 1.1; }
-  .income2 .tipsv { color: var(--tips); }
-  .legend { list-style: none; margin: 0; padding: 0; }
-  .legend li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
-  .legend .name { display: flex; align-items: center; gap: 8px; }
-  .dot { width: 12px; height: 12px; border-radius: 3px; flex: none; }
-  .legend .val { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .rates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
-  .rate { border-left: 4px solid var(--road); padding-left: 10px; }
-  .rate .num { font-size: 24px; font-weight: 800; line-height: 1.1; white-space: nowrap; }
-  .rate .kicker { font-size: 13px; }
-  .note { font-size: 14px; color: var(--muted); margin: 12px 0 0; }
-
-  details.panel summary { cursor: pointer; font-weight: 600; min-height: 32px; }
-  details.panel[open] summary { margin-bottom: 12px; }
-  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; color: var(--ink); font-size: 15px; }
-  .check input { width: 22px; height: 22px; margin-top: 2px; flex: none; }
-
-  .tablewrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 15px; }
-  th, td { text-align: left; padding: 8px 6px; border-top: 1px solid var(--line); white-space: nowrap; }
-  th { font-weight: 600; color: var(--muted); font-size: 13px; border-top: 0; }
-  td.r, th.r { text-align: right; }
-  .x { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 18px; min-width: 32px; min-height: 32px; }
-  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-  .chip { font: inherit; font-weight: 600; min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 0; background: var(--field); color: var(--ink); cursor: pointer; }
-  .chip.clear { color: var(--muted); }
-  .chip:active { background: var(--line); }
-  .fixedlist { list-style: none; margin: 0 0 12px; padding: 0; }
-  .fixedlist li { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
-  .fixedlist .nm { flex: 1; }
-  .fixedlist .am { font-variant-numeric: tabular-nums; font-weight: 600; }
-  .wrap { position: relative; overflow-x: clip; }
-  .hero-ride { position: absolute; top: 4px; left: -12%; font-size: 26px; line-height: 1; pointer-events: none;
-    animation: ride 2.6s cubic-bezier(.4,0,.3,1) .3s 1 both; z-index: 2; }
-  @keyframes ride { from { left: -12%; } to { left: 108%; } }
-  .streak { display: inline-flex; align-items: center; gap: 6px; background: var(--field); border-radius: 999px;
-    padding: 4px 12px; font-weight: 600; font-size: 14px; margin: -8px 0 16px; }
-  .streak[hidden] { display: none; }
-  .laneWrap { position: relative; margin: 26px 0 10px; }
-  .laneWrap .lane { margin: 0; }
-  .rider { position: absolute; top: -26px; left: 0; font-size: 22px; line-height: 1; pointer-events: none;
-    transform: translateX(-50%) scaleX(-1); transition: left .8s cubic-bezier(.3,1.35,.5,1); }
-  .rider[hidden] { display: none; }
-  #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
-  .big { text-shadow: 0 0 28px color-mix(in srgb, var(--net) 35%, transparent); }
-  .big.neg { text-shadow: none; }
-  .chip { transition: transform .12s ease; }
-  .chip:active { transform: scale(.9); }
-  @media (prefers-reduced-motion: reduce) { .hero-ride { display: none; } .rider { transition: none; } .chip { transition: none; } }
-  .cols { display: flex; flex-direction: column; }
-  .col { display: contents; }
-  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  input[type="file"] { width: 100%; font: inherit; color: var(--muted); }
-  @media (min-width: 900px) {
-    .wrap { max-width: 1060px; padding-top: 28px; }
-    .cols { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 0 20px; align-items: start; }
-    .col { display: block; }
-    h1 { font-size: 40px; }
-    .big { font-size: 76px; }
-    .sub { font-size: 17px; }
-  }
-  .stats { max-width: none; }
-  #pieWrap { width: 100%; max-width: 220px; aspect-ratio: 1 / 1; margin: 0 auto 8px; }
-  #pieWrap svg { width: 100%; height: 100%; display: block; }
-  #pieWrap text { font-family: "Fira Sans Condensed", "Arial Narrow", Arial, sans-serif; font-weight: 800; }
-  .sign { font-weight: 800; width: 14px; text-align: center; flex: none; }
-  #pieLegend .val small { color: var(--muted); font-weight: 500; margin-left: 4px; }
-  .brand { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 8px 0 20px; }
-  .brand h1 { margin: 0; }
-  .brand .sub { margin: 4px 0 0; }
-  .logo { width: 78px; height: 78px; flex: none; }
-  .k-note { fill: var(--net); }
-  .k-noteline { stroke: #0a5a45; }
-  .k-notetext { fill: #0a5a45; font-family: "Fira Sans Condensed", Arial, sans-serif; }
-  .k-pocket { fill: #2d333a; stroke: #4a525b; stroke-width: 1.5; }
-  .k-hem { fill: #383f47; }
-  .k-stitch { stroke: var(--road); }
-  @media (min-width: 900px) { .logo { width: 96px; height: 96px; } }
-  .wx { margin-left: auto; display: flex; align-items: center; gap: 12px; background: var(--surface);
-    border-radius: 20px; padding: 10px 16px; min-width: 210px; max-width: 100%; }
-  .wx-icon { font-size: 38px; line-height: 1; flex: none; }
-  .wx-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .wx-temp { font-size: 30px; font-weight: 800; line-height: 1; }
-  .wx-label { font-weight: 600; }
-  .wx-sub { color: var(--muted); font-size: 13px; line-height: 1.35; }
-  .wx-sub a { color: var(--muted); }
-  .wx-pick { margin-top: 6px; gap: 4px; }
-  .wx-pick .chip { min-height: 34px; padding: 2px 10px; font-size: 18px; }
-  .wx-pick .chip[aria-pressed="true"] { outline: 2px solid var(--road); }
-  @media (max-width: 640px) { .wx { margin-left: 0; width: 100%; } }
-  .cal-head { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 10px; }
-  .cal-head strong { font-family: "Fira Sans Condensed", "Arial Narrow", Arial, sans-serif; font-size: 19px; }
-  .cal-dow, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-dow span { text-align: center; color: var(--muted); font-size: 12px; padding: 2px 0; }
-  .cal-day { aspect-ratio: 1 / 1; min-height: 40px; border: 0; padding: 0; border-radius: 12px; background: var(--field);
-    color: var(--ink); font: inherit; font-size: 14px; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; cursor: pointer; line-height: 1.1; }
-  .cal-day small { font-size: 10px; opacity: .9; }
-  .cal-day.blank { background: transparent; cursor: default; }
-  .cal-day.done { background: color-mix(in srgb, var(--net) 26%, var(--field)); }
-  .cal-day.done small { color: var(--net); font-weight: 600; opacity: 1; }
-  .cal-day.off { color: var(--muted); }
-  .cal-day.missing { background: transparent; box-shadow: inset 0 0 0 1.5px var(--tax); }
-  .cal-day.today { outline: 2px solid var(--road); outline-offset: 1px; }
-  .cal-day.sel { box-shadow: 0 0 0 2px var(--ink); }
-  .cal-day.missing.sel { box-shadow: inset 0 0 0 1.5px var(--tax), 0 0 0 2px var(--ink); }
-  .cal-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; color: var(--muted); }
-  .cal-legend .lg { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; background: var(--field); }
-  .cal-legend .lg.done { background: color-mix(in srgb, var(--net) 60%, var(--field)); }
-  .cal-legend .lg.missing { background: transparent; box-shadow: inset 0 0 0 1.5px var(--tax); }
-  .cal-detail { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
-  .cal-detail ul { list-style: none; margin: 8px 0; padding: 0; }
-  .cal-detail li { padding: 6px 0; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .cal-detail .btn { min-height: 44px; font-size: 14px; }
-  .reminder { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-radius: 16px; padding: 12px 16px; margin-bottom: 12px;
-    background: color-mix(in srgb, var(--road) 16%, var(--surface)); }
-  .reminder[hidden] { display: none; }
-  .reminder span { flex: 1; min-width: 200px; font-size: 14px; }
-  .reminder .btn { min-height: 44px; font-size: 14px; }
-  .histbtn { background: none; border: 0; color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; padding: 6px 0; text-align: left; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-  .cloud { display: inline-flex; align-items: center; gap: 6px; background: var(--field); border-radius: 999px;
-    padding: 4px 12px; font-weight: 500; font-size: 13px; margin: -8px 0 16px 6px; color: var(--muted); }
-  .cloud[hidden] { display: none; }
-  .cloud.ok { color: var(--net); }
-  .cloud.err { color: var(--tax); }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .goal-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .goal-top h2 { margin: 0; }
-  .goal-edit { display: flex; gap: 8px; align-items: center; }
-  .goal-edit input { width: 130px; }
-  .goal-edit .btn { min-height: 44px; font-size: 14px; }
-  .goal-track { position: relative; height: 34px; margin: 40px 8px 34px; border-radius: 999px; background: var(--track); }
-  .goal-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 999px; min-width: 0;
-    background: linear-gradient(90deg, var(--fill1), var(--fill2)); transition: width 1.1s cubic-bezier(.3, 1.15, .4, 1); }
-  .goal-track::after { content: ""; position: absolute; left: 16px; right: 16px; top: 50%; border-top: 2px dashed var(--road); opacity: .85; pointer-events: none; }
-  .goal-rider { position: absolute; top: -34px; left: 0; font-size: 32px; line-height: 1; transform: translateX(-50%) scaleX(-1);
-    transition: left 1.1s cubic-bezier(.3, 1.15, .4, 1); z-index: 2; }
-  .goal-flag { position: absolute; right: -8px; top: -32px; font-size: 26px; line-height: 1; }
-  .goal-ticks span { position: absolute; top: 40px; font-size: 11px; color: var(--muted); transform: translateX(-50%); white-space: nowrap; }
-  .goal-line { margin: 0; font-weight: 600; }
-  .goal-cheer { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
-  .goal-plan { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
-  .goal-plan p { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
-  .goal-plan ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-  .goal-plan li { background: var(--field); border-radius: 14px; padding: 10px 12px; }
-  .goal-plan .num { font-size: 24px; font-weight: 800; line-height: 1.1; display: block; }
-  .goal-plan small { color: var(--muted); font-size: 12px; }
-  @media (prefers-reduced-motion: reduce) { .goal-fill, .goal-rider { transition: none; } }
-  .lane .s-vat { background: var(--vat); }
-  select { width: 100%; font: inherit; color: var(--ink); background: var(--field); border: 1px solid transparent; border-radius: 12px; padding: 10px 12px; min-height: 44px; }
-  .vatbox { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 4px; }
-  .cal-day { position: relative; }
-  .cal-day .vdot { position: absolute; top: 4px; right: 5px; width: 9px; height: 9px; border-radius: 50%; background: var(--vat); }
-  .cal-day.due { box-shadow: inset 0 0 0 1.5px var(--vat); }
-  .cal-day.due.sel { box-shadow: inset 0 0 0 1.5px var(--vat), 0 0 0 2px var(--ink); }
-  .cal-legend .lg.vat { background: var(--vat); border-radius: 50%; }
-  .cal-due { margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--vat) 18%, var(--field)); font-size: 14px; }
-  .panel { border: 1px solid var(--line); }
-  .big, .big.neg { text-shadow: none; }
-  .result { border-color: var(--edge); }
-  .topbar { display: flex; gap: 14px; justify-content: flex-end; align-items: center; margin: 0 0 -6px; position: relative; z-index: 3; }
-  .theme-pick { display: flex; gap: 10px; }
-  .langbtn { font: inherit; font-weight: 700; font-size: 12px; letter-spacing: .04em; min-height: 30px; padding: 4px 12px; border-radius: 999px;
-    border: 1px solid var(--edge); background: var(--field); color: var(--ink); cursor: pointer; }
-  .theme-pick button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--edge); padding: 0; cursor: pointer; }
-  .theme-pick button[aria-pressed="true"] { outline: 2px solid var(--road); outline-offset: 2px; }
-  .pane[hidden] { display: none !important; }
-  .tabs { padding: 14px 16px 18px; }
-  .tabbar { display: flex; gap: 6px; overflow-x: auto; margin: 0 -4px 14px; padding: 0 4px 4px; scrollbar-width: none; }
-  .tabbar::-webkit-scrollbar { display: none; }
-  .tabbar button { flex: none; font: inherit; font-weight: 600; font-size: 14px; padding: 8px 14px; border: 0; border-radius: 999px;
-    background: var(--field); color: var(--ink); min-height: 40px; cursor: pointer; white-space: nowrap; }
-  .tabbar button[aria-selected="true"] { background: var(--ink); color: var(--surface); }
-  .tabcount { opacity: .75; font-weight: 500; }
-  .tabs .pane h2 { margin-top: 0; }
-  .statbody { display: grid; gap: 8px; }
-  .cal-wrap { max-width: 560px; }
-  .pane-cfg { gap: 12px; align-items: start; }
-  .tabs details.panel { background: transparent; border: 1px solid var(--line); border-radius: 16px; margin-bottom: 10px; }
-  @media (min-width: 720px) {
-    .statbody { grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: center; }
-    .pane-cfg:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-  }
-  .wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 4px; }
-  .wk-col { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; min-width: 0; }
-  .wk-val { font-size: 11px; color: var(--muted); height: 15px; line-height: 15px; font-variant-numeric: tabular-nums; }
-  .wk-track { width: 100%; height: 110px; display: flex; align-items: flex-end; justify-content: center; }
-  .wk-bar { width: 72%; max-width: 34px; min-height: 3px; border-radius: 8px 8px 4px 4px; display: flex; flex-direction: column-reverse; overflow: hidden; background: var(--line); }
-  .wk-bar .p { background: var(--net); width: 100%; }
-  .wk-bar .t { background: var(--tips); width: 100%; }
-  .wk-day { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.2; }
-  .wk-col.today .wk-day { color: var(--ink); font-weight: 700; }
-  .wk-col.today .wk-day::after { content: ""; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--road); margin: 3px auto 0; }
-  .wk-col.off .wk-bar { background: transparent; }
-  .wk-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 13px; color: var(--muted); }
-  .wk-legend .lg { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; }
-  .wk-legend .lg.net { background: var(--net); }
-  .wk-legend .lg.tips { background: var(--tips); }
-  .install { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-radius: 16px; padding: 12px 16px; margin: 8px 0 12px;
-    background: color-mix(in srgb, var(--net) 16%, var(--surface)); position: relative; z-index: 3; }
-  .install[hidden] { display: none; }
-  .install span { flex: 1; min-width: 200px; font-size: 14px; }
-  .install .btn { min-height: 44px; font-size: 14px; }
-  .cal-detail li { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  #cancelEdit[hidden] { display: none; }
-  .brand > div:not(.wx) { flex: 1 1 200px; min-width: 0; }
-  .grid .full > .chips { margin-top: -4px; }
-  .wx-temp:empty { display: none; }
-  .grid { align-items: end; }
-  .seg button { white-space: nowrap; }
-  @media (max-width: 480px) {
-    .picker .seg { display: flex; width: 100%; }
-    .seg button { flex: 1 1 auto; padding: 8px 6px; font-size: 13px; }
-  }
-  @media (min-width: 900px) {
-    .cal-wrap { max-width: none; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 0 32px; align-items: start; }
-    .cal-side .cal-legend { margin-top: 0; }
-  }
-  footer { color: var(--muted); font-size: 13px; margin-top: 8px; }
-  @media (max-width: 380px) { .big { font-size: 46px; } .grid, .income2 { grid-template-columns: 1fr; } }
-  @media (prefers-reduced-motion: reduce) { .lane span { transition: none; } }
-</style>
-<meta name="theme-color" content="#142b24">
-<meta name="description" content="Clean Pocket: net-income tracker for freelance delivery riders in Greece. Shifts, tips, VAT, EFKA and yearly goal.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Clean Pocket">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Fira+Sans+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
 </head>
-<body>
-<div class="wrap">
-  <div class="topbar">
-  <button type="button" class="langbtn" id="langBtn" aria-label="Αλλαγή γλώσσας">EN</button>
-  <div class="theme-pick" id="themePick" role="group" aria-label="Θέμα εμφάνισης">
-    <button type="button" data-theme="forest" style="background:#1b3a30" aria-label="Δάσος (σκούρο πράσινο)" aria-pressed="true"></button>
-    <button type="button" data-theme="graphite" style="background:#232830" aria-label="Γραφίτης" aria-pressed="false"></button>
-    <button type="button" data-theme="black" style="background:#000000" aria-label="Μαύρο" aria-pressed="false"></button>
-    <button type="button" data-theme="light" style="background:#ffffff" aria-label="Ανοιχτό" aria-pressed="false"></button>
-  </div>
-  </div>
-  <div class="install" id="installBar" hidden>
+<body class="boot-reveal">
+
+<div id="app" class="app">
+
+  <div class="banner" id="installBar" hidden>
     <span id="installText"></span>
-    <button type="button" class="btn" id="installBtn">Εγκατάσταση</button>
-    <button type="button" class="btn ghost" id="installLater">Όχι τώρα</button>
+    <button type="button" class="btn sm" id="installBtn"></button>
+    <button type="button" class="btn sm ghost" id="installLater"></button>
   </div>
-  <div class="hero-ride" aria-hidden="true">🛵💨</div>
-  <header class="brand">
-    <svg class="logo" viewBox="0 0 96 96" role="img" aria-label="Χαρτονόμισμα που βγαίνει από τσέπη">
-      <g transform="rotate(-8 48 26)">
-        <rect class="k-note" x="20" y="6" width="56" height="36" rx="5"/>
-        <rect class="k-noteline" x="25" y="11" width="46" height="26" rx="3" fill="none" stroke-width="1.5"/>
-        <circle class="k-noteline" cx="48" cy="24" r="9" fill="none" stroke-width="1.5"/>
-        <text class="k-notetext" x="48" y="29" text-anchor="middle" font-size="14" font-weight="800">€</text>
-        <circle class="k-noteline" cx="30" cy="24" r="2.2" fill="none" stroke-width="1.2"/>
-        <circle class="k-noteline" cx="66" cy="24" r="2.2" fill="none" stroke-width="1.2"/>
-      </g>
-      <path class="k-pocket" d="M12 40 H84 V68 Q84 74 79 77 L48 92 L17 77 Q12 74 12 68 Z"/>
-      <path class="k-hem" d="M12 40 H84 V49 H12 Z"/>
-      <path class="k-stitch" d="M19 55 V67 Q19 70 22 72 L48 85 L74 72 Q77 70 77 67 V55" fill="none" stroke-width="1.6" stroke-dasharray="3.5 3"/>
-    </svg>
-    <div>
-      <h1>Clean Pocket</h1>
-      <p class="sub">Για να γνωρίζεις πάντα τι σου μένει καθαρά στην τσέπη.</p>
-    </div>
-    <aside class="wx" id="wx" aria-live="polite" aria-label="Καιρός">
-      <div class="wx-icon" id="wxIcon" aria-hidden="true">🌤️</div>
-      <div class="wx-main">
-        <div class="wx-line"><span class="num wx-temp" id="wxTemp"></span><span class="wx-label" id="wxLabel">Καιρός…</span></div>
-        <div class="wx-sub" id="wxSub">Θεσσαλονίκη</div>
-        <div class="chips wx-pick" id="wxPick" hidden></div>
-      </div>
-    </aside>
-  </header>
-  <div class="reminder" id="backupReminder" hidden>
-    <span id="reminderText"></span>
-    <button type="button" class="btn" id="reminderBtn">Αντίγραφο τώρα</button>
-    <button type="button" class="btn ghost" id="reminderLater">Αργότερα</button>
+  <div class="banner" id="updateBar" hidden>
+    <button type="button" class="btn sm wide" id="updateBtn"></button>
   </div>
-  <div class="streak" id="streak" hidden></div>
-  <div class="cloud" id="cloudBadge" role="status" hidden></div>
+  <div class="banner warn" id="backupBar" hidden>
+    <span id="backupText"></span>
+    <button type="button" class="btn sm" id="backupNowBtn"></button>
+    <button type="button" class="btn sm ghost" id="backupLaterBtn"></button>
+  </div>
+  <div class="banner sample" id="sampleBar" hidden>
+    <span id="sampleBarText"></span>
+    <button type="button" class="btn sm ghost" id="sampleRemoveBtn"></button>
+  </div>
 
-  <section class="panel goal" id="goalPanel" aria-labelledby="h-goal">
-    <div class="goal-top">
-      <h2 id="h-goal">Στόχος καθαρών <span id="goalYear"></span></h2>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="toast" id="toast" hidden role="status"></div>
+
+  <!-- ===== HOME ===== -->
+  <section class="view" id="view-home" data-view="home">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 96 96" role="img" aria-label="Clean Pocket">
+          <g transform="rotate(-8 48 26)">
+            <rect class="k-note" x="20" y="6" width="56" height="36" rx="5"/>
+            <rect class="k-noteline" x="25" y="11" width="46" height="26" rx="3" fill="none" stroke-width="1.5"/>
+            <circle class="k-noteline" cx="48" cy="24" r="9" fill="none" stroke-width="1.5"/>
+            <text class="k-notetext" x="48" y="29" text-anchor="middle" font-size="14" font-weight="800">&#8364;</text>
+            <circle class="k-noteline" cx="30" cy="24" r="2.2" fill="none" stroke-width="1.2"/>
+            <circle class="k-noteline" cx="66" cy="24" r="2.2" fill="none" stroke-width="1.2"/>
+          </g>
+          <path class="k-pocket" d="M12 40 H84 V68 Q84 74 79 77 L48 92 L17 77 Q12 74 12 68 Z"/>
+          <path class="k-hem" d="M12 40 H84 V49 H12 Z"/>
+          <path class="k-stitch" d="M19 55 V67 Q19 70 22 72 L48 85 L74 72 Q77 70 77 67 V55" fill="none" stroke-width="1.6" stroke-dasharray="3.5 3"/>
+        </svg>
+        <h1>Clean Pocket</h1>
+      </div>
+      <div class="topbar-right">
+        <span class="streak" id="streak" hidden></span>
+        <div class="seg sm langseg" id="langSegTop" role="group" aria-label="Γλώσσα">
+          <button type="button" class="segbtn" data-lang="el" aria-pressed="true">&Epsilon;&Lambda;</button>
+          <button type="button" class="segbtn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="picker seg" role="group" aria-label="Περίοδος" id="periodSeg">
+      <button type="button" class="segbtn" data-period="h1" aria-pressed="true"></button>
+      <button type="button" class="segbtn" data-period="h2" aria-pressed="false"></button>
+      <button type="button" class="segbtn" data-period="month" aria-pressed="false"></button>
+      <button type="button" class="segbtn" data-period="year" aria-pressed="false"></button>
+    </div>
+    <div class="periodNav">
+      <button type="button" class="iconbtn" id="periodPrev" aria-label="‹">‹</button>
+      <strong id="periodLabel"></strong>
+      <button type="button" class="iconbtn" id="periodNext" aria-label="›">›</button>
+    </div>
+
+    <section class="card hero" id="heroCard" aria-live="polite">
+      <p class="kicker" id="heroKicker"></p>
+      <div class="big num" id="netBig">-</div>
+      <p class="kicker" id="netSub"></p>
+      <div class="tiles">
+        <div class="tile"><span class="tkicker" id="tEarnedLbl"></span><span class="tval" id="tEarned">-</span><span class="tcap" id="tEarnedCap"></span></div>
+        <div class="tile"><span class="tkicker" id="tYoursLbl"></span><span class="tval" id="tYours">-</span><span class="tcap" id="tYoursCap"></span></div>
+        <div class="tile"><span class="tkicker" id="tSetAsideLbl"></span><span class="tval" id="tSetAside">-</span><span class="tcap" id="tSetAsideCap"></span></div>
+      </div>
+      <div class="hero-empty-actions" id="heroEmptyActions" hidden>
+        <button type="button" class="btn" id="heroAddBtn"></button>
+        <button type="button" class="btn ghost" id="heroSampleBtn"></button>
+      </div>
+    </section>
+
+    <div class="explainer" id="firstShiftExplainer" hidden>
+      <span id="explainerText"></span>
+      <button type="button" class="x" id="explainerClose">&#10005;</button>
+    </div>
+
+    <section class="card" id="nextDueCard">
+      <h2 id="h-nextdue"></h2>
+      <ul class="obl-list" id="nextDueList"></ul>
+    </section>
+
+    <section class="card" id="goalMiniCard">
+      <div class="goal-mini-head">
+        <span id="goalMiniLabel"></span>
+        <span id="goalMiniPct"></span>
+      </div>
+      <div class="goal-track sm"><div class="goal-fill" id="goalMiniFill"></div></div>
+    </section>
+
+    <section class="card" id="last7Card">
+      <h2 id="h-last7"></h2>
+      <div class="wk" id="wkBars"></div>
+      <p class="note" id="wkNote"></p>
+    </section>
+
+    <details class="card" id="breakdownCard">
+      <summary id="h-breakdown"></summary>
+      <div class="laneWrap">
+        <span class="rider" id="rider" aria-hidden="true" hidden>&#128692;</span>
+        <div class="lane" id="lane" role="img"></div>
+      </div>
+      <ul class="legend" id="legendList"></ul>
+      <div class="rates">
+        <div class="rate"><div class="num" id="totHours">-</div><div class="kicker" id="lblTotHours"></div></div>
+        <div class="rate"><div class="num" id="perHour">-</div><div class="kicker" id="lblPerHour"></div></div>
+        <div class="rate"><div class="num" id="perShift">-</div><div class="kicker" id="lblPerShift"></div></div>
+      </div>
+      <p class="note" id="vatLine" hidden></p>
+      <p class="note" id="prepayNote"></p>
+      <p class="note warn" id="presumedWarn" hidden></p>
+      <div class="field" id="extraWrap" hidden>
+        <label for="extraInput" id="extraLabel"></label>
+        <input type="text" id="extraInput" inputmode="decimal">
+      </div>
+    </details>
+  </section>
+
+  <!-- ===== CALENDAR ===== -->
+  <section class="view" id="view-calendar" data-view="calendar" hidden>
+    <header class="topbar"><h1 id="h-cal-title-top"></h1></header>
+    <div class="card">
+      <div class="cal-head">
+        <button type="button" class="iconbtn" id="calPrev">&#8249;</button>
+        <strong id="calTitle"></strong>
+        <button type="button" class="iconbtn" id="calNext">&#8250;</button>
+      </div>
+      <div class="empty-inline" id="calEmpty" hidden>
+        <p class="note" id="calEmptyText"></p>
+        <button type="button" class="btn sm" id="calEmptyAddBtn"></button>
+      </div>
+      <div class="cal-dow" id="calDow" aria-hidden="true"></div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <span><i class="lg done"></i><span id="lgDone"></span></span>
+        <span><i class="lg missing"></i><span id="lgMissing"></span></span>
+        <span><i class="lg off"></i><span id="lgOff"></span></span>
+        <span><i class="lg vat"></i><span id="lgVat"></span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OBLIGATIONS & GOALS ===== -->
+  <section class="view" id="view-obligations" data-view="obligations" hidden>
+    <header class="topbar"><h1 id="h-obl-top"></h1></header>
+
+    <section class="card">
+      <h2 id="h-obl"></h2>
+      <p class="note" id="setAsideNote"></p>
+      <div class="setaside-total"><span id="h-setaside"></span> <strong id="setAsideBig">-</strong></div>
+      <ul class="obl-list" id="oblList"></ul>
+      <button type="button" class="btn sm ghost" id="oblEmptyAddBtn" hidden></button>
+      <details class="subcard">
+        <summary id="h-add-debt"></summary>
+        <div class="field"><label id="lblDebtName" for="debtName"></label><input type="text" id="debtName" maxlength="60"></div>
+        <div class="field"><label id="lblDebtAmount" for="debtAmount"></label><input type="text" id="debtAmount" inputmode="decimal"></div>
+        <div class="field"><label id="lblDebtDue" for="debtDue"></label><input type="date" id="debtDue"></div>
+        <div class="field">
+          <label id="lblDebtRepeat" for="debtRepeat"></label>
+          <select id="debtRepeat"><option value="none" id="optRepeatNone"></option><option value="monthly" id="optRepeatMonthly"></option></select>
+        </div>
+        <button type="button" class="btn wide" id="debtAdd"></button>
+      </details>
+    </section>
+
+    <section class="card goal" id="goalPanel">
+      <div class="goal-top">
+        <h2 id="goalTitleText"></h2>
+      </div>
       <div class="goal-edit">
-        <label for="goalInput" class="sr">Ετήσιος στόχος καθαρών, €</label>
-        <input type="number" id="goalInput" inputmode="numeric" step="100" min="0" placeholder="π.χ. 20000">
-        <button type="button" class="btn" id="goalSave">Ορισμός</button>
+        <input type="text" id="goalInput" inputmode="numeric">
+        <button type="button" class="btn" id="goalSave"></button>
+        <button type="button" class="btn ghost goal-lock" id="goalLock" hidden aria-pressed="false">&#128275;</button>
       </div>
-    </div>
-    <div class="goal-track" id="goalTrack" role="img" aria-label="Πρόοδος προς τον ετήσιο στόχο">
-      <div class="goal-fill" id="goalFill"></div>
-      <span class="goal-rider" id="goalRider" aria-hidden="true">🛵</span>
-      <span class="goal-flag" aria-hidden="true">🏁</span>
-      <div class="goal-ticks" id="goalTicks" aria-hidden="true"></div>
-    </div>
-    <p class="goal-line" id="goalLine">Όρισε έναν ετήσιο στόχο και δες το μηχανάκι να τον πλησιάζει με κάθε βάρδια.</p>
-    <p class="goal-cheer" id="goalCheer"></p>
-    <div class="goal-plan" id="goalPlan" hidden></div>
+      <div class="goal-track" id="goalTrack">
+        <div class="goal-fill" id="goalFill"></div>
+        <span class="goal-rider" id="goalRider" aria-hidden="true">&#128692;</span>
+        <span class="goal-flag" aria-hidden="true">&#127937;</span>
+      </div>
+      <p class="goal-line" id="goalLine"></p>
+      <p class="goal-cheer" id="goalCheer"></p>
+      <div class="goal-plan" id="goalPlan" hidden></div>
+    </section>
+
+    <section class="card">
+      <h2 id="h-savings"></h2>
+      <ul class="savings-list" id="savingsList"></ul>
+      <details class="subcard">
+        <summary id="h-add-savings"></summary>
+        <div class="field"><label id="lblSavName" for="savName"></label><input type="text" id="savName" maxlength="60"></div>
+        <div class="field"><label id="lblSavTarget" for="savTarget"></label><input type="text" id="savTarget" inputmode="decimal"></div>
+        <div class="field"><label id="lblSavSaved" for="savSaved"></label><input type="text" id="savSaved" inputmode="decimal"></div>
+        <div class="field"><label id="lblSavDate" for="savDate"></label><input type="date" id="savDate"></div>
+        <button type="button" class="btn wide" id="savAdd"></button>
+      </details>
+    </section>
   </section>
 
-  <div class="cols">
-  <div class="col col-a">
-  <div style="order:1">
-  <section class="panel" aria-labelledby="h-new">
-    <h2 id="h-new">Νέα βάρδια</h2>
-    <div class="grid">
-      <div class="full">
-        <label for="fDate">Ημερομηνία</label>
-        <input type="date" id="fDate">
-      </div>
-      <div>
-        <label for="fIncome">Έσοδα πλατφόρμας, €</label>
-        <input type="number" id="fIncome" inputmode="decimal" step="0.01" min="0" placeholder="π.χ. 62">
-      </div>
-      <div>
-        <label for="fTips">Tips, €</label>
-        <input type="number" id="fTips" inputmode="decimal" step="0.01" min="0" placeholder="π.χ. 8">
-      </div>
-      <div class="full"><div class="chips" role="group" aria-label="Γρήγορη προσθήκη tips">
-          <button type="button" class="chip" data-add="1">+1</button>
-          <button type="button" class="chip" data-add="2">+2</button>
-          <button type="button" class="chip" data-add="5">+5</button>
-          <button type="button" class="chip" data-add="10">+10</button>
-          <button type="button" class="chip clear" id="tipsClear" aria-label="Μηδενισμός tips">✕</button>
-        </div></div>
-      <div>
-        <label for="fHours">Ώρες βάρδιας</label>
-        <input type="number" id="fHours" inputmode="decimal" step="0.25" min="0" placeholder="π.χ. 6">
-      </div>
-      <div>
-        <label for="fExp">Έξοδα βάρδιας (καύσιμα κ.λπ.), €</label>
-        <input type="number" id="fExp" inputmode="decimal" step="0.01" min="0" placeholder="π.χ. 9">
-      </div>
-      <div class="full">
-        <button type="button" class="btn wide" id="add">Προσθήκη βάρδιας</button>
-        <button type="button" class="btn wide ghost" id="cancelEdit" hidden style="margin-top:8px">Ακύρωση</button>
-        <p class="status" id="status" role="status"></p>
-      </div>
-    </div>
-  </section>
-  </div>
-  <div style="order:4">
-  <section class="panel week" aria-labelledby="h-week">
-    <h2 id="h-week">Τελευταίες 7 ημέρες</h2>
-    <div class="wk" id="wkBars" role="group" aria-label="Έσοδα ανά ημέρα"></div>
-    <div class="wk-legend"><span><i class="lg net"></i>Πλατφόρμα</span><span><i class="lg tips"></i>Tips</span></div>
-    <p class="note" id="wkNote"></p>
-  </section>
-  </div>
-  </div>
-  <div class="col col-b">
-  <div style="order:2">
-  <section class="panel" aria-labelledby="h-period">
-    <h2 id="h-period">Περίοδος</h2>
-    <div class="picker">
-      <div class="seg" role="group" aria-label="Περίοδος">
-        <button type="button" id="half1" aria-pressed="true">1–14</button>
-        <button type="button" id="half2" aria-pressed="false">15–30</button>
-        <button type="button" id="half0" aria-pressed="false">Όλος ο μήνας</button>
-        <button type="button" id="halfY" aria-pressed="false">Έτος</button>
-      </div>
-      <input type="month" id="month" aria-label="Μήνας">
-    </div>
-  </section>
-  </div>
-  <div style="order:3">
-  <section class="panel result" aria-live="polite" aria-labelledby="h-out">
-    <h2 id="h-out" style="margin-bottom:0">Καθαρά για σένα</h2>
-    <div class="big num" id="netBig">—</div>
-    <p class="kicker" id="periodLabel">Πρόσθεσε μια βάρδια για να δεις το αποτέλεσμα.</p>
+  <!-- ===== MORE ===== -->
+  <section class="view" id="view-more" data-view="more" hidden>
+    <header class="topbar"><h1 id="h-more-top"></h1></header>
 
-    <div class="income2">
-      <div><div class="kicker" id="lblIncome">Έσοδα πλατφόρμας</div><div class="num" id="tIncome">—</div></div>
-      <div><div class="kicker">Tips</div><div class="num tipsv" id="tTips">—</div></div>
-    </div>
-    <p class="note" id="vatLine" hidden style="margin:8px 0 0"></p>
+    <details class="card">
+      <summary id="h-mydata"></summary>
+      <div class="actions">
+        <button type="button" class="btn" id="expJson"></button>
+        <button type="button" class="btn ghost" id="expCsv"></button>
+        <button type="button" class="btn ghost" id="shareBtn" hidden></button>
+      </div>
+      <div class="actions">
+        <label class="btn ghost filebtn" for="impFile" id="lblImport"></label>
+        <input type="file" id="impFile" class="sr" accept=".json,application/json,.csv,text/csv">
+      </div>
+      <div class="actions">
+        <button type="button" class="btn ghost wide" id="shareAppBtn"></button>
+      </div>
+      <p class="note" id="lastBackupNote"></p>
+      <p class="status" id="dataStatus" role="status"></p>
+      <details class="subcard danger">
+        <summary id="h-delete-all"></summary>
+        <div class="field"><label id="lblDeleteConfirm" for="deleteConfirm"></label><input type="text" id="deleteConfirm"></div>
+        <button type="button" class="btn danger wide" id="deleteAllBtn" disabled></button>
+      </details>
+    </details>
 
-    <div class="laneWrap">
-      <span class="rider" id="rider" aria-hidden="true" hidden>🛵</span>
-      <div class="lane" id="lane" role="img" aria-label="Ανάλυση συνολικών εσόδων"></div>
-    </div>
-    <ul class="legend">
-      <li><span class="name"><span class="dot" style="background:var(--expense)"></span>Έξοδα βαρδιών και έκτακτα</span><span class="val" id="vExp">—</span></li>
-      <li><span class="name"><span class="dot" style="background:var(--expense);opacity:.6"></span>Πάγια έξοδα (μισό μηνιαίο)</span><span class="val" id="vFixed">—</span></li>
-      <li><span class="name"><span class="dot" style="background:var(--efka)"></span>ΕΦΚΑ (μισή μηνιαία εισφορά)</span><span class="val" id="vEfka">—</span></li>
-      <li><span class="name"><span class="dot" style="background:var(--tax)"></span>Φόρος εισοδήματος (κράτημα)</span><span class="val" id="vTax">—</span></li>
-      <li id="vatRow"><span class="name"><span class="dot" style="background:var(--vat)"></span>ΦΠΑ προς απόδοση (δεν μειώνει τα καθαρά)</span><span class="val" id="vVat">—</span></li>
-      <li><span class="name"><span class="dot" style="background:var(--net)"></span>Καθαρά</span><span class="val" id="vNet">—</span></li>
-    </ul>
-    <div class="rates">
-      <div class="rate"><div class="num" id="totHours">—</div><div class="kicker">συνολικές ώρες</div></div>
-      <div class="rate"><div class="num" id="perHour">—</div><div class="kicker">καθαρά ανά ώρα</div></div>
-      <div class="rate"><div class="num" id="perShift">—</div><div class="kicker">καθαρά ανά βάρδια</div></div>
-    </div>
-    <div style="margin-top:14px" id="extraWrap">
-      <label for="extra">Έκτακτα έξοδα αυτού του δεκαπενθημέρου (π.χ. επισκευή), €</label>
-      <input type="number" id="extra" inputmode="decimal" step="0.01" min="0" placeholder="0">
-    </div>
-    <p class="note" id="prepayNote"></p>
-  </section>
-  </div>
-  </div>
-  </div>
+    <details class="card" id="fixedPanel">
+      <summary><span id="h-fixed"></span> &middot; <span id="fixedTotal">0,00 &euro;</span></summary>
+      <p class="note" id="fixedNote"></p>
+      <ul class="fixedlist" id="fixedList"></ul>
+      <div class="field"><label id="lblFxName" for="fxName"></label><input type="text" id="fxName" maxlength="60"></div>
+      <div class="field"><label id="lblFxAmount" for="fxAmount"></label><input type="text" id="fxAmount" inputmode="decimal"></div>
+      <label class="check"><input type="checkbox" id="fxVat"> <span id="lblFxVat"></span></label>
+      <button type="button" class="btn wide" id="fxAdd"></button>
+    </details>
 
-  <section class="panel tabs" id="tabsPanel" aria-label="Ανάλυση και ρυθμίσεις">
-    <div class="tabbar" role="tablist" aria-label="Ενότητες">
-      <button type="button" role="tab" id="tab-stats" aria-controls="pane-stats" aria-selected="true" data-tab="stats">Πού πάνε τα λεφτά</button>
-      <button type="button" role="tab" id="tab-list" aria-controls="pane-list" aria-selected="false" tabindex="-1" data-tab="list">Βάρδιες <span class="tabcount" id="tabCount"></span></button>
-      <button type="button" role="tab" id="tab-cal" aria-controls="pane-cal" aria-selected="false" tabindex="-1" data-tab="cal">Ημερολόγιο</button>
-      <button type="button" role="tab" id="tab-hist" aria-controls="pane-hist" aria-selected="false" tabindex="-1" data-tab="hist">Ιστορικό</button>
-      <button type="button" role="tab" id="tab-cfg" aria-controls="pane-cfg" aria-selected="false" tabindex="-1" data-tab="cfg">Πάγια και ρυθμίσεις</button>
-    </div>
-    <div class="pane" role="tabpanel" id="pane-stats" aria-labelledby="tab-stats">
-      <section class="stats" aria-labelledby="h-stats">
-    <h2 id="h-stats">Πού πάνε τα λεφτά</h2>
-    <div class="statbody">
-      <div id="pieWrap"></div>
-      <ul class="legend" id="pieLegend"></ul>
-    </div>
-    <p class="note" id="pieNote"></p>
-  </section>
-    </div>
-    <div class="pane" role="tabpanel" id="pane-list" aria-labelledby="tab-list" hidden>
-      <section aria-labelledby="h-list">
-    <h2 id="h-list">Βάρδιες της περιόδου</h2>
-    <div id="listEmpty" class="note" style="margin-top:0">Καμία βάρδια σε αυτή την περίοδο. Τα δεδομένα μένουν μόνο σε αυτή τη συσκευή.</div>
-    <div class="tablewrap" id="listWrap" hidden>
-      <table>
-        <thead><tr><th>Ημ/νία</th><th class="r">Πλατφόρμα</th><th class="r">Tips</th><th class="r">Ώρες</th><th class="r">Έξοδα</th><th></th></tr></thead>
-        <tbody id="listBody"></tbody>
-      </table>
-    </div>
-  </section>
-    </div>
-    <div class="pane" role="tabpanel" id="pane-cal" aria-labelledby="tab-cal" hidden>
-      <div id="calPanel">
-    <div class="cal-wrap">
-    <div class="cal-main">
-    <div class="cal-head">
-      <button type="button" class="chip" id="calPrev" aria-label="Προηγούμενος μήνας">‹</button>
-      <strong id="calTitle"></strong>
-      <button type="button" class="chip" id="calNext" aria-label="Επόμενος μήνας">›</button>
-    </div>
-    <div class="cal-dow" aria-hidden="true"><span>Δε</span><span>Τρ</span><span>Τε</span><span>Πε</span><span>Πα</span><span>Σα</span><span>Κυ</span></div>
-    <div class="cal-grid" id="calGrid"></div>
-    </div>
-    <div class="cal-side">
-    <div class="cal-legend">
-      <span><i class="lg done"></i>Καταχωρισμένη</span>
-      <span><i class="lg missing"></i>Χωρίς καταχώριση</span>
-      <span><i class="lg off"></i>Ρεπό</span>
-      <span><i class="lg vat"></i>Υποχρέωση ΦΠΑ</span>
-    </div>
-    <p class="note" id="calVat"></p>
-    <p class="note" id="calSummary"></p>
-    <div class="cal-detail" id="calDetail" hidden></div>
-    </div>
-  </div>
-  </div>
-    </div>
-    <div class="pane" role="tabpanel" id="pane-hist" aria-labelledby="tab-hist" hidden>
-      <div id="histPanel">
-    <div id="histEmpty" class="note" style="margin-top:0">Το ιστορικό σου θα εμφανιστεί εδώ μόλις καταχωρίσεις την πρώτη βάρδια.</div>
-    <div class="tablewrap" id="histWrap" hidden>
-      <table>
-        <thead><tr><th>Μήνας</th><th class="r">Έσοδα</th><th class="r">Tips</th><th class="r">Καθαρά</th><th class="r">Βάρδ.</th><th class="r">Ώρες</th></tr></thead>
-        <tbody id="histBody"></tbody>
-      </table>
-    </div>
-    <p class="note" id="histNote"></p>
-  </div>
-    </div>
-    <div class="pane pane-cfg" role="tabpanel" id="pane-cfg" aria-labelledby="tab-cfg" hidden>
-      <details class="panel" id="fixedPanel">
-    <summary>Πάγια έξοδα (μηνιαία) · <span id="fixedTotal">0,00 €</span></summary>
-    <p class="note" style="margin-top:0">Τα βάζεις μία φορά. Μοιράζονται αυτόματα, μισά σε κάθε δεκαπενθήμερο. Π.χ. κινητό, ασφάλεια, service, λογιστής.</p>
-    <ul class="fixedlist" id="fixedList"></ul>
-    <div class="grid">
-      <div>
-        <label for="fxName">Όνομα</label>
-        <input type="text" id="fxName" placeholder="π.χ. Ασφάλεια μηχανής" style="width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid transparent;border-radius:12px;padding:10px 12px;min-height:44px;">
+    <details class="card">
+      <summary id="h-history"></summary>
+      <div id="histEmpty" class="note"></div>
+      <div class="tablewrap" id="histWrap" hidden>
+        <table>
+          <thead><tr><th id="thMonth"></th><th class="r" id="thIncome"></th><th class="r" id="thTips"></th><th class="r" id="thNet"></th><th class="r" id="thShifts"></th></tr></thead>
+          <tbody id="histBody"></tbody>
+        </table>
       </div>
-      <div>
-        <label for="fxAmount">Ποσό ανά μήνα, €</label>
-        <input type="number" id="fxAmount" inputmode="decimal" step="0.01" min="0" placeholder="π.χ. 25">
+    </details>
+
+    <details class="card">
+      <summary id="h-pie"></summary>
+      <div class="statbody">
+        <div id="pieWrap"></div>
+        <ul class="legend" id="pieLegend"></ul>
       </div>
-      <div class="full">
-        <label class="check" style="margin-top:0"><input type="checkbox" id="fxVat"> <span>Περιλαμβάνει ΦΠΑ που εκπίπτει (π.χ. κινητό, λογιστής)</span></label>
-      </div>
-      <div class="full">
-        <button type="button" class="btn wide" id="fxAdd">Προσθήκη πάγιου εξόδου</button>
-      </div>
-    </div>
-  </details>
-      <details class="panel" id="settings">
-    <summary>Ρυθμίσεις ΕΦΚΑ και φόρου (2026)</summary>
-    <div class="grid">
-      <div class="full">
-        <label for="efka">Μηνιαία εισφορά ΕΦΚΑ που πληρώνεις, €</label>
-        <input type="number" id="efka" inputmode="decimal" step="0.01" min="0" value="250.77">
-      </div>
-      <div class="full">
-        <label for="annual">Εκτιμώμενο ετήσιο κέρδος (προαιρετικό), €</label>
-        <input type="number" id="annual" inputmode="decimal" step="1" min="0" placeholder="Αν το αφήσεις κενό: μέσος όρος δεκαπενθημέρων × 24">
-      </div>
-    </div>
-    <label class="check"><input type="checkbox" id="newpro" checked> <span>Νέος επαγγελματίας (μειωμένη προκαταβολή φόρου)</span></label>
-    <div class="vatbox">
-      <label class="check"><input type="checkbox" id="vatOn" checked> <span>Είμαι σε κανονικό καθεστώς ΦΠΑ (η πλατφόρμα πληρώνει ΦΠΑ επιπλέον στην αμοιβή μου)</span></label>
-      <div class="grid" style="margin-top:12px">
-        <div>
-          <label for="vatRate">Συντελεστής ΦΠΑ, %</label>
-          <input type="number" id="vatRate" inputmode="decimal" step="0.1" min="0" max="100" value="24">
-        </div>
-        <div>
-          <label for="vatShare">Έξοδα βαρδιών με εκπιπτόμενο ΦΠΑ, %</label>
-          <input type="number" id="vatShare" inputmode="decimal" step="1" min="0" max="100" value="0">
-        </div>
-        <div class="full">
-          <label for="vatIncl">Τα έσοδα πλατφόρμας που καταχωρώ:</label>
-          <select id="vatIncl">
-            <option value="0">είναι χωρίς ΦΠΑ (το ΦΠΑ έρχεται επιπλέον από την πλατφόρμα)</option>
-            <option value="1">περιλαμβάνουν ΦΠΑ (το συνολικό ποσό που εισπράττω)</option>
-          </select>
+      <p class="note" id="pieNote"></p>
+    </details>
+
+    <details class="card" id="settingsPanel">
+      <summary id="h-settings"></summary>
+      <div class="field">
+        <label id="lblTheme"></label>
+        <div class="theme-pick" id="themePick" role="group">
+          <button type="button" data-theme="forest" aria-label="forest" aria-pressed="true"></button>
+          <button type="button" data-theme="graphite" aria-label="graphite" aria-pressed="false"></button>
+          <button type="button" data-theme="black" aria-label="black" aria-pressed="false"></button>
+          <button type="button" data-theme="light" aria-label="light" aria-pressed="false"></button>
         </div>
       </div>
-      <p class="note">Το ΦΠΑ που πληρώνει η πλατφόρμα επιπλέον της αμοιβής σου δεν είναι εισόδημά σου: αποδίδεται στην εφορία (μείον το ΦΠΑ των εξόδων σου που εκπίπτει) και εμφανίζεται ως «ΦΠΑ προς απόδοση», αλλά δεν αφαιρείται από τα καθαρά σου. Ποιο ΦΠΑ εξόδων εκπίπτει (π.χ. καύσιμα, service, κινητό) το ορίζεις εσύ, μετά από συνεννόηση με τον λογιστή σου. Τα tips υπολογίζονται χωρίς ΦΠΑ.</p>
-    </div>
-    <p class="note">Τα tips μετράνε ως έσοδα στον υπολογισμό του φόρου. Η προκαταβολή φόρου υπολογίζεται με 55%, ή 27,5% για νέους επαγγελματίες. Οι φορολογικές κλίμακες είναι στον κώδικα (CONFIG).</p>
-  </details>
-      <details class="panel" id="backupPanel">
-    <summary>Αντίγραφο ασφαλείας και μεταφορά δεδομένων</summary>
-    <p class="note" style="margin-top:0">Κατέβασε το ιστορικό σου ως αρχείο και φόρτωσέ το σε άλλη συσκευή (π.χ. από το κινητό στον υπολογιστή), ή δώσε τις βάρδιες στον λογιστή σου ως αρχείο για Excel.</p>
-    <div class="actions">
-      <button type="button" class="btn" id="expJson" disabled>Αποθήκευση αντιγράφου (.json)</button>
-      <button type="button" class="btn ghost" id="expCsv" disabled>Εξαγωγή βαρδιών (.csv)</button>
-    </div>
-    <div style="margin-top:16px">
-      <label for="impFile">Εισαγωγή αντιγράφου (.json)</label>
-      <input type="file" id="impFile" accept=".json,application/json">
-    </div>
-    <p class="note" id="lastBackup"></p>
-    <p class="status" id="bkStatus" role="status"></p>
-  </details>
-    </div>
+      <div class="field">
+        <label id="lblLang"></label>
+        <div class="seg" id="langSeg">
+          <button type="button" class="segbtn" data-lang="el" aria-pressed="true">&Epsilon;&Lambda;</button>
+          <button type="button" class="segbtn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+      <div class="field">
+        <label id="lblWeather"></label>
+        <select id="weatherMode">
+          <option value="off" id="optWxOff"></option>
+          <option value="city" id="optWxCity"></option>
+          <option value="geo" id="optWxGeo"></option>
+        </select>
+      </div>
+      <div class="field" id="weatherCityWrap" hidden>
+        <label id="lblWeatherCity" for="weatherCity"></label>
+        <select id="weatherCity"></select>
+      </div>
+      <div id="wxDisplay" class="wx" hidden>
+        <span class="wx-icon" id="wxIcon" aria-hidden="true">&#127780;&#65039;</span>
+        <span class="wx-temp" id="wxTemp"></span>
+        <span class="wx-label" id="wxLabel"></span>
+      </div>
+      <button type="button" class="btn ghost wide" id="reonboardBtn"></button>
+      <button type="button" class="btn ghost wide" id="tourBtn"></button>
+    </details>
+
+    <details class="card">
+      <summary id="h-about"></summary>
+      <p class="note" id="aboutSource"></p>
+      <p class="note" id="aboutDisclaimer"></p>
+    </details>
   </section>
 
-  <footer>Εκτίμηση για ενημέρωση, όχι φορολογική συμβουλή. Ποσά και κλίμακες: ΕΦΚΑ εγκύκλιος 6/2026 και κλίμακα επιχειρηματικής δραστηριότητας — επαλήθευσέ τα στο ΑΑΔΕ/ΕΦΚΑ ή με λογιστή πριν πάρεις αποφάσεις.</footer>
+  <!-- ===== NEW SHIFT SHEET ===== -->
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+  <div class="sheet" id="shiftSheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-grab"></div>
+    <h2 id="sheetTitle"></h2>
+    <div class="field"><label id="lblDate" for="fDate"></label><input type="date" id="fDate"></div>
+    <div class="field"><label id="lblIncome" for="fIncome"></label><input type="text" id="fIncome" inputmode="decimal"></div>
+    <div class="field">
+      <label id="lblTips" for="fTips"></label>
+      <input type="text" id="fTips" inputmode="decimal">
+      <div class="chips" role="group">
+        <button type="button" class="chip" data-add="1">+1</button>
+        <button type="button" class="chip" data-add="2">+2</button>
+        <button type="button" class="chip" data-add="5">+5</button>
+        <button type="button" class="chip" data-add="10">+10</button>
+        <button type="button" class="chip clear" id="tipsClear">&#10005;</button>
+      </div>
+    </div>
+    <div class="field"><label id="lblHours" for="fHours"></label><input type="text" id="fHours" inputmode="decimal"></div>
+    <div class="field"><label id="lblExp" for="fExp"></label><input type="text" id="fExp" inputmode="decimal"></div>
+    <label class="check"><input type="checkbox" id="fOff"> <span id="lblDayOff"></span></label>
+    <p class="status" id="sheetStatus" role="status"></p>
+    <div class="sheet-actions">
+      <button type="button" class="btn wide" id="sheetSave"></button>
+      <button type="button" class="btn ghost wide" id="sheetDelete" hidden></button>
+      <button type="button" class="btn ghost wide" id="sheetCancel"></button>
+    </div>
+  </div>
+
+  <!-- ===== CSV IMPORT PREVIEW ===== -->
+  <div class="sheet-backdrop" id="csvBackdrop" hidden></div>
+  <div class="sheet" id="csvSheet" hidden role="dialog" aria-modal="true" aria-labelledby="csvTitle">
+    <h2 id="csvTitle"></h2>
+    <p class="note" id="csvFound"></p>
+    <p class="note" id="csvSkipped"></p>
+    <div class="tablewrap"><table><tbody id="csvPreviewBody"></tbody></table></div>
+    <div class="sheet-actions">
+      <button type="button" class="btn wide" id="csvConfirm"></button>
+      <button type="button" class="btn ghost wide" id="csvCancel"></button>
+    </div>
+  </div>
+
+  <!-- ===== ONBOARDING ===== -->
+  <div class="onb-backdrop" id="onbBackdrop" hidden>
+    <div class="onb" id="onb" role="dialog" aria-modal="true" aria-labelledby="onbTitle">
+      <div class="onb-steps" id="onbSteps"></div>
+      <h2 id="onbTitle"></h2>
+      <div id="onbBody"></div>
+      <div class="onb-actions">
+        <button type="button" class="btn ghost" id="onbSkip"></button>
+        <div class="onb-actions-right">
+          <button type="button" class="btn ghost" id="onbBack" hidden></button>
+          <button type="button" class="btn" id="onbNext"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOUR PROMPT ===== -->
+  <div class="onb-backdrop" id="tourPromptBackdrop" hidden>
+    <div class="onb" id="tourPrompt" role="dialog" aria-modal="true" aria-labelledby="tourPromptTitle">
+      <h2 id="tourPromptTitle"></h2>
+      <div class="tourprompt-actions">
+        <button type="button" class="btn wide" id="tourPromptYes"></button>
+        <button type="button" class="btn ghost wide" id="tourPromptSampleBtn"></button>
+        <button type="button" class="btn ghost wide" id="tourPromptNo"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GUIDED TOUR ===== -->
+  <div class="tour-backdrop" id="tourBackdrop" hidden>
+    <div class="tour-spot" id="tourSpot"></div>
+    <div class="tour-card" id="tourCard" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-describedby="tourDesc" tabindex="-1">
+      <p class="tour-counter" id="tourCounter" aria-live="polite"></p>
+      <h3 id="tourTitle"></h3>
+      <p id="tourDesc"></p>
+      <div class="tour-actions">
+        <button type="button" class="btn ghost sm" id="tourSkip"></button>
+        <div class="tour-actions-right">
+          <button type="button" class="btn ghost sm" id="tourBack" hidden></button>
+          <button type="button" class="btn sm" id="tourNext"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <nav class="bottomnav" id="bottomnav" aria-label="Πλοήγηση">
+    <button type="button" class="navbtn" data-nav="home" aria-current="page">
+      <span class="navicon">&#127968;</span><span class="navlabel" id="navHomeLbl"></span>
+    </button>
+    <button type="button" class="navbtn" data-nav="calendar">
+      <span class="navicon">&#128197;</span><span class="navlabel" id="navCalLbl"></span>
+    </button>
+    <button type="button" class="navbtn navplus" id="navAddBtn" aria-label="Νέα βάρδια">
+      <span class="navplus-icon">+</span>
+    </button>
+    <button type="button" class="navbtn" data-nav="obligations">
+      <span class="navicon">&#128179;</span><span class="navlabel" id="navOblLbl"></span>
+    </button>
+    <button type="button" class="navbtn" data-nav="more">
+      <span class="navicon">&#8942;</span><span class="navlabel" id="navMoreLbl"></span>
+    </button>
+  </nav>
 </div>
-<canvas id="confetti" aria-hidden="true"></canvas>
 
-<script>
-(function () {
-  // ---- Ρυθμίσεις που αλλάζουν κάθε χρόνο. ΠΡΟΣ ΕΠΑΛΗΘΕΥΣΗ με ΑΑΔΕ/ΕΦΚΑ. ----
-  var CONFIG = {
-    year: 2026,
-    businessScale: [[10000, 0.09], [20000, 0.22], [30000, 0.28], [40000, 0.36], [Infinity, 0.44]],
-    prepayNormal: 0.55,
-    prepayNewPro: 0.275,
-    periodsPerYear: 24
-  };
-
-  var $ = function (id) { return document.getElementById(id); };
-
-  // ---- γλώσσα (Ελληνικά / English) ----
-  var LANG = "el";
-  var EN = {
-"🔥 {n} μέρες στη σειρά": "🔥 {n} days in a row",
-"Μήνας ": "Month ",
-"Δεκαπενθήμερο ": "Half-month ",
-"Έτος ": "Year ",
-"Πρόσθεσε βάρδιες για να δεις την ανάλυση.": "Add shifts to see the breakdown.",
-"Έσοδα πλατφόρμας (χωρίς ΦΠΑ)": "Platform income (excl. VAT)",
-"Έσοδα πλατφόρμας": "Platform income",
-"Έξοδα βαρδιών": "Shift expenses",
-"Έκτακτα έξοδα": "One-off expenses",
-"Πάγια έξοδα": "Fixed expenses",
-"ΕΦΚΑ": "EFKA",
-"Φόρος εισοδήματος (κράτημα)": "Income tax (set aside)",
-"Διάγραμμα εσόδων και εξόδων": "Income and expenses chart",
-"Καθαρά": "Net",
-"Πράσινα τα έσοδα (+), κόκκινα τα έξοδα και οι κρατήσεις (−). Το ΦΠΑ δεν περιλαμβάνεται, γιατί αποδίδεται στην εφορία και δεν είναι δικό σου εισόδημα.": "Green is income (+), red is expenses and deductions (−). VAT is not included, because it goes to the tax office and is not your income.",
-"πιστωτικό υπόλοιπο ": "credit balance ",
-"ρεπό": "off",
-"καμία καταχώριση": "no entry",
-"Δεν υπάρχουν καταχωρίσεις τις τελευταίες 7 ημέρες.": "No entries in the last 7 days.",
-"Σύνολο 7 ημερών {total} · μέσος όρος {avg} ανά μέρα με βάρδια · καλύτερη μέρα: {day} ({best}{vat}). Πάτησε μια μέρα για λεπτομέρειες.": "7-day total {total} · average {avg} per shift day · best day: {day} ({best}{vat}). Tap a day for details.",
-", χωρίς ΦΠΑ": ", excl. VAT",
-"καταχωρισμένη": "logged",
-"χωρίς καταχώριση": "no entry",
-"μελλοντική μέρα": "future day",
-", υποχρέωση ΦΠΑ {m} {v}": ", VAT due for {m} {v}",
-"{n} χωρίς καταχώριση": "{n} with no entry",
-"{n} μέρα καταχωρισμένη": "{n} day logged",
-"{n} μέρες καταχωρισμένες": "{n} days logged",
-"{n} μέρα ρεπό": "{n} day off",
-"{n} μέρες ρεπό": "{n} days off",
-"Την 1η {m} {y} έχεις υποχρέωση ΦΠΑ {pm}: {v}.": "On 1 {m} {y} you have a VAT obligation for {pm}: {v}.",
-"Επόμενη υποχρέωση: 1η {nm} {ny}, ΦΠΑ {cm} περίπου {v} (εκτίμηση, ο μήνας δεν έχει τελειώσει).": "Next obligation: 1 {nm} {ny}, VAT for {cm} about {v} (estimate, the month is not over yet).",
-"Πλατφόρμα {p} · Tips {t}{h} · Έξοδα {x}": "Platform {p} · Tips {t}{h} · Expenses {x}",
-"{n} ώρες": "{n} hours",
-"Σημειωμένη ως ρεπό.": "Marked as a day off.",
-"Δεν υπάρχει καταχώριση για αυτή τη μέρα.": "There is no entry for this day.",
-"Υποχρέωση: ΦΠΑ {pm} {y} · {v}. Ό,τι εισέπραξες ως ΦΠΑ μείον το ΦΠΑ εξόδων που εκπίπτει.": "Obligation: VAT for {pm} {y} · {v}. The VAT you collected minus the deductible VAT on expenses.",
-"Προσθήκη βάρδιας σε αυτή τη μέρα": "Add a shift on this day",
-"Αφαίρεση ρεπό": "Remove day off",
-"Σήμανση ως ρεπό": "Mark as day off",
-"Το ιστορικό σου ({n} βάρδιες) υπάρχει μόνο σε αυτή τη συσκευή. Κατέβασε ένα αντίγραφο ασφαλείας, για να μη χαθεί.": "Your history ({n} shifts) exists only on this device. Download a backup so it is not lost.",
-"Το τελευταίο αντίγραφο ασφαλείας ήταν πριν {n} μέρες. Κάνε νέο για να μείνει το ιστορικό ασφαλές.": "Your last backup was {n} days ago. Make a new one to keep your history safe.",
-"Τελευταίο αντίγραφο: {d}.": "Last backup: {d}.",
-"Δεν έχεις κάνει ακόμη αντίγραφο ασφαλείας.": "You have not made a backup yet.",
-"Πάτησε έναν μήνα για να τον δεις αναλυτικά. Τα καθαρά είναι εκτίμηση με τις τρέχουσες ρυθμίσεις ΕΦΚΑ και φόρου.": "Tap a month to see it in detail. Net amounts are an estimate based on your current EFKA and tax settings.",
-"Σύνολο": "Total",
-"Όρισε έναν ετήσιο στόχο και δες το μηχανάκι να τον πλησιάζει με κάθε βάρδια.": "Set a yearly goal and watch the scooter get closer with every shift.",
-"Μετράνε μόνο τα καθαρά που σου μένουν, όχι ο τζίρος.": "Only what you actually keep counts, not turnover.",
-"Κράτησες {a} € από {b} € · {p}%": "You kept €{a} of €{b} · {p}%",
-" · απομένουν {l} €": " · €{l} to go",
-"🏆 Πέτυχες τον στόχο της χρονιάς!": "🏆 You reached this year's goal!",
-"Τελική ευθεία, το φινίρισμα φαίνεται 🏁": "Final stretch, the finish line is in sight 🏁",
-"Πάνω από το μισό δρόμο! 💪": "Over halfway there! 💪",
-"Είσαι στον δρόμο, συνέχισε 🛵": "You're on your way, keep going 🛵",
-"Ζεσταίνουμε τις μηχανές 🔥": "Warming up the engines 🔥",
-"Η διαδρομή ξεκινά με την πρώτη βάρδια": "The road starts with your first shift",
-"Για να υπολογίσω πόσες ώρες χρειάζονται, πρόσθεσε βάρδιες με ώρες και θετικό κέρδος (έσοδα και tips μείον έξοδα βάρδιας).": "To work out how many hours are needed, add shifts with hours and a positive profit (income and tips minus shift expenses).",
-"Για να μείνουν {g} € καθαρά μέσα στη χρονιά, με τον ρυθμό που δουλεύεις τώρα (περίπου {m} κέρδος ανά ώρα πριν από ΕΦΚΑ, πάγια και φόρο):": "To keep €{g} net over the year, at your current pace (about {m} profit per hour before EFKA, fixed costs and tax):",
-"συνολικά μέσα στο έτος": "in total over the year",
-"{n} μέρες": "{n} days",
-"των 8 ωρών": "of 8 hours",
-"{n} εβδομάδες": "{n} weeks",
-"full-time (8 ώρες × 5 μέρες)": "full-time (8 hours × 5 days)",
-"{n} ώρες/εβδ.": "{n} hours/week",
-"αν μοιραστούν σε όλο το έτος ({p}% του full-time)": "if spread over the whole year ({p}% of full-time)",
-"απομένουν · {d} μέρες των 8 ωρών": "remaining · {d} days of 8 hours",
-"μέχρι 31 Δεκεμβρίου ({p}% του full-time)": "until 31 December ({p}% of full-time)",
-"απομένουν, με τον τρέχοντα ρυθμό ο στόχος έχει καλυφθεί": "remaining — at the current pace the goal is covered",
-"Υπολογίζει 12 μήνες ΕΦΚΑ και πάγιων εξόδων, χωρίς έκτακτα έξοδα, και τη φορολογική κλίμακα των ρυθμίσεων. Είναι εκτίμηση.": "Assumes 12 months of EFKA and fixed costs, no one-off expenses, and the tax scale from your settings. It is an estimate.",
-" ώρ.": " h",
-": δεν υπάρχουν βάρδιες ακόμη.": ": no shifts yet.",
-" βάρδια": " shift",
-" βάρδιες": " shifts",
-" μήνας": " month",
-" μήνες": " months",
-"Εισπράττεις από την πλατφόρμα {tot} ({inc} αμοιβή + {vat} ΦΠΑ). Το ΦΠΑ αποδίδεται στην εφορία και δεν μετράει στα καθαρά σου.": "You receive {tot} from the platform ({inc} fee + {vat} VAT). The VAT goes to the tax office and does not count in your net.",
-"Εκτιμώμενος φορολογικός συντελεστής: {r}%, με βάση ετήσιο κέρδος περίπου {a}.": "Estimated tax rate: {r}%, based on a yearly profit of about {a}.",
-" Η προκαταβολή του επόμενου έτους (περίπου {p}{u}) συμψηφίζεται με τον φόρο εκείνης της χρονιάς, αλλά θα τη χρειαστείς σε μετρητά.": " Next year's tax prepayment (about {p}{u}) is offset against that year's tax, but you will need it in cash.",
-" για όλο το έτος": " for the whole year",
-" ανά μήνα": " per month",
-" ανά δεκαπενθήμερο": " per half-month",
-"Διαγραφή βάρδιας ": "Delete shift ",
-"Βάλε έσοδα πλατφόρμας ή tips για να προσθέσεις τη βάρδια.": "Enter platform income or tips to add the shift.",
-"Καλή βάρδια! 🛵": "Good shift! 🛵",
-"Γράφτηκε! 💸": "Logged! 💸",
-"Ένα ακόμα στο ταμείο 🔥": "Another one in the till 🔥",
-"Πάμε δυνατά! ⚡": "Let's go! ⚡",
-"Στον δρόμο για τον στόχο 🏁": "On the road to the goal 🏁",
-" Βάρδια ": " Shift ",
-" · ΦΠΑ εκπίπτει": " · VAT deductible",
-"Διαγραφή πάγιου εξόδου ": "Delete fixed expense ",
-"Πάγιο έξοδο": "Fixed expense",
-"Η αποθήκευση αρχείου δεν είναι διαθέσιμη σε αυτή την προβολή. Η εισαγωγή λειτουργεί κανονικά.": "Saving files is not available in this view. Importing works as usual.",
-"Το αρχείο ετοιμάστηκε.": "The file is ready.",
-"Ακυρώθηκε.": "Cancelled.",
-"Δεν ήταν δυνατή η αποθήκευση του αρχείου.": "The file could not be saved.",
-"Ημερομηνία;Έσοδα πλατφόρμας;Tips;Ώρες;Έξοδα βάρδιας": "Date;Platform income;Tips;Hours;Shift expenses",
-"Το αρχείο είναι πολύ μεγάλο για αντίγραφο ασφαλείας.": "The file is too large to be a backup.",
-"Εισήχθησαν {a} βάρδιες και {b} πάγια έξοδα. Οι υπάρχουσες ρυθμίσεις έμειναν όπως ήταν.": "Imported {a} shifts and {b} fixed expenses. Your existing settings were left as they were.",
-"Το αρχείο δεν είναι έγκυρο αντίγραφο της εφαρμογής.": "The file is not a valid backup of this app.",
-"Δεν ήταν δυνατή η ανάγνωση του αρχείου.": "The file could not be read.",
-"Καθαρός ουρανός": "Clear sky",
-"Σχεδόν καθαρός": "Mostly clear",
-"Λίγα σύννεφα": "Partly cloudy",
-"Συννεφιά": "Overcast",
-"Ομίχλη": "Fog",
-"Ψιχάλες": "Drizzle",
-"Παγωμένη βροχή": "Freezing rain",
-"Βροχή": "Rain",
-"Χιόνι": "Snow",
-"Μπόρες": "Showers",
-"Χιονόμπορες": "Snow showers",
-"Καταιγίδα": "Thunderstorm",
-"Καιρός": "Weather",
-"Καθαρός": "Clear",
-"Καταιγίδα: πρόσεχε πολύ.": "Thunderstorm: be very careful.",
-"Βρεγμένο οδόστρωμα, πρόσεχε.": "Wet road, be careful.",
-"Χιόνι: ολισθηρός δρόμος.": "Snow: slippery road.",
-"Χαμηλή ορατότητα.": "Low visibility.",
-"Δυνατός άνεμος.": "Strong wind.",
-"Κρύο: ντύσου ζεστά.": "Cold: dress warmly.",
-"Καύσωνας: πάρε νερό μαζί σου.": "Heatwave: take water with you.",
-"καιρός Θεσσαλονίκη": "weather Thessaloniki",
-"Θεσσαλονίκη": "Thessaloniki",
-"Πρόγνωση": "Forecast",
-"Πώς είναι ο καιρός;": "What's the weather like?",
-" · άνεμος ": " · wind ",
-" χλμ/ώρα": " km/h",
-"☁️ Αποθήκευση…": "☁️ Saving…",
-"☁️ Το ιστορικό σου είναι αποθηκευμένο στον λογαριασμό σου": "☁️ Your history is saved to your account",
-"⚠️ Γέμισε ο χώρος αποθήκευσης του λογαριασμού. Κάνε αντίγραφο ασφαλείας.": "⚠️ Your account storage is full. Make a backup.",
-"⚠️ Δεν ολοκληρώθηκε η αποθήκευση στον λογαριασμό. Ξαναδοκιμάζω σε λίγο.": "⚠️ Saving to your account did not complete. Retrying shortly.",
-"Για να γνωρίζεις πάντα τι σου μένει καθαρά στην τσέπη.": "So you always know what stays clean in your pocket.",
-"Καιρός…": "Weather…",
-"Αντίγραφο τώρα": "Back up now",
-"Αργότερα": "Later",
-"Στόχος καθαρών": "Net goal",
-"Ετήσιος στόχος καθαρών, €": "Yearly net goal, €",
-"Ορισμός": "Set",
-"Νέα βάρδια": "New shift",
-"Ημερομηνία": "Date",
-"Έσοδα πλατφόρμας, €": "Platform income, €",
-"Καθαρισμός": "Clear",
-"Ώρες βάρδιας": "Shift hours",
-"Έξοδα βάρδιας (καύσιμα κ.λπ.), €": "Shift expenses (fuel etc.), €",
-"Προσθήκη βάρδιας": "Add shift",
-"Τελευταίες 7 ημέρες": "Last 7 days",
-"Πλατφόρμα": "Platform",
-"Περίοδος": "Period",
-"Όλος ο μήνας": "Whole month",
-"Έτος": "Year",
-"Καθαρά για σένα": "Net for you",
-"Πρόσθεσε μια βάρδια για να δεις το αποτέλεσμα.": "Add a shift to see the result.",
-"Έξοδα βαρδιών και έκτακτα": "Shift and one-off expenses",
-"Πάγια έξοδα (μισό μηνιαίο)": "Fixed expenses (half of monthly)",
-"ΕΦΚΑ (μισή μηνιαία εισφορά)": "EFKA (half of the monthly contribution)",
-"ΦΠΑ προς απόδοση (δεν μειώνει τα καθαρά)": "VAT payable (does not reduce your net)",
-"συνολικές ώρες": "total hours",
-"καθαρά ανά ώρα": "net per hour",
-"καθαρά ανά βάρδια": "net per shift",
-"Έκτακτα έξοδα αυτού του δεκαπενθημέρου (π.χ. επισκευή), €": "One-off expenses this half-month (e.g. repairs), €",
-"Πού πάνε τα λεφτά": "Where the money goes",
-"Βάρδιες": "Shifts",
-"Ημερολόγιο": "Calendar",
-"Ιστορικό": "History",
-"Πάγια και ρυθμίσεις": "Fixed costs and settings",
-"Βάρδιες της περιόδου": "Shifts in this period",
-"Καμία βάρδια σε αυτή την περίοδο. Τα δεδομένα μένουν μόνο σε αυτή τη συσκευή.": "No shifts in this period. Data stays only on this device.",
-"Ημ/νία": "Date",
-"Ώρες": "Hours",
-"Έξοδα": "Expenses",
-"Δε": "Mo",
-"Τρ": "Tu",
-"Τε": "We",
-"Πε": "Th",
-"Πα": "Fr",
-"Σα": "Sa",
-"Κυ": "Su",
-"Καταχωρισμένη": "Logged",
-"Χωρίς καταχώριση": "No entry",
-"Ρεπό": "Day off",
-"Υποχρέωση ΦΠΑ": "VAT obligation",
-"Το ιστορικό σου θα εμφανιστεί εδώ μόλις καταχωρίσεις την πρώτη βάρδια.": "Your history will appear here once you log your first shift.",
-"Μήνας": "Month",
-"Έσοδα": "Income",
-"Βάρδ.": "Shifts",
-"Πάγια έξοδα (μηνιαία) ·": "Fixed expenses (monthly) ·",
-"Τα βάζεις μία φορά. Μοιράζονται αυτόματα, μισά σε κάθε δεκαπενθήμερο. Π.χ. κινητό, ασφάλεια, service, λογιστής.": "Enter them once. They are split automatically, half in each half-month. E.g. phone, insurance, servicing, accountant.",
-"Όνομα": "Name",
-"Ποσό ανά μήνα, €": "Amount per month, €",
-"Περιλαμβάνει ΦΠΑ που εκπίπτει (π.χ. κινητό, λογιστής)": "Includes deductible VAT (e.g. phone, accountant)",
-"Προσθήκη πάγιου εξόδου": "Add fixed expense",
-"Ρυθμίσεις ΕΦΚΑ και φόρου (2026)": "EFKA and tax settings (2026)",
-"Μηνιαία εισφορά ΕΦΚΑ που πληρώνεις, €": "Monthly EFKA contribution you pay, €",
-"Εκτιμώμενο ετήσιο κέρδος (προαιρετικό), €": "Estimated yearly profit (optional), €",
-"Νέος επαγγελματίας (μειωμένη προκαταβολή φόρου)": "New professional (reduced tax prepayment)",
-"Είμαι σε κανονικό καθεστώς ΦΠΑ (η πλατφόρμα πληρώνει ΦΠΑ επιπλέον στην αμοιβή μου)": "I am under the normal VAT regime (the platform pays VAT on top of my fee)",
-"Συντελεστής ΦΠΑ, %": "VAT rate, %",
-"Έξοδα βαρδιών με εκπιπτόμενο ΦΠΑ, %": "Shift expenses with deductible VAT, %",
-"Τα έσοδα πλατφόρμας που καταχωρώ:": "The platform income I enter:",
-"είναι χωρίς ΦΠΑ (το ΦΠΑ έρχεται επιπλέον από την πλατφόρμα)": "is excluding VAT (the platform pays VAT on top)",
-"περιλαμβάνουν ΦΠΑ (το συνολικό ποσό που εισπράττω)": "includes VAT (the total amount I receive)",
-"Το ΦΠΑ που πληρώνει η πλατφόρμα επιπλέον της αμοιβής σου δεν είναι εισόδημά σου: αποδίδεται στην εφορία (μείον το ΦΠΑ των εξόδων σου που εκπίπτει) και εμφανίζεται ως «ΦΠΑ προς απόδοση», αλλά δεν αφαιρείται από τα καθαρά σου. Ποιο ΦΠΑ εξόδων εκπίπτει (π.χ. καύσιμα, service, κινητό) το ορίζεις εσύ, μετά από συνεννόηση με τον λογιστή σου. Τα tips υπολογίζονται χωρίς ΦΠΑ.": "The VAT the platform pays on top of your fee is not your income: it goes to the tax office (minus the VAT on your expenses that is deductible) and appears as “VAT payable”, but it is not deducted from your net. Which VAT on expenses is deductible (e.g. fuel, servicing, phone) is for you to set, after talking to your accountant. Tips are calculated without VAT.",
-"Τα tips μετράνε ως έσοδα στον υπολογισμό του φόρου. Η προκαταβολή φόρου υπολογίζεται με 55%, ή 27,5% για νέους επαγγελματίες. Οι φορολογικές κλίμακες είναι στον κώδικα (CONFIG).": "Tips count as income in the tax calculation. The tax prepayment is calculated at 55%, or 27.5% for new professionals. The tax scales are in the code (CONFIG).",
-"Αντίγραφο ασφαλείας και μεταφορά δεδομένων": "Backup and data transfer",
-"Κατέβασε το ιστορικό σου ως αρχείο και φόρτωσέ το σε άλλη συσκευή (π.χ. από το κινητό στον υπολογιστή), ή δώσε τις βάρδιες στον λογιστή σου ως αρχείο για Excel.": "Download your history as a file and load it on another device (e.g. from phone to computer), or give your shifts to your accountant as a file for Excel.",
-"Αποθήκευση αντιγράφου (.json)": "Save backup (.json)",
-"Εξαγωγή βαρδιών (.csv)": "Export shifts (.csv)",
-"Εισαγωγή αντιγράφου (.json)": "Import backup (.json)",
-"Εκτίμηση για ενημέρωση, όχι φορολογική συμβουλή. Ποσά και κλίμακες: ΕΦΚΑ εγκύκλιος 6/2026 και κλίμακα επιχειρηματικής δραστηριότητας — επαλήθευσέ τα στο ΑΑΔΕ/ΕΦΚΑ ή με λογιστή πριν πάρεις αποφάσεις.": "Estimate for information only, not tax advice. Amounts and scales: EFKA circular 6/2026 and the business-income tax scale — verify them with AADE/EFKA or an accountant before making decisions.",
-"Θέμα εμφάνισης": "Display theme",
-"Δάσος (σκούρο πράσινο)": "Forest (dark green)",
-"Γραφίτης": "Graphite",
-"Μαύρο": "Black",
-"Ανοιχτό": "Light",
-"Χαρτονόμισμα που βγαίνει από τσέπη": "Banknote coming out of a pocket",
-"π.χ. 20000": "e.g. 20000",
-"Πρόοδος προς τον ετήσιο στόχο": "Progress towards the yearly goal",
-"π.χ. 62": "e.g. 62",
-"π.χ. 8": "e.g. 8",
-"Γρήγορη προσθήκη tips": "Quick add tips",
-"Μηδενισμός tips": "Reset tips",
-"π.χ. 6": "e.g. 6",
-"π.χ. 9": "e.g. 9",
-"Έσοδα ανά ημέρα": "Income per day",
-"Ανάλυση συνολικών εσόδων": "Breakdown of total income",
-"Ανάλυση και ρυθμίσεις": "Analysis and settings",
-"Ενότητες": "Sections",
-"Προηγούμενος μήνας": "Previous month",
-"Επόμενος μήνας": "Next month",
-"π.χ. Ασφάλεια μηχανής": "e.g. Motorbike insurance",
-"π.χ. 25": "e.g. 25",
-"Αν το αφήσεις κενό: μέσος όρος δεκαπενθημέρων × 24": "If left empty: average of half-months × 24",
-"Αλλαγή γλώσσας": "Change language",
-"Αποθήκευση αλλαγών": "Save changes",
-"Ακύρωση": "Cancel",
-"Επεξεργασία βάρδιας {d}": "Editing shift {d}",
-"Οι αλλαγές αποθηκεύτηκαν.": "Changes saved.",
-"Επεξεργασία βάρδιας ": "Edit shift ",
-"Βάλε έσοδα πλατφόρμας ή tips, ή διέγραψε τη βάρδια.": "Enter platform income or tips, or delete the shift.",
-"Βάλε την εφαρμογή στην αρχική οθόνη για γρήγορο άνοιγμα και χρήση χωρίς σύνδεση.": "Add the app to your home screen for quick access and use without a connection.",
-"Στο iPhone: πάτα «Κοινοποίηση» και μετά «Προσθήκη στην αρχική οθόνη».": "On iPhone: tap “Share”, then “Add to Home Screen”.",
-"Εγκατάσταση": "Install",
-"Όχι τώρα": "Not now"
-};
-  function T(s) { return LANG === "en" && EN[s] !== undefined ? EN[s] : s; }
-  function F(tpl, vars) {
-    return T(tpl).replace(/\{(\w+)\}/g, function (m, k) { return vars && vars[k] !== undefined ? vars[k] : m; });
-  }
-  function LOCALE() { return LANG === "en" ? "en-GB" : "el-GR"; }
-  var MONTHS_SHORT = ["Ιαν", "Φεβ", "Μαρ", "Απρ", "Μάι", "Ιουν", "Ιουλ", "Αυγ", "Σεπ", "Οκτ", "Νοε", "Δεκ"];
-  var ARR_EL = null;
-  var ARR_EN = {
-    short: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    full: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    wd: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    wds: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-  };
-  function setArr(target, src) { for (var i = 0; i < src.length; i++) target[i] = src[i]; }
-  function applyLangArrays() {
-    if (!ARR_EL) {
-      ARR_EL = { short: MONTHS_SHORT.slice(), full: MONTHS_FULL.slice(), wd: WD_FULL.slice(), gen: MONTHS_GEN.slice(), wds: WD_SHORT.slice() };
-    }
-    var en = LANG === "en";
-    setArr(MONTHS_SHORT, en ? ARR_EN.short : ARR_EL.short);
-    setArr(MONTHS_FULL, en ? ARR_EN.full : ARR_EL.full);
-    setArr(MONTHS_GEN, en ? ARR_EN.full : ARR_EL.gen);
-    setArr(WD_FULL, en ? ARR_EN.wd : ARR_EL.wd);
-    setArr(WD_SHORT, en ? ARR_EN.wds : ARR_EL.wds);
-  }
-  function translateStatic() {
-    var en = LANG === "en";
-    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-    var nodes = [], nd;
-    while ((nd = w.nextNode())) nodes.push(nd);
-    nodes.forEach(function (n) {
-      var par = n.parentNode;
-      if (par && (par.nodeName === "SCRIPT" || par.nodeName === "STYLE")) return;
-      if (en) {
-        var cur = n.nodeValue, t = cur.trim();
-        if (!t) return;
-        var tr = EN[t];
-        if (tr !== undefined) {
-          if (n.__el === undefined) n.__el = cur;
-          n.nodeValue = cur.match(/^\s*/)[0] + tr + cur.match(/\s*$/)[0];
-        }
-      } else if (n.__el !== undefined) { n.nodeValue = n.__el; n.__el = undefined; }
-    });
-    document.querySelectorAll("[aria-label],[placeholder],[title]").forEach(function (el) {
-      ["aria-label", "placeholder", "title"].forEach(function (a) {
-        var v = el.getAttribute(a);
-        if (v === null) return;
-        if (!el.__elA) el.__elA = {};
-        if (en) {
-          if (EN[v] !== undefined) { if (el.__elA[a] === undefined) el.__elA[a] = v; el.setAttribute(a, EN[v]); }
-        } else if (el.__elA[a] !== undefined) { el.setAttribute(a, el.__elA[a]); el.__elA[a] = undefined; }
-      });
-    });
-  }
-  function applyLang(lang, rerender) {
-    LANG = lang === "en" ? "en" : "el";
-    try { localStorage.setItem("pk_lang", LANG); } catch (e) { /* αγνοούμε */ }
-    document.documentElement.setAttribute("lang", LANG);
-    applyLangArrays();
-    translateStatic();
-    $("langBtn").textContent = LANG === "en" ? "ΕΛ" : "EN";
-    if (rerender) {
-      $("status").textContent = ""; $("bkStatus").textContent = "";
-      updateEditUI();
-      render(); renderFixed();
-      if (cloud.bs) cloudBadge(cloud.bs, cloud.be);
-      wxLive();
-    }
-  }
-
-  var _eurFmt = {};
-  var eur = { format: function (v) {
-    var l = LOCALE();
-    if (!_eurFmt[l]) _eurFmt[l] = new Intl.NumberFormat(l, { style: "currency", currency: "EUR" });
-    return _eurFmt[l].format(v);
-  } };
-  function dec(str) { return LANG === "en" ? String(str) : String(str).replace(".", ","); }
-  var STORE_KEY = "pk_v2";
-  var half = 1;
-  var cloud = { col: null, on: false, busy: false, dirty: false, last: {}, timer: null, retry: null, lastPull: 0 };
-  var THEMES = { forest: "#142b24", graphite: "#1a1e25", black: "#000000", light: "#eef0f3" };
-  function cssv(name, fb) {
-    var v = "";
-    try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) { v = ""; }
-    return v || fb || "";
-  }
-  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  var shownNet = 0, rafId = 0;
-
-  function showNet(to) {
-    var el = $("netBig");
-    cancelAnimationFrame(rafId);
-    if (reduced || Math.abs(to - shownNet) < 0.005) { el.textContent = eur.format(to); shownNet = to; return; }
-    var from = shownNet, t0 = performance.now(), dur = 650;
-    function step(t) {
-      var k = Math.min(1, (t - t0) / dur);
-      k = 1 - Math.pow(1 - k, 3);
-      var v = from + (to - from) * k;
-      el.textContent = eur.format(v); shownNet = v;
-      if (k < 1) rafId = requestAnimationFrame(step); else shownNet = to;
-    }
-    rafId = requestAnimationFrame(step);
-  }
-
-  function buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) { /* αγνοούμε */ } }
-
-  function burst(withTips) {
-    if (reduced) return;
-    var c = $("confetti"), ctx = c.getContext("2d");
-    if (!ctx) return;
-    c.width = window.innerWidth; c.height = window.innerHeight;
-    var r = $("add").getBoundingClientRect();
-    var ox = r.left + r.width / 2, oy = r.top;
-    var colors = [cssv("--net", "#35d3a2"), cssv("--tips", "#f2b64d"), cssv("--efka", "#78a6ff"), cssv("--tax", "#ff7a6b"), cssv("--road", "#f2b705"), cssv("--ink", "#f2f4f7")];
-    var ps = [], N = withTips ? 90 : 55, i;
-    for (i = 0; i < N; i++) {
-      ps.push({
-        x: ox + (Math.random() - .5) * 60, y: oy,
-        vx: (Math.random() - .5) * 11, vy: -(Math.random() * 10 + 5),
-        s: Math.random() * 6 + 5, a: Math.random() * 6, va: (Math.random() - .5) * .4,
-        col: colors[Math.floor(Math.random() * colors.length)],
-        coin: withTips && i % 3 === 0
-      });
-    }
-    var frame = 0;
-    function draw() {
-      ctx.clearRect(0, 0, c.width, c.height);
-      var alive = false;
-      ps.forEach(function (q) {
-        q.vy += .38; q.x += q.vx; q.y += q.vy; q.a += q.va; q.vx *= .99;
-        if (q.y < c.height + 20) alive = true;
-        ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.a);
-        if (q.coin) { ctx.font = "bold " + (q.s * 2.6) + "px sans-serif"; ctx.fillStyle = cssv("--tips", "#f2b64d"); ctx.fillText("€", -q.s, q.s); }
-        else { ctx.fillStyle = q.col; ctx.fillRect(-q.s / 2, -q.s / 4, q.s, q.s / 2); }
-        ctx.restore();
-      });
-      frame++;
-      if (alive && frame < 200) requestAnimationFrame(draw); else ctx.clearRect(0, 0, c.width, c.height);
-    }
-    requestAnimationFrame(draw);
-  }
-
-  function isoOf(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
-  function renderStreak() {
-    var days = {};
-    db.entries.forEach(function (e) { days[e.date] = true; });
-    var d = new Date();
-    if (!days[isoOf(d)]) d.setDate(d.getDate() - 1);
-    var count = 0;
-    while (days[isoOf(d)]) { count++; d.setDate(d.getDate() - 1); }
-    var el = $("streak");
-    if (count >= 2) { el.hidden = false; el.textContent = F("🔥 {n} μέρες στη σειρά", { n: count }); }
-    else { el.hidden = true; }
-  }
-
-  // ---- δεδομένα ----
-  var db = { entries: [], extra: {}, fixed: [], off: {}, goals: {}, lastBackup: "", synced: {}, linked: false, settings: { efka: 250.77, newpro: true, annual: "" } };
-  function load() {
-    try {
-      var s = localStorage.getItem(STORE_KEY);
-      if (s) { var d = JSON.parse(s); if (d && d.entries) { db.entries = d.entries; db.extra = d.extra || {}; db.fixed = d.fixed || []; db.off = d.off || {}; db.goals = d.goals || {}; db.lastBackup = d.lastBackup || ""; db.synced = d.synced || {}; db.linked = !!d.linked; db.settings = d.settings || db.settings; } }
-    } catch (e) { /* κενή αποθήκη */ }
-  }
-  function persistLocal() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch (e) { /* αγνοούμε */ } }
-  function persist() { persistLocal(); scheduleCloud(); }
-
-  function pad(n) { return String(n).padStart(2, "0"); }
-  function todayISO() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
-  function keyOf(iso) { var p = iso.split("-"); return p[0] + "-" + p[1] + "-" + (+p[2] <= 14 ? 1 : 2); }
-  function n(v) { var x = parseFloat(v); return isFinite(x) && x > 0 ? x : 0; }
-  function viewKey() { return ($("month").value || todayISO().slice(0, 7)) + "-" + half; }
-
-  function labelOf(key) {
-    var p = key.split("-"); var y = +p[0], m = +p[1], h = +p[2];
-    var names = MONTHS_SHORT;
-    var lastDay = new Date(y, m, 0).getDate();
-    if (h === 0) return names[m - 1] + " " + y + " (1–" + lastDay + ")";
-    return (h === 1 ? "1–14" : "15–" + lastDay) + " " + names[m - 1] + " " + y;
-  }
-
-  function progressiveTax(taxable) {
-    var tax = 0, prev = 0, i, cap, rate;
-    for (i = 0; i < CONFIG.businessScale.length; i++) {
-      cap = CONFIG.businessScale[i][0]; rate = CONFIG.businessScale[i][1];
-      if (taxable > prev) tax += (Math.min(taxable, cap) - prev) * rate;
-      prev = cap;
-      if (taxable <= cap) break;
-    }
-    return tax;
-  }
-
-  function normVat(v) {
-    v = v || {};
-    var rate = parseFloat(v.rate), share = parseFloat(v.share);
-    return {
-      on: v.on !== false,
-      rate: isFinite(rate) && rate >= 0 && rate <= 100 ? rate : 24,
-      withVat: v.withVat === true,
-      share: isFinite(share) && share >= 0 ? Math.min(100, share) : 0
-    };
-  }
-  function vatCfg() {
-    var v = normVat(db.settings.vat);
-    return { on: v.on, rate: v.on ? v.rate / 100 : 0, withVat: v.withVat, share: v.share / 100 };
-  }
-  // Προσαρμογή μίας βάρδιας για ΦΠΑ: καθαρό έσοδο, ΦΠΑ που εισπράττεται, ΦΠΑ εξόδων που εκπίπτει
-  function entryAdj(e) {
-    var c = vatCfg();
-    var inc = e.income, vatOut = 0, vatIn = 0;
-    if (c.on && c.rate > 0) {
-      if (c.withVat) { inc = e.income / (1 + c.rate); vatOut = e.income - inc; }
-      else { vatOut = e.income * c.rate; }
-      vatIn = e.exp * c.rate / (1 + c.rate) * c.share;
-    }
-    return { inc: inc, tips: e.tips, vatOut: vatOut, vatIn: vatIn, expGross: e.exp, expNet: e.exp - vatIn, hours: e.hours };
-  }
-  function fixedGrossMonthly() {
-    var s = 0;
-    db.fixed.forEach(function (f) { s += f.amount; });
-    return s;
-  }
-  function fixedVatInMonthly() {
-    var c = vatCfg(), s = 0;
-    db.fixed.forEach(function (f) { if (c.on && c.rate > 0 && f.vat) s += f.amount * c.rate / (1 + c.rate); });
-    return s;
-  }
-  // καθαρά πάγια έξοδα (μετά την έκπτωση του ΦΠΑ που εκπίπτει)
-  function fixedMonthly() { return fixedGrossMonthly() - fixedVatInMonthly(); }
-
-  function periodTotals(key) {
-    var p = key.split("-");
-    if (p[2] !== "0") return periodTotalsHalf(key);
-    var a = periodTotalsHalf(p[0] + "-" + p[1] + "-1"), b = periodTotalsHalf(p[0] + "-" + p[1] + "-2");
-    return {
-      income: a.income + b.income, tips: a.tips + b.tips, exp: a.exp + b.exp, extra: a.extra + b.extra,
-      hours: a.hours + b.hours, shifts: a.shifts + b.shifts, fixed: a.fixed + b.fixed,
-      vatOut: a.vatOut + b.vatOut, vatInShift: a.vatInShift + b.vatInShift, vatInFixed: a.vatInFixed + b.vatInFixed
-    };
-  }
-
-  function inView(date, key) {
-    if (half === -1) return date.slice(0, 4) === key.slice(0, 4);
-    var p = key.split("-");
-    return p[2] === "0" ? date.slice(0, 7) === p[0] + "-" + p[1] : keyOf(date) === key;
-  }
-
-  function periodWord() { return half === 0 ? T("Μήνας ") : T("Δεκαπενθήμερο "); }
-
-  function yearOf() { return ($("month").value || todayISO()).slice(0, 4); }
-
-  function labelText(key) {
-    if (half === -1) return T("Έτος ") + yearOf();
-    return periodWord() + labelOf(key);
-  }
-
-  function yearTotals(yy) {
-    var y = yy || yearOf();
-    var t = { income: 0, tips: 0, exp: 0, extra: 0, hours: 0, shifts: 0, fixed: 0, months: 0, vatOut: 0, vatInShift: 0, vatInFixed: 0 };
-    var first = 13, last = 0;
-    db.entries.forEach(function (e) {
-      if (e.date.slice(0, 4) !== y) return;
-      var a = entryAdj(e);
-      t.income += a.inc; t.tips += a.tips; t.exp += a.expNet; t.hours += a.hours; t.shifts += 1;
-      t.vatOut += a.vatOut; t.vatInShift += a.vatIn;
-      var m = +e.date.slice(5, 7);
-      if (m < first) first = m;
-      if (m > last) last = m;
-    });
-    if (t.shifts > 0) {
-      var now = new Date();
-      if (String(now.getFullYear()) === y) last = Math.max(last, now.getMonth() + 1);
-      t.months = last - first + 1;
-      t.fixed = fixedMonthly() * t.months;
-      t.vatInFixed = fixedVatInMonthly() * t.months;
-    }
-    Object.keys(db.extra).forEach(function (k) { if (k.slice(0, 4) === y) { t.exp += n(db.extra[k]); t.extra += n(db.extra[k]); } });
-    return t;
-  }
-
-  function updateLabels() {
-    var mv = $("month").value || todayISO().slice(0, 7);
-    var p = mv.split("-");
-    var lastDay = new Date(+p[0], +p[1], 0).getDate();
-    $("half2").textContent = "15–" + lastDay;
-  }
-
-  function periodTotalsHalf(key) {
-    var t = { income: 0, tips: 0, exp: 0, extra: 0, hours: 0, shifts: 0, vatOut: 0, vatInShift: 0, vatInFixed: 0 };
-    db.entries.forEach(function (e) {
-      if (keyOf(e.date) !== key) return;
-      var a = entryAdj(e);
-      t.income += a.inc; t.tips += a.tips; t.exp += a.expNet; t.hours += a.hours; t.shifts += 1;
-      t.vatOut += a.vatOut; t.vatInShift += a.vatIn;
-    });
-    t.extra = n(db.extra[key]);
-    t.exp += t.extra;
-    t.fixed = fixedMonthly() / 2;
-    t.vatInFixed = fixedVatInMonthly() / 2;
-    return t;
-  }
-
-  // εκτίμηση ετήσιου κέρδους: μέσος όρος δεκαπενθημέρων με δεδομένα (χωρίς το τρέχον ημιτελές, αν υπάρχουν άλλα)
-  function projectedAnnual(currentKey) {
-    var manual = n(db.settings.annual);
-    if (manual > 0) return manual;
-    var keys = {};
-    db.entries.forEach(function (e) { keys[keyOf(e.date)] = true; });
-    var list = Object.keys(keys);
-    var todayKey = keyOf(todayISO());
-    var usable = list.filter(function (k) { return k !== todayKey; });
-    if (!usable.length) usable = list;
-    if (!usable.length) return 0;
-    var sum = 0;
-    usable.forEach(function (k) { var t = periodTotals(k); sum += Math.max(0, t.income + t.tips - t.exp - t.fixed); });
-    return (sum / usable.length) * CONFIG.periodsPerYear;
-  }
-
-  var GREENS = ["#5be3b0", "#a5f0d3", "#2fb88a"];
-  var REDS = ["#ffa89f", "#ff8474", "#f2584a", "#d43f32", "#a9332a", "#7d2620"];
-
-  function renderPie(t, efkaShare, taxReserve, net) {
-    var wrap = $("pieWrap"), legend = $("pieLegend");
-    if (!t) {
-      wrap.innerHTML = ""; legend.innerHTML = "";
-      $("pieNote").textContent = T("Πρόσθεσε βάρδιες για να δεις την ανάλυση.");
-      return;
-    }
-    var vatOn = vatCfg().on;
-    var items = [
-      { name: vatOn ? T("Έσοδα πλατφόρμας (χωρίς ΦΠΑ)") : T("Έσοδα πλατφόρμας"), val: t.income, sign: "+", color: GREENS[0] },
-      { name: "Tips", val: t.tips, sign: "+", color: GREENS[1] },
-      { name: T("Έξοδα βαρδιών"), val: Math.max(0, t.exp - t.extra), sign: "−", color: REDS[0] },
-      { name: T("Έκτακτα έξοδα"), val: t.extra, sign: "−", color: REDS[1] },
-      { name: T("Πάγια έξοδα"), val: t.fixed, sign: "−", color: REDS[2] },
-      { name: T("ΕΦΚΑ"), val: efkaShare, sign: "−", color: REDS[3] },
-      { name: T("Φόρος εισοδήματος (κράτημα)"), val: taxReserve, sign: "−", color: REDS[4] }
-    ].filter(function (i) { return i.val > 0.005; });
-
-    var total = 0;
-    items.forEach(function (i) { total += i.val; });
-    if (total <= 0) { wrap.innerHTML = ""; legend.innerHTML = ""; $("pieNote").textContent = ""; return; }
-
-    var r = 42, C = 2 * Math.PI * r, cum = 0, circles = "";
-    items.forEach(function (i) {
-      var len = (i.val / total) * C;
-      var gap = items.length > 1 ? Math.min(2, len * 0.3) : 0;
-      circles += '<circle cx="60" cy="60" r="' + r + '" fill="none" stroke="' + i.color + '" stroke-width="20"' +
-        ' stroke-dasharray="' + Math.max(0, len - gap).toFixed(2) + ' ' + (C - Math.max(0, len - gap)).toFixed(2) + '"' +
-        ' stroke-dashoffset="' + (-cum).toFixed(2) + '"></circle>';
-      cum += len;
-    });
-    var netColor = net < 0 ? cssv("--tax", "#ff8474") : cssv("--net", "#5be3b0");
-    wrap.innerHTML = '<svg viewBox="0 0 120 120" role="img" aria-label="' + T("Διάγραμμα εσόδων και εξόδων") + '">' +
-      '<g transform="rotate(-90 60 60)">' + circles + '</g>' +
-      '<text x="60" y="55" text-anchor="middle" font-size="8" font-weight="500" fill="' + cssv("--muted", "#9ba5b1") + '">' + T("Καθαρά") + '</text>' +
-      '<text x="60" y="70" text-anchor="middle" font-size="12" fill="' + netColor + '">' + eur.format(net) + '</text></svg>';
-
-    legend.innerHTML = "";
-    items.forEach(function (i) {
-      var li = document.createElement("li");
-      li.innerHTML = "<span class='name'><span class='sign'></span><span class='dot'></span><span class='nm'></span></span><span class='val'></span>";
-      var sg = li.querySelector(".sign");
-      sg.textContent = i.sign;
-      sg.style.color = i.sign === "+" ? "var(--net)" : "var(--tax)";
-      li.querySelector(".dot").style.background = i.color;
-      li.querySelector(".nm").textContent = i.name;
-      var v = li.querySelector(".val");
-      v.textContent = eur.format(i.val);
-      var sm = document.createElement("small");
-      sm.textContent = Math.round((i.val / total) * 100) + "%";
-      v.appendChild(sm);
-      legend.appendChild(li);
-    });
-    $("pieNote").textContent = T("Πράσινα τα έσοδα (+), κόκκινα τα έξοδα και οι κρατήσεις (−). Το ΦΠΑ δεν περιλαμβάνεται, γιατί αποδίδεται στην εφορία και δεν είναι δικό σου εισόδημα.");
-  }
-
-  var MONTHS_FULL = ["Ιανουάριος", "Φεβρουάριος", "Μάρτιος", "Απρίλιος", "Μάιος", "Ιούνιος", "Ιούλιος", "Αύγουστος", "Σεπτέμβριος", "Οκτώβριος", "Νοέμβριος", "Δεκέμβριος"];
-  var WD_FULL = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο", "Κυριακή"];
-  var MONTHS_GEN = ["Ιανουαρίου", "Φεβρουαρίου", "Μαρτίου", "Απριλίου", "Μαΐου", "Ιουνίου", "Ιουλίου", "Αυγούστου", "Σεπτεμβρίου", "Οκτωβρίου", "Νοεμβρίου", "Δεκεμβρίου"];
-  var calSel = null;
-  var calDue = {};
-
-  // ΦΠΑ προς απόδοση ενός μήνα (μόνο αν υπάρχουν βάρδιες και είσαι σε καθεστώς ΦΠΑ)
-  function monthVat(y, m) {
-    var prefix = y + "-" + pad(m);
-    var has = db.entries.some(function (e) { return e.date.slice(0, 7) === prefix; });
-    if (!has || !vatCfg().on) return null;
-    var t = periodTotals(prefix + "-0");
-    return { pay: t.vatOut - t.vatInShift - t.vatInFixed, m: m, y: y };
-  }
-  function vatText(v) {
-    return v.pay < 0 ? T("πιστωτικό υπόλοιπο ") + eur.format(-v.pay) : eur.format(v.pay);
-  }
-
-  function dayInfo() {
-    var map = {}, first = null;
-    db.entries.forEach(function (e) {
-      var o = map[e.date] || (map[e.date] = { income: 0, tips: 0, exp: 0, hours: 0, count: 0 });
-      o.income += e.income; o.tips += e.tips; o.exp += e.exp; o.hours += e.hours; o.count += 1;
-      if (!first || e.date < first) first = e.date;
-    });
-    return { map: map, first: first };
-  }
-
-  var WD_SHORT = ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"];
-
-  function renderWeek() {
-    var box = $("wkBars");
-    box.innerHTML = "";
-    var d0 = new Date(); d0.setHours(0, 0, 0, 0);
-    var days = [], i;
-    for (i = 6; i >= 0; i--) { var dd = new Date(d0); dd.setDate(d0.getDate() - i); days.push(isoOf(dd)); }
-    var by = {};
-    db.entries.forEach(function (e) {
-      if (days.indexOf(e.date) < 0) return;
-      var a = entryAdj(e);
-      var o = by[e.date] || (by[e.date] = { inc: 0, tips: 0, hours: 0, n: 0 });
-      o.inc += a.inc; o.tips += a.tips; o.hours += e.hours; o.n += 1;
-    });
-    var max = 0, total = 0, active = 0, best = null;
-    days.forEach(function (k) {
-      var o = by[k];
-      if (!o) return;
-      var v = o.inc + o.tips;
-      total += v; active += 1;
-      if (v > max) { max = v; best = k; }
-    });
-    var today = todayISO();
-    days.forEach(function (k) {
-      var o = by[k], v = o ? o.inc + o.tips : 0;
-      var dt = new Date(+k.slice(0, 4), +k.slice(5, 7) - 1, +k.slice(8, 10));
-      var isOff = !o && db.off[k] === true;
-      var col = document.createElement("button");
-      col.type = "button";
-      col.className = "wk-col" + (k === today ? " today" : "") + (isOff ? " off" : "");
-      var val = document.createElement("div"); val.className = "wk-val";
-      val.textContent = o ? String(Math.round(v)) : (isOff ? T("ρεπό") : "");
-      var track = document.createElement("div"); track.className = "wk-track";
-      var bar = document.createElement("div"); bar.className = "wk-bar";
-      if (o && max > 0) {
-        bar.style.height = Math.max(3, (v / max) * 100) + "%";
-        var pp = document.createElement("div"); pp.className = "p"; pp.style.height = (v > 0 ? (o.inc / v) * 100 : 0) + "%";
-        var tt = document.createElement("div"); tt.className = "t"; tt.style.height = (v > 0 ? (o.tips / v) * 100 : 0) + "%";
-        bar.appendChild(pp); bar.appendChild(tt);
-      } else { bar.style.height = "3px"; }
-      track.appendChild(bar);
-      var lab = document.createElement("div"); lab.className = "wk-day";
-      lab.textContent = WD_SHORT[dt.getDay()] + " " + dt.getDate();
-      col.appendChild(val); col.appendChild(track); col.appendChild(lab);
-      col.setAttribute("aria-label", WD_FULL[(dt.getDay() + 6) % 7] + " " + dt.getDate() + " " + MONTHS_GEN[dt.getMonth()] + ": " +
-        (o ? eur.format(v) + (o.hours ? ", " + fmtH(o.hours) : "") : (isOff ? T("ρεπό") : T("καμία καταχώριση"))));
-      col.addEventListener("click", function () {
-        $("month").value = k.slice(0, 7); calSel = k; updateLabels(); showTab("cal"); render();
-      });
-      box.appendChild(col);
-    });
-    if (!active) { $("wkNote").textContent = T("Δεν υπάρχουν καταχωρίσεις τις τελευταίες 7 ημέρες."); return; }
-    var bd = new Date(+best.slice(0, 4), +best.slice(5, 7) - 1, +best.slice(8, 10));
-    $("wkNote").textContent = F("Σύνολο 7 ημερών {total} · μέσος όρος {avg} ανά μέρα με βάρδια · καλύτερη μέρα: {day} ({best}{vat}). Πάτησε μια μέρα για λεπτομέρειες.", {
-      total: eur.format(total), avg: eur.format(total / active), day: WD_SHORT[bd.getDay()] + " " + bd.getDate(),
-      best: eur.format(max), vat: vatCfg().on ? T(", χωρίς ΦΠΑ") : ""
-    });
-  }
-
-  function renderCalendar() {
-    var mv = $("month").value || todayISO().slice(0, 7);
-    var p = mv.split("-"), y = +p[0], m = +p[1];
-    $("calTitle").textContent = MONTHS_FULL[m - 1] + " " + y;
-    if (calSel && calSel.slice(0, 7) !== mv) calSel = null;
-
-    var info = dayInfo(), today = todayISO();
-    var lead = (new Date(y, m - 1, 1).getDay() + 6) % 7;
-    var days = new Date(y, m, 0).getDate();
-    var grid = $("calGrid");
-    grid.innerHTML = "";
-    var cnt = { done: 0, off: 0, missing: 0 };
-    calDue = {};
-    var i;
-
-    for (i = 0; i < lead; i++) {
-      var blank = document.createElement("div");
-      blank.className = "cal-day blank";
-      grid.appendChild(blank);
-    }
-    for (i = 1; i <= days; i++) {
-      (function (day) {
-        var iso = y + "-" + pad(m) + "-" + pad(day);
-        var rec = info.map[iso];
-        var isOff = !rec && db.off[iso] === true;
-        var missing = !rec && !isOff && iso < today && info.first && iso >= info.first;
-        var b = document.createElement("button");
-        b.type = "button";
-        var cls = "cal-day";
-        var state = "";
-        if (rec) { cls += " done"; cnt.done++; state = T("καταχωρισμένη"); }
-        else if (isOff) { cls += " off"; cnt.off++; state = T("ρεπό"); }
-        else if (missing) { cls += " missing"; cnt.missing++; state = T("χωρίς καταχώριση"); }
-        else { state = iso > today ? T("μελλοντική μέρα") : T("χωρίς καταχώριση"); }
-        var dueV = null;
-        if (day === 1) {
-          dueV = monthVat(m === 1 ? y - 1 : y, m === 1 ? 12 : m - 1);
-          if (dueV) { cls += " due"; calDue[iso] = dueV; }
-        }
-        if (iso === today) cls += " today";
-        if (iso === calSel) cls += " sel";
-        b.className = cls;
-        var num = document.createElement("span");
-        num.textContent = String(day);
-        b.appendChild(num);
-        var sm = document.createElement("small");
-        if (rec) sm.textContent = String(Math.round(rec.income + rec.tips)) + "€";
-        else if (isOff) sm.textContent = T("ρεπό");
-        else sm.textContent = "\u00a0";
-        b.appendChild(sm);
-        if (dueV) { var dot = document.createElement("i"); dot.className = "vdot"; dot.setAttribute("aria-hidden", "true"); b.appendChild(dot); }
-        b.setAttribute("aria-label", day + " " + MONTHS_FULL[m - 1] + ": " + state + (rec ? ", " + eur.format(rec.income + rec.tips) : "") +
-          (dueV ? F(", υποχρέωση ΦΠΑ {m} {v}", { m: MONTHS_GEN[dueV.m - 1], v: vatText(dueV) }) : ""));
-        b.setAttribute("aria-pressed", iso === calSel ? "true" : "false");
-        b.addEventListener("click", function () { calSel = (calSel === iso) ? null : iso; renderCalendar(); });
-        grid.appendChild(b);
-      })(i);
-    }
-
-    var msg = F(cnt.done === 1 ? "{n} μέρα καταχωρισμένη" : "{n} μέρες καταχωρισμένες", { n: cnt.done });
-    if (cnt.off) msg += " · " + F(cnt.off === 1 ? "{n} μέρα ρεπό" : "{n} μέρες ρεπό", { n: cnt.off });
-    if (cnt.missing) msg += " · " + F("{n} χωρίς καταχώριση", { n: cnt.missing });
-    $("calSummary").textContent = msg + ".";
-
-    var vparts = [];
-    var dv = calDue[y + "-" + pad(m) + "-01"];
-    if (dv) vparts.push(F("Την 1η {m} {y} έχεις υποχρέωση ΦΠΑ {pm}: {v}.", { m: MONTHS_GEN[m - 1], y: y, pm: MONTHS_GEN[dv.m - 1], v: vatText(dv) }));
-    var nowD = new Date(), cy = nowD.getFullYear(), cm = nowD.getMonth() + 1;
-    var cur = monthVat(cy, cm);
-    var ny = cm === 12 ? cy + 1 : cy, nm = cm === 12 ? 1 : cm + 1;
-    if (cur && !(ny === y && nm === m)) {
-      vparts.push(F("Επόμενη υποχρέωση: 1η {nm} {ny}, ΦΠΑ {cm} περίπου {v} (εκτίμηση, ο μήνας δεν έχει τελειώσει).", { nm: MONTHS_GEN[nm - 1], ny: ny, cm: MONTHS_GEN[cm - 1], v: vatText(cur) }));
-    }
-    $("calVat").textContent = vparts.join(" ");
-    renderCalDetail(info);
-  }
-
-  function renderCalDetail(info) {
-    var el = $("calDetail");
-    if (!calSel) { el.hidden = true; el.innerHTML = ""; return; }
-    el.hidden = false; el.innerHTML = "";
-    var pp = calSel.split("-");
-    var dt = new Date(+pp[0], +pp[1] - 1, +pp[2]);
-    var title = document.createElement("strong");
-    title.textContent = WD_FULL[(dt.getDay() + 6) % 7] + " " + (+pp[2]) + " " + MONTHS_FULL[+pp[1] - 1];
-    el.appendChild(title);
-
-    var rows = db.entries.filter(function (e) { return e.date === calSel; });
-    if (rows.length) {
-      var ul = document.createElement("ul");
-      rows.forEach(function (e) {
-        var li = document.createElement("li");
-        li.textContent = F("Πλατφόρμα {p} · Tips {t}{h} · Έξοδα {x}", {
-          p: eur.format(e.income), t: eur.format(e.tips),
-          h: e.hours ? " · " + F("{n} ώρες", { n: dec(String(e.hours)) }) : "", x: eur.format(e.exp)
-        });
-        var eb = document.createElement("button");
-        eb.type = "button"; eb.className = "x"; eb.textContent = "✎";
-        eb.setAttribute("aria-label", T("Επεξεργασία βάρδιας ") + e.date.slice(8, 10) + "/" + e.date.slice(5, 7));
-        eb.addEventListener("click", function () { startEdit(e.id); });
-        li.appendChild(eb);
-        ul.appendChild(li);
-      });
-      el.appendChild(ul);
-    } else {
-      var msg = document.createElement("p");
-      msg.className = "note";
-      msg.style.marginTop = "8px";
-      msg.textContent = db.off[calSel] ? T("Σημειωμένη ως ρεπό.") : T("Δεν υπάρχει καταχώριση για αυτή τη μέρα.");
-      el.appendChild(msg);
-    }
-
-    var due = calDue[calSel];
-    if (due) {
-      var dp = document.createElement("p");
-      dp.className = "cal-due";
-      dp.textContent = F("Υποχρέωση: ΦΠΑ {pm} {y} · {v}. Ό,τι εισέπραξες ως ΦΠΑ μείον το ΦΠΑ εξόδων που εκπίπτει.", { pm: MONTHS_GEN[due.m - 1], y: due.y, v: vatText(due) });
-      el.appendChild(dp);
-    }
-
-    var actions = document.createElement("div");
-    actions.className = "actions";
-    var add = document.createElement("button");
-    add.type = "button"; add.className = "btn";
-    add.textContent = T("Προσθήκη βάρδιας σε αυτή τη μέρα");
-    add.addEventListener("click", function () {
-      cancelEdit();
-      $("fDate").value = calSel;
-      try { $("fDate").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" }); } catch (e) { /* αγνοούμε */ }
-      try { $("fIncome").focus({ preventScroll: true }); } catch (e) { $("fIncome").focus(); }
-    });
-    actions.appendChild(add);
-    if (!rows.length) {
-      var off = document.createElement("button");
-      off.type = "button"; off.className = "btn ghost";
-      off.textContent = db.off[calSel] ? T("Αφαίρεση ρεπό") : T("Σήμανση ως ρεπό");
-      off.addEventListener("click", function () {
-        if (db.off[calSel]) delete db.off[calSel]; else db.off[calSel] = true;
-        persist(); render();
-      });
-      actions.appendChild(off);
-    }
-    el.appendChild(actions);
-  }
-
-  function shiftMonth(delta) {
-    var mv = $("month").value || todayISO().slice(0, 7);
-    var p = mv.split("-");
-    var d = new Date(+p[0], +p[1] - 1 + delta, 1);
-    $("month").value = d.getFullYear() + "-" + pad(d.getMonth() + 1);
-    updateLabels(); render();
-  }
-
-  var reminderHidden = false;
-
-  function renderReminder() {
-    var el = $("backupReminder");
-    var cnt = db.entries.length;
-    var days = null;
-    if (db.lastBackup) days = Math.floor((new Date(todayISO()) - new Date(db.lastBackup)) / 86400000);
-    var need = cnt >= 3 && !cloud.on && (days === null || days >= 14) && !reminderHidden;
-    el.hidden = !need;
-    if (need) {
-      $("reminderText").textContent = days === null
-        ? F("Το ιστορικό σου ({n} βάρδιες) υπάρχει μόνο σε αυτή τη συσκευή. Κατέβασε ένα αντίγραφο ασφαλείας, για να μη χαθεί.", { n: cnt })
-        : F("Το τελευταίο αντίγραφο ασφαλείας ήταν πριν {n} μέρες. Κάνε νέο για να μείνει το ιστορικό ασφαλές.", { n: days });
-    }
-    $("lastBackup").textContent = db.lastBackup ? F("Τελευταίο αντίγραφο: {d}.", { d: db.lastBackup.split("-").reverse().join("/") }) : T("Δεν έχεις κάνει ακόμη αντίγραφο ασφαλείας.");
-  }
-
-  function renderHistory() {
-    var months = {};
-    db.entries.forEach(function (e) { months[e.date.slice(0, 7)] = true; });
-    var keys = Object.keys(months).sort().reverse();
-    var body = $("histBody");
-    body.innerHTML = "";
-    $("histEmpty").hidden = keys.length > 0;
-    $("histWrap").hidden = keys.length === 0;
-    $("histNote").textContent = keys.length ? T("Πάτησε έναν μήνα για να τον δεις αναλυτικά. Τα καθαρά είναι εκτίμηση με τις τρέχουσες ρυθμίσεις ΕΦΚΑ και φόρου.") : "";
-    if (!keys.length) return;
-
-    var efkaMonthly = n(db.settings.efka);
-    var annual = projectedAnnual();
-    var annualTax = progressiveTax(Math.max(0, annual - efkaMonthly * 12));
-    var eff = annual > 0 ? annualTax / annual : 0;
-    var totGross = 0, totTips = 0, totNet = 0, totShifts = 0, totHrs = 0;
-
-    keys.forEach(function (mk) {
-      var t = periodTotals(mk + "-0");
-      var gross = t.income + t.tips;
-      var profit = gross - t.exp - t.fixed;
-      var net = profit - efkaMonthly - Math.max(0, profit) * eff;
-      totGross += gross; totTips += t.tips; totNet += net; totShifts += t.shifts; totHrs += t.hours;
-      var pp = mk.split("-");
-      var tr = document.createElement("tr");
-      tr.innerHTML = "<td></td><td class='r'></td><td class='r'></td><td class='r'></td><td class='r'></td><td class='r'></td>";
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "histbtn";
-      b.textContent = MONTHS_FULL[+pp[1] - 1].slice(0, 3) + " " + pp[0];
-      b.addEventListener("click", function () {
-        $("month").value = mk; setHalf(0); updateLabels(); render();
-      });
-      tr.children[0].appendChild(b);
-      tr.children[1].textContent = eur.format(gross);
-      tr.children[2].textContent = eur.format(t.tips);
-      tr.children[3].textContent = eur.format(net);
-      tr.children[4].textContent = String(t.shifts);
-      tr.children[5].textContent = fmtH(t.hours);
-      body.appendChild(tr);
-    });
-    var tot = document.createElement("tr");
-    tot.className = "sum";
-    tot.innerHTML = "<td>" + T("Σύνολο") + "</td><td class='r'></td><td class='r'></td><td class='r'></td><td class='r'></td><td class='r'></td>";
-    tot.children[1].textContent = eur.format(totGross);
-    tot.children[2].textContent = eur.format(totTips);
-    tot.children[3].textContent = eur.format(totNet);
-    tot.children[4].textContent = String(totShifts);
-    tot.children[5].textContent = fmtH(totHrs);
-    body.appendChild(tot);
-  }
-
-  var goalShown = false, lastGoalPct = null;
-
-  function fmtInt(v) { return Math.round(v).toLocaleString(LOCALE(), { maximumFractionDigits: 0 }); }
-
-  function goalStats() {
-    var y = todayISO().slice(0, 4);
-    var t = yearTotals(y);
-    var efkaMonthly = n(db.settings.efka);
-    var profit = t.income + t.tips - t.exp - t.fixed;
-    var annual = projectedAnnual();
-    var annualTax = progressiveTax(Math.max(0, annual - efkaMonthly * 12));
-    var eff = annual > 0 ? annualTax / annual : 0;
-    var net = profit - efkaMonthly * t.months - Math.max(0, profit) * eff;
-    var mIncome = 0, mHours = 0;
-    db.entries.forEach(function (e) {
-      if (e.date.slice(0, 4) === y && e.hours > 0) { var ad = entryAdj(e); mIncome += ad.inc + ad.tips - ad.expNet; mHours += e.hours; }
-    });
-    return { year: y, net: net, hoursYTD: t.hours, margin: mHours > 0 ? mIncome / mHours : 0, efkaMonthly: efkaMonthly };
-  }
-
-  // Πόσες ώρες χρειάζονται μέσα στο έτος για να μείνει ο στόχος καθαρά (μετά από ΕΦΚΑ, πάγια και φόρο)
-  function hoursForGoal(goal, margin, efkaMonthly) {
-    if (goal <= 0 || margin <= 0) return null;
-    var lo = 0, hi = goal * 2 + 1000, i, mid;
-    for (i = 0; i < 60; i++) {
-      mid = (lo + hi) / 2;
-      if (mid - progressiveTax(mid) < goal) lo = mid; else hi = mid;
-    }
-    var X = hi;
-    var profit = X + efkaMonthly * 12;
-    var needMargin = profit + fixedMonthly() * 12;
-    return needMargin / margin;
-  }
-
-  function renderGoal() {
-    var st = goalStats();
-    var goal = n(db.goals[st.year]);
-    $("goalYear").textContent = st.year;
-    var input = $("goalInput");
-    if (document.activeElement !== input) input.value = goal > 0 ? goal : "";
-
-    var fill = $("goalFill"), rider = $("goalRider");
-    var ticks = $("goalTicks");
-    ticks.innerHTML = "";
-    var plan = $("goalPlan");
-
-    if (goal <= 0) {
-      var z = function () { fill.style.width = "0%"; rider.style.left = "0%"; };
-      if (!goalShown) { z(); goalShown = true; } else z();
-      $("goalLine").textContent = T("Όρισε έναν ετήσιο στόχο και δες το μηχανάκι να τον πλησιάζει με κάθε βάρδια.");
-      $("goalCheer").textContent = T("Μετράνε μόνο τα καθαρά που σου μένουν, όχι ο τζίρος.");
-      plan.hidden = true; lastGoalPct = null;
-      return;
-    }
-
-    var pct = Math.max(0, Math.min(100, (st.net / goal) * 100));
-    var apply = function () { fill.style.width = pct + "%"; rider.style.left = pct + "%"; };
-    if (!goalShown) { fill.style.width = "0%"; rider.style.left = "0%"; goalShown = true; requestAnimationFrame(function () { requestAnimationFrame(apply); }); }
-    else apply();
-
-    [25, 50, 75].forEach(function (q) {
-      var sp = document.createElement("span");
-      sp.style.left = q + "%";
-      sp.textContent = fmtInt(goal * q / 100) + " €";
-      ticks.appendChild(sp);
-    });
-
-    var left = Math.max(0, goal - Math.max(0, st.net));
-    $("goalLine").textContent = F("Κράτησες {a} € από {b} € · {p}%", { a: fmtInt(Math.max(0, st.net)), b: fmtInt(goal), p: Math.round(pct) }) +
-      (left > 0 ? F(" · απομένουν {l} €", { l: fmtInt(left) }) : "");
-    var cheer = pct >= 100 ? T("🏆 Πέτυχες τον στόχο της χρονιάς!")
-      : pct >= 75 ? T("Τελική ευθεία, το φινίρισμα φαίνεται 🏁")
-      : pct >= 50 ? T("Πάνω από το μισό δρόμο! 💪")
-      : pct >= 25 ? T("Είσαι στον δρόμο, συνέχισε 🛵")
-      : pct > 0 ? T("Ζεσταίνουμε τις μηχανές 🔥")
-      : T("Η διαδρομή ξεκινά με την πρώτη βάρδια");
-    $("goalCheer").textContent = cheer;
-    if (lastGoalPct !== null && lastGoalPct < 100 && pct >= 100) burst(true);
-    lastGoalPct = pct;
-
-    // πλάνο εργασίας
-    plan.hidden = false;
-    plan.innerHTML = "";
-    var head = document.createElement("p");
-    if (st.margin <= 0) {
-      head.textContent = T("Για να υπολογίσω πόσες ώρες χρειάζονται, πρόσθεσε βάρδιες με ώρες και θετικό κέρδος (έσοδα και tips μείον έξοδα βάρδιας).");
-      plan.appendChild(head);
-      return;
-    }
-    var H = hoursForGoal(goal, st.margin, st.efkaMonthly);
-    head.textContent = F("Για να μείνουν {g} € καθαρά μέσα στη χρονιά, με τον ρυθμό που δουλεύεις τώρα (περίπου {m} κέρδος ανά ώρα πριν από ΕΦΚΑ, πάγια και φόρο):", { g: fmtInt(goal), m: eur.format(st.margin) });
-    plan.appendChild(head);
-    var now = new Date();
-    var end = new Date(now.getFullYear(), 11, 31);
-    var daysLeft = Math.max(1, Math.round((end - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000) + 1);
-    var weeksLeft = daysLeft / 7;
-    var remH = Math.max(0, H - st.hoursYTD);
-    var items = [
-      [F("{n} ώρες", { n: fmtInt(H) }), T("συνολικά μέσα στο έτος")],
-      [F("{n} μέρες", { n: fmtInt(H / 8) }), T("των 8 ωρών")],
-      [F("{n} εβδομάδες", { n: fmtInt(H / 40) }), T("full-time (8 ώρες × 5 μέρες)")],
-      [F("{n} ώρες/εβδ.", { n: (Math.round(H / 52 * 10) / 10).toLocaleString(LOCALE()) }), F("αν μοιραστούν σε όλο το έτος ({p}% του full-time)", { p: Math.round((H / 52) / 40 * 100) })]
-    ];
-    if (remH > 0) {
-      items.push([F("{n} ώρες", { n: fmtInt(remH) }), F("απομένουν · {d} μέρες των 8 ωρών", { d: fmtInt(remH / 8) })]);
-      items.push([F("{n} ώρες/εβδ.", { n: (Math.round(remH / weeksLeft * 10) / 10).toLocaleString(LOCALE()) }), F("μέχρι 31 Δεκεμβρίου ({p}% του full-time)", { p: Math.round((remH / weeksLeft) / 40 * 100) })]);
-    } else {
-      items.push([F("{n} ώρες", { n: 0 }), T("απομένουν, με τον τρέχοντα ρυθμό ο στόχος έχει καλυφθεί")]);
-    }
-    var ul = document.createElement("ul");
-    items.forEach(function (it) {
-      var li = document.createElement("li");
-      var a = document.createElement("span"); a.className = "num"; a.textContent = it[0];
-      var b = document.createElement("small"); b.textContent = it[1];
-      li.appendChild(a); li.appendChild(b); ul.appendChild(li);
-    });
-    plan.appendChild(ul);
-    var note = document.createElement("p");
-    note.style.marginTop = "8px";
-    note.textContent = T("Υπολογίζει 12 μήνες ΕΦΚΑ και πάγιων εξόδων, χωρίς έκτακτα έξοδα, και τη φορολογική κλίμακα των ρυθμίσεων. Είναι εκτίμηση.");
-    plan.appendChild(note);
-  }
-
-  $("goalSave").addEventListener("click", function () {
-    var y = todayISO().slice(0, 4);
-    var v = n($("goalInput").value);
-    if (v > 0) db.goals[y] = v; else delete db.goals[y];
-    persist(); renderGoal();
-  });
-  $("goalInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("goalSave").click(); } });
-
-  function fmtH(h) {
-    var v = Math.round(h * 100) / 100;
-    return v.toLocaleString(LOCALE(), { maximumFractionDigits: 2 }) + T(" ώρ.");
-  }
-
-  function render() {
-    renderStreak();
-    renderWeek();
-    renderGoal();
-    renderCalendar();
-    renderHistory();
-    renderReminder();
-    var key = viewKey();
-    var t = half === -1 ? yearTotals() : periodTotals(key);
-    var gross = t.income + t.tips;
-    var has = t.shifts > 0 || gross > 0;
-    var efkaMonthly = n(db.settings.efka);
-    var efkaShare = half === -1 ? efkaMonthly * t.months : (half === 0 ? efkaMonthly : efkaMonthly / 2);
-    var profit = gross - t.exp - t.fixed;
-    var vatPay = t.vatOut - t.vatInShift - t.vatInFixed;
-    var vatOn = vatCfg().on;
-    $("vatRow").hidden = !vatOn;
-    $("lblIncome").textContent = vatOn ? T("Έσοδα πλατφόρμας (χωρίς ΦΠΑ)") : T("Έσοδα πλατφόρμας");
-
-    $("extraWrap").hidden = half <= 0;
-    $("extra").value = db.extra[key] ? db.extra[key] : "";
-    renderList(key);
-
-    if (!has) {
-      cancelAnimationFrame(rafId); shownNet = 0; $("rider").hidden = true;
-      $("netBig").textContent = "—"; $("netBig").classList.remove("neg");
-      $("periodLabel").textContent = labelText(key) + T(": δεν υπάρχουν βάρδιες ακόμη.");
-      ["tIncome", "tTips", "vExp", "vFixed", "vEfka", "vTax", "vVat", "vNet", "perHour", "perShift", "totHours"].forEach(function (id) { $(id).textContent = "—"; });
-      $("lane").innerHTML = ""; $("prepayNote").textContent = ""; $("vatLine").hidden = true;
-      renderPie(null);
-      return;
-    }
-
-    var annualProfit = projectedAnnual(key);
-    var taxable = Math.max(0, annualProfit - efkaMonthly * 12);
-    var annualTax = progressiveTax(taxable);
-    var effRate = annualProfit > 0 ? annualTax / annualProfit : 0;
-    var taxReserve = Math.max(0, profit) * effRate;
-    var net = profit - efkaShare - taxReserve;
-    var prepayPct = db.settings.newpro ? CONFIG.prepayNewPro : CONFIG.prepayNormal;
-    var prepayPer = (annualTax * prepayPct) / CONFIG.periodsPerYear;
-    if (half === 0) prepayPer *= 2;
-    if (half === -1) prepayPer *= 24;
-
-    showNet(net);
-    $("netBig").classList.toggle("neg", net < 0);
-    $("periodLabel").textContent = labelText(key) + " · " + t.shifts + (t.shifts === 1 ? T(" βάρδια") : T(" βάρδιες")) +
-      (half === -1 ? " · " + t.months + (t.months === 1 ? T(" μήνας") : T(" μήνες")) : "");
-    $("tIncome").textContent = eur.format(t.income);
-    $("tTips").textContent = eur.format(t.tips);
-    $("vExp").textContent = eur.format(t.exp);
-    $("vFixed").textContent = eur.format(t.fixed);
-    $("vVat").textContent = eur.format(vatPay);
-    $("vEfka").textContent = eur.format(efkaShare);
-    $("vTax").textContent = eur.format(taxReserve);
-    $("vNet").textContent = eur.format(net);
-    $("totHours").textContent = fmtH(t.hours);
-    $("perHour").textContent = t.hours > 0 ? eur.format(net / t.hours) : "—";
-    $("perShift").textContent = t.shifts > 0 ? eur.format(net / t.shifts) : "—";
-
-    if (gross > 0) {
-      var pct = function (v) { return Math.max(0, Math.min(100, (v / gross) * 100)); };
-      var sExp = pct(t.exp + t.fixed), sEfka = pct(efkaShare), sTax = pct(taxReserve);
-      var sNet = Math.max(0, 100 - sExp - sEfka - sTax);
-      $("lane").innerHTML =
-        '<span class="s-net" style="width:' + sNet + '%"></span>' +
-        '<span class="s-tax" style="width:' + sTax + '%"></span>' +
-        '<span class="s-efka" style="width:' + sEfka + '%"></span>' +
-        '<span class="s-exp" style="width:' + sExp + '%"></span>';
-      $("rider").hidden = false;
-      $("rider").style.left = sNet + "%";
-    } else { $("lane").innerHTML = ""; $("rider").hidden = true; }
-
-    var vl = $("vatLine");
-    if (vatOn && t.vatOut > 0) {
-      vl.hidden = false;
-      vl.textContent = F("Εισπράττεις από την πλατφόρμα {tot} ({inc} αμοιβή + {vat} ΦΠΑ). Το ΦΠΑ αποδίδεται στην εφορία και δεν μετράει στα καθαρά σου.", {
-        tot: eur.format(t.income + t.vatOut), inc: eur.format(t.income), vat: eur.format(t.vatOut)
-      });
-    } else { vl.hidden = true; }
-
-    renderPie(t, efkaShare, taxReserve, net);
-
-    var msg = F("Εκτιμώμενος φορολογικός συντελεστής: {r}%, με βάση ετήσιο κέρδος περίπου {a}.", { r: dec((effRate * 100).toFixed(1)), a: eur.format(annualProfit) });
-    if (annualTax > 0) {
-      msg += F(" Η προκαταβολή του επόμενου έτους (περίπου {p}{u}) συμψηφίζεται με τον φόρο εκείνης της χρονιάς, αλλά θα τη χρειαστείς σε μετρητά.", {
-        p: eur.format(prepayPer), u: half === -1 ? T(" για όλο το έτος") : (half === 0 ? T(" ανά μήνα") : T(" ανά δεκαπενθήμερο"))
-      });
-    }
-    $("prepayNote").textContent = msg;
-  }
-
-  var editId = null;
-  function updateEditUI() {
-    $("add").textContent = editId !== null ? T("Αποθήκευση αλλαγών") : T("Προσθήκη βάρδιας");
-    $("cancelEdit").hidden = editId === null;
-  }
-  function startEdit(id) {
-    var target = null;
-    db.entries.forEach(function (e) { if (e.id === id) target = e; });
-    if (!target) return;
-    editId = id;
-    $("fDate").value = target.date;
-    $("fIncome").value = target.income > 0 ? target.income : "";
-    $("fTips").value = target.tips > 0 ? target.tips : "";
-    $("fHours").value = target.hours > 0 ? target.hours : "";
-    $("fExp").value = target.exp > 0 ? target.exp : "";
-    $("status").style.color = "var(--tips)";
-    $("status").textContent = F("Επεξεργασία βάρδιας {d}", { d: target.date.split("-").reverse().slice(0, 2).join("/") });
-    updateEditUI();
-    try { $("fDate").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" }); } catch (e) { /* αγνοούμε */ }
-    try { $("fIncome").focus({ preventScroll: true }); } catch (e2) { $("fIncome").focus(); }
-  }
-  function cancelEdit() {
-    var was = editId !== null;
-    editId = null;
-    if (was) { ["fIncome", "fTips", "fHours", "fExp"].forEach(function (id) { $(id).value = ""; }); $("status").textContent = ""; }
-    updateEditUI();
-  }
-
-  function renderList(key) {
-    var body = $("listBody");
-    body.innerHTML = "";
-    var rows = db.entries.filter(function (e) { return inView(e.date, key); })
-      .sort(function (a, b) { return a.date === b.date ? b.id - a.id : (a.date < b.date ? 1 : -1); });
-    $("tabCount").textContent = rows.length ? "(" + rows.length + ")" : "";
-    $("listEmpty").hidden = rows.length > 0;
-    $("listWrap").hidden = rows.length === 0;
-    rows.forEach(function (e) {
-      var tr = document.createElement("tr");
-      tr.innerHTML = "<td></td><td class='r'></td><td class='r'></td><td class='r'></td><td class='r'></td><td></td>";
-      var p = e.date.split("-");
-      tr.children[0].textContent = p[2] + "/" + p[1];
-      tr.children[1].textContent = eur.format(e.income);
-      tr.children[2].textContent = eur.format(e.tips);
-      tr.children[3].textContent = e.hours ? dec(String(e.hours)) : "—";
-      tr.children[4].textContent = eur.format(e.exp);
-      var ed = document.createElement("button");
-      ed.className = "x"; ed.type = "button"; ed.textContent = "✎";
-      ed.setAttribute("aria-label", T("Επεξεργασία βάρδιας ") + p[2] + "/" + p[1]);
-      ed.addEventListener("click", function () { startEdit(e.id); });
-      var x = document.createElement("button");
-      x.className = "x"; x.type = "button"; x.textContent = "×";
-      x.setAttribute("aria-label", T("Διαγραφή βάρδιας ") + p[2] + "/" + p[1]);
-      x.addEventListener("click", function () {
-        db.entries = db.entries.filter(function (q) { return q.id !== e.id; });
-        if (editId === e.id) cancelEdit();
-        persist(); render();
-      });
-      tr.children[5].appendChild(ed);
-      tr.children[5].appendChild(x);
-      body.appendChild(tr);
-    });
-  }
-
-  function setHalf(h) {
-    half = h;
-    $("half1").setAttribute("aria-pressed", h === 1);
-    $("half2").setAttribute("aria-pressed", h === 2);
-    $("half0").setAttribute("aria-pressed", h === 0);
-    $("halfY").setAttribute("aria-pressed", h === -1);
-  }
-
-  // ---- συμβάντα ----
-  $("add").addEventListener("click", function () {
-    var date = $("fDate").value || todayISO();
-    var income = n($("fIncome").value), tips = n($("fTips").value);
-    if (income <= 0 && tips <= 0) {
-      $("status").style.color = "var(--tax)";
-      $("status").textContent = editId !== null ? T("Βάλε έσοδα πλατφόρμας ή tips, ή διέγραψε τη βάρδια.") : T("Βάλε έσοδα πλατφόρμας ή tips για να προσθέσεις τη βάρδια.");
-      $("fIncome").focus();
-      return;
-    }
-    if (editId !== null) {
-      var target = null;
-      db.entries.forEach(function (e) { if (e.id === editId) target = e; });
-      if (target) {
-        target.date = date; target.income = income; target.tips = tips;
-        target.hours = n($("fHours").value); target.exp = n($("fExp").value);
-        editId = null;
-        delete db.off[date];
-        persist();
-        var ke = keyOf(date).split("-");
-        $("month").value = ke[0] + "-" + ke[1];
-        if (half > 0) setHalf(+ke[2]);
-        updateLabels();
-        ["fIncome", "fTips", "fHours", "fExp"].forEach(function (id) { $(id).value = ""; });
-        updateEditUI();
-        $("status").style.color = "var(--net)";
-        $("status").textContent = T("Οι αλλαγές αποθηκεύτηκαν.");
-        render();
-        buzz(15);
-        return;
-      }
-      editId = null; updateEditUI();
-    }
-    db.entries.push({
-      id: Date.now(), date: date, income: income, tips: tips,
-      hours: n($("fHours").value), exp: n($("fExp").value)
-    });
-    delete db.off[date];
-    persist();
-    var k = keyOf(date).split("-");
-    $("month").value = k[0] + "-" + k[1];
-    if (half > 0) setHalf(+k[2]);
-    updateLabels();
-    ["fIncome", "fTips", "fHours", "fExp"].forEach(function (id) { $(id).value = ""; });
-    $("status").style.color = "var(--net)";
-    var cheers = [T("Καλή βάρδια! 🛵"), T("Γράφτηκε! 💸"), T("Ένα ακόμα στο ταμείο 🔥"), T("Πάμε δυνατά! ⚡"), T("Στον δρόμο για τον στόχο 🏁")];
-    var cheer = cheers[Math.floor(Math.random() * cheers.length)];
-    $("status").textContent = cheer + T(" Βάρδια ") + date.split("-").reverse().slice(0, 2).join("/") +
-      (tips > 0 ? " · +" + eur.format(tips) + " tips 🪙" : "");
-    render();
-    burst(tips > 0);
-    buzz(tips > 0 ? [20, 40, 20] : 20);
-    $("fIncome").focus();
-  });
-
-  $("cancelEdit").addEventListener("click", function () { cancelEdit(); });
-  $("calPrev").addEventListener("click", function () { shiftMonth(-1); });
-  $("calNext").addEventListener("click", function () { shiftMonth(1); });
-  $("half1").addEventListener("click", function () { setHalf(1); render(); });
-  $("half2").addEventListener("click", function () { setHalf(2); render(); });
-  $("half0").addEventListener("click", function () { setHalf(0); render(); });
-  $("halfY").addEventListener("click", function () { setHalf(-1); render(); });
-  $("month").addEventListener("change", function () { updateLabels(); render(); });
-
-  $("extra").addEventListener("input", function () {
-    var k = viewKey(), v = n($("extra").value);
-    if (v > 0) db.extra[k] = v; else delete db.extra[k];
-    persist();
-    // ενημέρωση χωρίς να ξαναγραφτεί το πεδίο που πληκτρολογεί
-    var keep = $("extra").value; render(); $("extra").value = keep;
-  });
-
-  $("efka").addEventListener("input", function () { db.settings.efka = $("efka").value; persist(); render(); });
-  $("annual").addEventListener("input", function () { db.settings.annual = $("annual").value; persist(); render(); });
-  $("newpro").addEventListener("change", function () { db.settings.newpro = $("newpro").checked; persist(); render(); });
-  function setVatInputs() {
-    var v = normVat(db.settings.vat);
-    $("vatOn").checked = v.on; $("vatRate").value = v.rate; $("vatShare").value = v.share; $("vatIncl").value = v.withVat ? "1" : "0";
-  }
-  function readVatInputs() {
-    db.settings.vat = { on: $("vatOn").checked, rate: $("vatRate").value, withVat: $("vatIncl").value === "1", share: $("vatShare").value };
-    persist(); render();
-  }
-  ["vatOn", "vatRate", "vatShare", "vatIncl"].forEach(function (id) {
-    $(id).addEventListener("input", readVatInputs);
-    $(id).addEventListener("change", readVatInputs);
-  });
-
-  // ---- tips: γρήγορα κουμπιά ----
-  document.querySelectorAll(".chip[data-add]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var v = n($("fTips").value) + parseFloat(b.getAttribute("data-add"));
-      $("fTips").value = String(Math.round(v * 100) / 100);
-      buzz(8);
-    });
-  });
-  $("tipsClear").addEventListener("click", function () { $("fTips").value = ""; });
-
-  // ---- πάγια έξοδα ----
-  function renderFixed() {
-    var ul = $("fixedList");
-    ul.innerHTML = "";
-    db.fixed.forEach(function (f) {
-      var li = document.createElement("li");
-      li.innerHTML = "<span class='nm'></span><span class='am'></span>";
-      li.children[0].textContent = f.name + (f.vat ? T(" · ΦΠΑ εκπίπτει") : "");
-      li.children[1].textContent = eur.format(f.amount);
-      var x = document.createElement("button");
-      x.className = "x"; x.type = "button"; x.textContent = "×";
-      x.setAttribute("aria-label", T("Διαγραφή πάγιου εξόδου ") + f.name);
-      x.addEventListener("click", function () {
-        db.fixed = db.fixed.filter(function (q) { return q.id !== f.id; });
-        persist(); renderFixed(); render();
-      });
-      li.appendChild(x);
-      ul.appendChild(li);
-    });
-    $("fixedTotal").textContent = eur.format(fixedGrossMonthly());
-  }
-  $("fxAdd").addEventListener("click", function () {
-    var amount = n($("fxAmount").value);
-    if (amount <= 0) { $("fxAmount").focus(); return; }
-    db.fixed.push({ id: Date.now(), name: $("fxName").value.trim() || T("Πάγιο έξοδο"), amount: amount, vat: $("fxVat").checked });
-    $("fxName").value = ""; $("fxAmount").value = ""; $("fxVat").checked = false;
-    persist(); renderFixed(); render();
-  });
-
-  // ---- αντίγραφο ασφαλείας ----
-  var downloadsNS = null;
-  function bk(msg, ok) { var el = $("bkStatus"); el.style.color = ok ? "var(--net)" : "var(--tax)"; el.textContent = msg; }
-  function stamp() { return todayISO(); }
-
-  if (window.claude && typeof window.claude.use === "function") {
-    window.claude.use("downloads").then(function (d) {
-      downloadsNS = d;
-      if (d) { $("expJson").disabled = false; $("expCsv").disabled = false; }
-      else { bk(T("Η αποθήκευση αρχείου δεν είναι διαθέσιμη σε αυτή την προβολή. Η εισαγωγή λειτουργεί κανονικά."), false); }
-    }).catch(function () {});
-  }
-
-  function saveFile(filename, data, onOk) {
-    if (!downloadsNS) return;
-    downloadsNS.save({ filename: filename, data: data }).then(function () {
-      bk(T("Το αρχείο ετοιμάστηκε."), true);
-      if (onOk) onOk();
-    }).catch(function (err) {
-      if (err && err.code === "declined") bk(T("Ακυρώθηκε."), false);
-      else bk(T("Δεν ήταν δυνατή η αποθήκευση του αρχείου."), false);
-    });
-  }
-
-  $("expJson").addEventListener("click", function () {
-    var payload = { app: "pososa-krataw", version: 2, exportedAt: new Date().toISOString(), data: db };
-    saveFile("pososa-krataw-" + stamp() + ".json", JSON.stringify(payload, null, 2), function () {
-      db.lastBackup = todayISO(); persist(); renderReminder();
-    });
-  });
-
-  $("expCsv").addEventListener("click", function () {
-    var fmt = function (v) { return String(v).replace(".", ","); }; // CSV: δεκαδικό κόμμα για Excel
-    var rows = db.entries.slice().sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : a.id - b.id); });
-    var out = [T("Ημερομηνία;Έσοδα πλατφόρμας;Tips;Ώρες;Έξοδα βάρδιας")];
-    rows.forEach(function (e) { out.push([e.date, fmt(e.income), fmt(e.tips), fmt(e.hours), fmt(e.exp)].join(";")); });
-    saveFile("vardies-" + stamp() + ".csv", "\uFEFF" + out.join("\r\n"));
-  });
-
-  $("impFile").addEventListener("change", function () {
-    var input = this;
-    var f = input.files && input.files[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { bk(T("Το αρχείο είναι πολύ μεγάλο για αντίγραφο ασφαλείας."), false); input.value = ""; return; }
-    var r = new FileReader();
-    r.onload = function () {
-      try {
-        var obj = JSON.parse(r.result);
-        var d = obj && obj.data;
-        if (!d || !Array.isArray(d.entries)) throw new Error("bad");
-        var have = {}, added = 0, addedFixed = 0;
-        db.entries.forEach(function (e) { have[e.id] = true; });
-        d.entries.forEach(function (e) {
-          if (!e || typeof e.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(e.date)) return;
-          var id = +e.id > 0 ? +e.id : Date.now() + added;
-          if (have[id]) return;
-          have[id] = true;
-          db.entries.push({ id: id, date: e.date, income: n(e.income), tips: n(e.tips), hours: n(e.hours), exp: n(e.exp) });
-          added++;
-        });
-        var haveF = {};
-        db.fixed.forEach(function (f2) { haveF[f2.id] = true; });
-        (Array.isArray(d.fixed) ? d.fixed : []).forEach(function (f2) {
-          if (!f2 || n(f2.amount) <= 0) return;
-          var id = +f2.id > 0 ? +f2.id : Date.now() + addedFixed;
-          if (haveF[id]) return;
-          haveF[id] = true;
-          db.fixed.push({ id: id, name: String(f2.name || T("Πάγιο έξοδο")).slice(0, 60), amount: n(f2.amount), vat: !!f2.vat });
-          addedFixed++;
-        });
-        if (d.extra && typeof d.extra === "object") {
-          Object.keys(d.extra).forEach(function (k) {
-            if (/^\d{4}-\d{2}-[12]$/.test(k) && !db.extra[k] && n(d.extra[k]) > 0) db.extra[k] = n(d.extra[k]);
-          });
-        }
-        if (d.off && typeof d.off === "object") {
-          Object.keys(d.off).forEach(function (k) {
-            if (/^\d{4}-\d{2}-\d{2}$/.test(k) && d.off[k] === true) db.off[k] = true;
-          });
-        }
-        if (d.goals && typeof d.goals === "object") {
-          Object.keys(d.goals).forEach(function (k) {
-            if (/^\d{4}$/.test(k) && !db.goals[k] && n(d.goals[k]) > 0) db.goals[k] = n(d.goals[k]);
-          });
-        }
-        persist(); renderFixed(); render();
-        bk(F("Εισήχθησαν {a} βάρδιες και {b} πάγια έξοδα. Οι υπάρχουσες ρυθμίσεις έμειναν όπως ήταν.", { a: added, b: addedFixed }), true);
-      } catch (e) {
-        bk(T("Το αρχείο δεν είναι έγκυρο αντίγραφο της εφαρμογής."), false);
-      }
-      input.value = "";
-    };
-    r.onerror = function () { bk(T("Δεν ήταν δυνατή η ανάγνωση του αρχείου."), false); };
-    r.readAsText(f);
-  });
-
-  // ---- καιρός ----
-  // Ζωντανός καιρός: δουλεύει όταν η σελίδα φιλοξενείται σε δικό της hosting.
-  // Στη δημοσιευμένη έκδοση Claude τα αιτήματα προς εξωτερικούς servers μπλοκάρονται και η σελίδα πέφτει σε χειροκίνητη επιλογή.
-  var WX = { lat: 40.64, lon: 22.94, city: "Θεσσαλονίκη" };
-  var WX_KEY = "pk_wx_manual";
-  var WX_MANUAL = [
-    { code: 0, icon: "☀️", label: "Καθαρός" },
-    { code: 3, icon: "⛅", label: "Συννεφιά" },
-    { code: 61, icon: "🌧️", label: "Βροχή" },
-    { code: 95, icon: "⛈️", label: "Καταιγίδα" },
-    { code: 45, icon: "🌫️", label: "Ομίχλη" }
-  ];
-
-  function wmo(code) {
-    if (code === 0) return { icon: "☀️", label: T("Καθαρός ουρανός") };
-    if (code === 1) return { icon: "🌤️", label: T("Σχεδόν καθαρός") };
-    if (code === 2) return { icon: "⛅", label: T("Λίγα σύννεφα") };
-    if (code === 3) return { icon: "☁️", label: T("Συννεφιά") };
-    if (code === 45 || code === 48) return { icon: "🌫️", label: T("Ομίχλη") };
-    if (code >= 51 && code <= 57) return { icon: "🌦️", label: T("Ψιχάλες") };
-    if (code === 66 || code === 67) return { icon: "🌧️", label: T("Παγωμένη βροχή") };
-    if (code >= 61 && code <= 65) return { icon: "🌧️", label: T("Βροχή") };
-    if (code >= 71 && code <= 77) return { icon: "❄️", label: T("Χιόνι") };
-    if (code >= 80 && code <= 82) return { icon: "🌦️", label: T("Μπόρες") };
-    if (code === 85 || code === 86) return { icon: "❄️", label: T("Χιονόμπορες") };
-    if (code >= 95) return { icon: "⛈️", label: T("Καταιγίδα") };
-    return { icon: "🌤️", label: T("Καιρός") };
-  }
-
-  function wxTip(code, temp, wind) {
-    if (code >= 95) return T("Καταιγίδα: πρόσεχε πολύ.");
-    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return T("Βρεγμένο οδόστρωμα, πρόσεχε.");
-    if (code >= 71 && code <= 77) return T("Χιόνι: ολισθηρός δρόμος.");
-    if (code === 45 || code === 48) return T("Χαμηλή ορατότητα.");
-    if (wind >= 40) return T("Δυνατός άνεμος.");
-    if (temp !== null && temp <= 5) return T("Κρύο: ντύσου ζεστά.");
-    if (temp !== null && temp >= 35) return T("Καύσωνας: πάρε νερό μαζί σου.");
-    return "";
-  }
-
-  function forecastUrl() { return "https://www.google.com/search?q=" + encodeURIComponent(LANG === "en" ? "weather Thessaloniki" : T("καιρός Θεσσαλονίκη")); }
-
-  function wxSet(icon, temp, label, subHtml) {
-    $("wxIcon").textContent = icon;
-    $("wxTemp").textContent = temp;
-    $("wxLabel").textContent = label;
-    $("wxSub").innerHTML = subHtml;
-  }
-
-  function wxManual() {
-    var saved = null;
-    try { saved = JSON.parse(localStorage.getItem(WX_KEY) || "null"); } catch (e) { saved = null; }
-    var today = todayISO();
-    var cur = saved && saved.date === today ? saved.code : null;
-    var found = null;
-    WX_MANUAL.forEach(function (o) { if (o.code === cur) found = o; });
-    var link = ' · <a href="' + forecastUrl() + '" target="_blank" rel="noopener noreferrer">' + T("Πρόγνωση") + '</a>';
-    if (found) wxSet(found.icon, "", T(found.label), T(WX.city) + link);
-    else wxSet("🌤️", "", T("Πώς είναι ο καιρός;"), T(WX.city) + link);
-    var pick = $("wxPick");
-    pick.hidden = false;
-    pick.innerHTML = "";
-    WX_MANUAL.forEach(function (o) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "chip";
-      b.textContent = o.icon;
-      b.setAttribute("aria-label", T(o.label));
-      b.setAttribute("aria-pressed", o.code === cur ? "true" : "false");
-      b.addEventListener("click", function () {
-        try { localStorage.setItem(WX_KEY, JSON.stringify({ date: today, code: o.code })); } catch (e) { /* αγνοούμε */ }
-        wxManual();
-      });
-      pick.appendChild(b);
-    });
-  }
-
-  function wxLive() {
-    if (typeof fetch !== "function") { wxManual(); return; }
-    var url = "https://api.open-meteo.com/v1/forecast?latitude=" + WX.lat + "&longitude=" + WX.lon +
-      "&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto";
-    var timer = null, ctrl = (typeof AbortController === "function") ? new AbortController() : null;
-    if (ctrl) timer = setTimeout(function () { ctrl.abort(); }, 7000);
-    fetch(url, ctrl ? { signal: ctrl.signal } : undefined).then(function (r) {
-      if (!r.ok) throw new Error("http");
-      return r.json();
-    }).then(function (j) {
-      if (timer) clearTimeout(timer);
-      var c = j && j.current;
-      if (!c || typeof c.weather_code !== "number" || typeof c.temperature_2m !== "number") throw new Error("shape");
-      var info = wmo(c.weather_code);
-      var wind = typeof c.wind_speed_10m === "number" ? Math.round(c.wind_speed_10m) : 0;
-      var tip = wxTip(c.weather_code, c.temperature_2m, wind);
-      $("wxPick").hidden = true;
-      var sub = T(WX.city) + T(" · άνεμος ") + wind + T(" χλμ/ώρα");
-      wxSet(info.icon, Math.round(c.temperature_2m) + "°", info.label, "");
-      $("wxSub").textContent = sub + (tip ? " · " + tip : "");
-    }).catch(function () {
-      if (timer) clearTimeout(timer);
-      wxManual();
-    });
-  }
-  function wxInit() { wxLive(); setInterval(wxLive, 30 * 60 * 1000); }
-
-  $("reminderBtn").addEventListener("click", function () {
-    if (downloadsNS) { $("expJson").click(); return; }
-    showTab("cfg");
-    var bp = $("backupPanel");
-    bp.open = true;
-    try { bp.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" }); } catch (e) { /* αγνοούμε */ }
-  });
-  $("reminderLater").addEventListener("click", function () { reminderHidden = true; renderReminder(); });
-
-  // Ζητάμε από τον browser να μην σβήσει τα δεδομένα αυτόματα (όπου υποστηρίζεται)
-  try {
-    if (navigator.storage && typeof navigator.storage.persist === "function") {
-      var pr = navigator.storage.persist();
-      if (pr && typeof pr.catch === "function") pr.catch(function () {});
-    }
-  } catch (e) { /* αγνοούμε */ }
-
-  // ---- μόνιμο ιστορικό στον λογαριασμό (db capability) ----
-  // Τα δεδομένα μένουν και τοπικά (γρήγορη εκκίνηση) και αντιγράφονται στον ιδιωτικό χώρο του λογαριασμού.
-  function sortObj(o) {
-    var out = {};
-    Object.keys(o || {}).sort().forEach(function (k) { out[k] = o[k]; });
-    return out;
-  }
-  function monthDocsFrom(entries) {
-    var by = {}, out = {};
-    entries.forEach(function (e) { var k = e.date.slice(0, 7); (by[k] = by[k] || []).push(e); });
-    Object.keys(by).forEach(function (k) {
-      var list = by[k].slice().sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : a.id - b.id); });
-      out["m-" + k] = { v: 1, month: k, entries: list.map(function (e) {
-        return { id: e.id, date: e.date, income: e.income, tips: e.tips, hours: e.hours, exp: e.exp };
-      }) };
-    });
-    return out;
-  }
-  function settingsDocFrom(src) {
-    var st = src.settings || {};
-    return {
-      v: 1,
-      settings: { efka: String(st.efka === undefined ? "" : st.efka), newpro: st.newpro !== false, annual: String(st.annual || ""), vat: normVat(st.vat) },
-      fixed: (src.fixed || []).map(function (f) { return { id: f.id, name: f.name, amount: f.amount, vat: !!f.vat }; }),
-      off: sortObj(src.off), extra: sortObj(src.extra), goals: sortObj(src.goals), lastBackup: src.lastBackup || ""
-    };
-  }
-
-  function cloudBadge(state, err) {
-    var el = $("cloudBadge");
-    cloud.bs = state || ""; cloud.be = err || null;
-    if (!state) { el.hidden = true; return; }
-    el.hidden = false;
-    el.className = "cloud" + (state === "ok" ? " ok" : (state === "error" ? " err" : ""));
-    if (state === "pending") el.textContent = T("☁️ Αποθήκευση…");
-    else if (state === "ok") el.textContent = T("☁️ Το ιστορικό σου είναι αποθηκευμένο στον λογαριασμό σου");
-    else {
-      var code = err && err.code ? err.code : "";
-      el.textContent = code === "quota_exceeded"
-        ? T("⚠️ Γέμισε ο χώρος αποθήκευσης του λογαριασμού. Κάνε αντίγραφο ασφαλείας.")
-        : T("⚠️ Δεν ολοκληρώθηκε η αποθήκευση στον λογαριασμό. Ξαναδοκιμάζω σε λίγο.");
-    }
-  }
-
-  function scheduleCloud() {
-    if (!cloud.on) return;
-    if (cloud.timer) clearTimeout(cloud.timer);
-    cloud.timer = setTimeout(function () { cloud.timer = null; cloudFlush(); }, 1000);
-    cloudBadge("pending");
-  }
-
-  function cloudFlush() {
-    if (!cloud.on) return;
-    if (cloud.busy) { cloud.dirty = true; return; }
-    cloud.busy = true; cloud.dirty = false;
-    var docs = monthDocsFrom(db.entries);
-    docs["settings"] = settingsDocFrom(db);
-    var ops = [];
-    Object.keys(docs).forEach(function (id) {
-      var str = JSON.stringify(docs[id]);
-      if (cloud.last[id] !== str) ops.push({ id: id, doc: docs[id], str: str });
-    });
-    Object.keys(cloud.last).forEach(function (id) { if (!docs[id]) ops.push({ id: id, del: true }); });
-    var i = 0;
-    function next() {
-      if (i >= ops.length) return Promise.resolve();
-      var op = ops[i++];
-      var ref = cloud.col.doc(op.id);
-      var p = op.del ? ref.delete() : ref.set(op.doc);
-      return p.then(function () {
-        if (op.del) delete cloud.last[op.id]; else cloud.last[op.id] = op.str;
-        return next();
-      });
-    }
-    next().then(function () {
-      var syn = {};
-      db.entries.forEach(function (e) { syn[e.id] = true; });
-      db.synced = syn; db.linked = true;
-      persistLocal();
-      cloud.busy = false;
-      cloudBadge("ok");
-      if (cloud.dirty) scheduleCloud();
-    }).catch(function (err) {
-      cloud.busy = false;
-      cloudBadge("error", err);
-      if (cloud.retry) clearTimeout(cloud.retry);
-      cloud.retry = setTimeout(cloudFlush, 30000);
-    });
-  }
-
-  function cleanEntry(e) {
-    if (!e || typeof e.date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(e.date) || !(+e.id > 0)) return null;
-    return { id: +e.id, date: e.date, income: n(e.income), tips: n(e.tips), hours: n(e.hours), exp: n(e.exp) };
-  }
-
-  function cloudPull() {
-    return cloud.col.get().then(function (snap) {
-      var cEntries = [], sDoc = null;
-      snap.docs.forEach(function (d) {
-        var data = d.data();
-        if (!data) return;
-        if (d.id === "settings") sDoc = JSON.parse(JSON.stringify(data));
-        else if (d.id.indexOf("m-") === 0 && Array.isArray(data.entries)) {
-          data.entries.forEach(function (e) { var c = cleanEntry(e); if (c) cEntries.push(c); });
-        }
-      });
-
-      // τι υπάρχει ήδη στο σύννεφο, όπως θα το έγραφε η εφαρμογή (για να γράφουμε μόνο διαφορές)
-      var last = monthDocsFrom(cEntries), lastStr = {};
-      Object.keys(last).forEach(function (id) { lastStr[id] = JSON.stringify(last[id]); });
-      if (sDoc) {
-        lastStr["settings"] = JSON.stringify(settingsDocFrom({
-          settings: sDoc.settings, fixed: sDoc.fixed, off: sDoc.off, extra: sDoc.extra, goals: sDoc.goals, lastBackup: sDoc.lastBackup
-        }));
-      }
-      cloud.last = lastStr;
-
-      // βάρδιες: ό,τι έχει το σύννεφο + ό,τι υπάρχει μόνο εδώ και δεν έχει συγχρονιστεί ποτέ
-      var inCloud = {};
-      cEntries.forEach(function (e) { inCloud[e.id] = true; });
-      var merged = cEntries.slice();
-      db.entries.forEach(function (e) { if (!inCloud[e.id] && !db.synced[e.id]) merged.push(e); });
-      db.entries = merged;
-
-      if (sDoc && sDoc.settings) {
-        var cs = sDoc.settings;
-        var cFixed = (Array.isArray(sDoc.fixed) ? sDoc.fixed : []).filter(function (f) { return f && n(f.amount) > 0; })
-          .map(function (f) { return { id: +f.id || Date.now(), name: String(f.name || T("Πάγιο έξοδο")).slice(0, 60), amount: n(f.amount), vat: !!f.vat }; });
-        var cOff = {}, cExtra = {}, cGoals = {};
-        Object.keys(sDoc.goals || {}).forEach(function (k) { if (/^\d{4}$/.test(k) && n(sDoc.goals[k]) > 0) cGoals[k] = n(sDoc.goals[k]); });
-        Object.keys(sDoc.off || {}).forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k) && sDoc.off[k] === true) cOff[k] = true; });
-        Object.keys(sDoc.extra || {}).forEach(function (k) { if (/^\d{4}-\d{2}-[12]$/.test(k) && n(sDoc.extra[k]) > 0) cExtra[k] = n(sDoc.extra[k]); });
-        if (!db.linked) {
-          // πρώτη σύνδεση αυτής της συσκευής: δεν χάνουμε ό,τι είχε τοπικά
-          var haveF = {};
-          cFixed.forEach(function (f) { haveF[f.id] = true; });
-          db.fixed.forEach(function (f) { if (!haveF[f.id]) cFixed.push(f); });
-          Object.keys(db.off).forEach(function (k) { if (db.off[k] === true) cOff[k] = true; });
-          Object.keys(db.extra).forEach(function (k) { if (!cExtra[k]) cExtra[k] = db.extra[k]; });
-          Object.keys(db.goals).forEach(function (k) { if (!cGoals[k]) cGoals[k] = db.goals[k]; });
-        }
-        db.settings = { efka: cs.efka === undefined || cs.efka === "" ? db.settings.efka : cs.efka, newpro: cs.newpro !== false, annual: cs.annual || "", vat: normVat(cs.vat) };
-        db.fixed = cFixed; db.off = cOff; db.extra = cExtra; db.goals = cGoals;
-        if (sDoc.lastBackup) db.lastBackup = sDoc.lastBackup;
-      }
-
-      cloud.on = true;
-      cloud.lastPull = Date.now();
-      persistLocal();
-      $("efka").value = db.settings.efka;
-      $("annual").value = db.settings.annual || "";
-      $("newpro").checked = db.settings.newpro !== false; setVatInputs();
-      renderFixed(); render();
-      cloudFlush();
-    });
-  }
-
-  function cloudInit() {
-    if (!(window.claude && typeof window.claude.use === "function")) return;
-    Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function (r) {
-      var cdb = r[0], user = r[1];
-      if (!cdb || !user) return null;
-      return user.id().then(function (uid) {
-        if (!uid) return null;
-        cloud.col = cdb.collection("data/users/" + uid);
-        return cloudPull();
-      });
-    }).catch(function (err) { cloud.on = false; cloudBadge("error", err); });
-  }
-
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState !== "visible" || !cloud.on) return;
-    if (cloud.busy || cloud.dirty || cloud.timer || Date.now() - cloud.lastPull < 60000) return;
-    cloudPull().catch(function () { /* μένουμε με τα τοπικά */ });
-  });
-
-  // ---- θέμα εμφάνισης ----
-  function loadChartColors() {
-    var g = [cssv("--g1"), cssv("--g2"), cssv("--g3")];
-    var r = [cssv("--r1"), cssv("--r2"), cssv("--r3"), cssv("--r4"), cssv("--r5"), cssv("--r6")];
-    if (g[0]) GREENS = g;
-    if (r[0]) REDS = r;
-  }
-  function applyTheme(name, rerender) {
-    if (!THEMES[name]) name = "forest";
-    document.documentElement.setAttribute("data-theme", name);
-    try { localStorage.setItem("pk_theme", name); } catch (e) { /* αγνοούμε */ }
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", THEMES[name]);
-    document.querySelectorAll("#themePick button").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-theme") === name ? "true" : "false");
-    });
-    loadChartColors();
-    if (rerender) render();
-  }
-  document.querySelectorAll("#themePick button").forEach(function (b) {
-    b.addEventListener("click", function () { applyTheme(b.getAttribute("data-theme"), true); });
-  });
-  var savedTheme = "forest";
-  try { savedTheme = localStorage.getItem("pk_theme") || "forest"; } catch (e) { savedTheme = "forest"; }
-
-  // ---- ενότητες (tabs) ----
-  var TAB_KEY = "pk_tab", TAB_NAMES = ["stats", "list", "cal", "hist", "cfg"];
-  function showTab(name) {
-    if (TAB_NAMES.indexOf(name) < 0) name = "stats";
-    document.querySelectorAll("#tabsPanel [role=tab]").forEach(function (b) {
-      var on = b.getAttribute("data-tab") === name;
-      b.setAttribute("aria-selected", on ? "true" : "false");
-      b.tabIndex = on ? 0 : -1;
-    });
-    TAB_NAMES.forEach(function (k) { $("pane-" + k).hidden = k !== name; });
-    try { localStorage.setItem(TAB_KEY, name); } catch (e) { /* αγνοούμε */ }
-  }
-  document.querySelectorAll("#tabsPanel [role=tab]").forEach(function (b) {
-    b.addEventListener("click", function () { showTab(b.getAttribute("data-tab")); });
-    b.addEventListener("keydown", function (e) {
-      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-      e.preventDefault();
-      var i = TAB_NAMES.indexOf(b.getAttribute("data-tab"));
-      i = (i + (e.key === "ArrowRight" ? 1 : TAB_NAMES.length - 1)) % TAB_NAMES.length;
-      showTab(TAB_NAMES[i]);
-      $("tab-" + TAB_NAMES[i]).focus();
-    });
-  });
-  var savedTab = "stats";
-  try { savedTab = localStorage.getItem(TAB_KEY) || "stats"; } catch (e) { savedTab = "stats"; }
-
-  $("langBtn").addEventListener("click", function () { applyLang(LANG === "en" ? "el" : "en", true); });
-  var savedLang = "el";
-  try { savedLang = localStorage.getItem("pk_lang") === "en" ? "en" : "el"; } catch (e) { savedLang = "el"; }
-
-  // ---- λειτουργία εκτός Claude: κανονική λήψη αρχείων ----
-  function browserSave(req) {
-    return new Promise(function (resolve, reject) {
-      try {
-        var isCsv = /\.csv$/i.test(req.filename);
-        var blob = new Blob([req.data], { type: isCsv ? "text/csv;charset=utf-8" : "application/json" });
-        var file = null;
-        try { file = new File([blob], req.filename, { type: blob.type }); } catch (e) { file = null; }
-        if (file && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-          navigator.share({ files: [file], title: req.filename }).then(function () { resolve({ status: "saved" }); })
-            .catch(function (err) { if (err && err.name === "AbortError") reject({ code: "declined" }); else downloadLink(); });
-          return;
-        }
-        downloadLink();
-      } catch (e) { reject(e); }
-      function downloadLink() {
-        try {
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = url; a.download = req.filename;
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-          resolve({ status: "saved" });
-        } catch (e2) { reject(e2); }
-      }
-    });
-  }
-  if (!(window.claude && typeof window.claude.use === "function")) {
-    downloadsNS = { save: browserSave };
-    $("expJson").disabled = false; $("expCsv").disabled = false;
-  }
-
-  // ---- εγκατάσταση ως εφαρμογή (PWA) ----
-  var INSTALL_KEY = "pk_install_dismissed";
-  var deferredPrompt = null;
-  function isStandalone() {
-    return !!((window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true);
-  }
-  function isIOS() {
-    return /iphone|ipad|ipod/i.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  }
-  function installDismissedRecently() {
-    try { var t = +localStorage.getItem(INSTALL_KEY); return t > 0 && Date.now() - t < 30 * 86400000; } catch (e) { return false; }
-  }
-  function showInstall(kind) {
-    if (window.claude || isStandalone() || installDismissedRecently()) return;
-    $("installText").textContent = kind === "ios"
-      ? T("Στο iPhone: πάτα «Κοινοποίηση» και μετά «Προσθήκη στην αρχική οθόνη».")
-      : T("Βάλε την εφαρμογή στην αρχική οθόνη για γρήγορο άνοιγμα και χρήση χωρίς σύνδεση.");
-    $("installBtn").hidden = kind === "ios";
-    $("installBar").hidden = false;
-  }
-  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferredPrompt = e; showInstall("prompt"); });
-  window.addEventListener("appinstalled", function () { $("installBar").hidden = true; deferredPrompt = null; });
-  $("installBtn").addEventListener("click", function () {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function () { deferredPrompt = null; $("installBar").hidden = true; }).catch(function () { /* αγνοούμε */ });
-  });
-  $("installLater").addEventListener("click", function () {
-    $("installBar").hidden = true;
-    try { localStorage.setItem(INSTALL_KEY, String(Date.now())); } catch (e) { /* αγνοούμε */ }
-  });
-  function initInstall() {
-    if (isIOS() && !isStandalone()) showInstall("ios");
-    if (!window.claude && "serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
-      window.addEventListener("load", function () { navigator.serviceWorker.register("./sw.js").catch(function () { /* αγνοούμε */ }); });
-    }
-  }
-
-  // ---- εκκίνηση ----
-  load();
-  $("efka").value = db.settings.efka;
-  $("annual").value = db.settings.annual || "";
-  $("newpro").checked = db.settings.newpro !== false; setVatInputs();
-  $("fDate").value = todayISO();
-  $("month").value = todayISO().slice(0, 7);
-  setHalf(+todayISO().split("-")[2] <= 14 ? 1 : 2);
-  applyTheme(savedTheme, false);
-  applyLang(savedLang, false);
-  showTab(savedTab);
-  updateLabels();
-  renderFixed();
-  render();
-  wxInit();
-  cloudInit();
-  initInstall();
-})();
-</script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
