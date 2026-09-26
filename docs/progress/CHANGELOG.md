@@ -1,50 +1,71 @@
-# Clean Pocket · CHANGELOG
+# Clean Pocket · ΙΣΤΟΡΙΚΟ ΑΛΛΑΓΩΝ
 
-Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
+*Ελληνικά · [English](CHANGELOG.en.md)*
+
+Οι εκδόσεις ακολουθούν το `CACHE_VERSION` στο `sw.js`. Κάθε καταχώριση λέει πώς επαληθεύτηκε.
+Κράτα αυτό το αρχείο και το `CHANGELOG.en.md` συγχρονισμένα.
 
 ## 3.1.2 · 2026-09-26 23:45
-- Tour spotlight clamped to the viewport and re-positioned on scroll/resize (tall targets, mid-scroll measurement).
-- Verified: `npm test` 30/30, smoke PASS in el and en, data preserved through the 3.1.1 → 3.1.2 update banner.
+- Η επισήμανση της ξενάγησης περιορίζεται στην οθόνη και ξανατοποθετείται σε scroll/αλλαγή μεγέθους (ψηλά
+  στοιχεία, μέτρηση στη μέση του scroll).
+- Επαλήθευση: `npm test` 30/30, smoke PASS σε el και en, τα δεδομένα διατηρήθηκαν μέσα από την μπάρα
+  ενημέρωσης 3.1.1 → 3.1.2.
 
 ## 3.1.1 · 2026-09-26
-- VAT status "I don't know" now counts as normal regime (was exempt); onboarding note says so.
-- Summary shows "Age not set" instead of "Age -"; paid checkboxes get accessible names.
-- Verified: `npm test` 30/30; VAT Q3 = 228.00 appears with sample data in the browser.
+- Το καθεστώς ΦΠΑ «Δεν ξέρω» μετράει πλέον ως κανονικό (ήταν απαλλαγή)· το λέει και η σημείωση στις
+  αρχικές ερωτήσεις.
+- Η σύνοψη δείχνει «Ηλικία: δεν ορίστηκε» αντί για «Ηλικία -»· τα κουτάκια «Πληρώθηκε» αποκτούν
+  προσβάσιμα ονόματα.
+- Επαλήθευση: `npm test` 30/30· το ΦΠΑ Γ' τριμήνου = 228,00 εμφανίζεται με δοκιμαστικά δεδομένα στον browser.
 
-## 3.1.0 · 2026-09-26 (round 2, agent build, graded 23:45)
-- Language choice is onboarding step 0 (preselected from the phone), EL/EN toggle in Home and Settings,
-  i18n completeness test (3 tests) so no string ships in one language only.
-- UI/UX: Fira Sans Condensed hero and tiles with a system fallback, fonts cached by the worker at runtime;
-  4px spacing scale; 3-word tile captions; empty states with one action; staggered reveal once per boot
-  (agent found and fixed a re-trigger flash when returning to Home); named nav buttons; contrast ≥ 4.5 in all themes.
-- Onboarding: skip on every step, summary step with per-row change.
-- Guided tour: 6 coach-mark steps with spotlight, keyboard and screen-reader support, re-launchable from More.
-- Sample data: ~3 weeks of realistic shifts flagged `sample`, banner with one-tap removal, excluded from exports.
-- Share the app (native share sheet, copy-link fallback). README: deploy for free (GitHub Pages, Netlify Drop).
-- Verified: `npm test` 30/30, smoke 25 checks × 2 languages PASS, `tools/contrast.py` 16/16.
+## 3.1.0 · 2026-09-26 (2ος γύρος, κατασκευή από agent, βαθμολογήθηκε 23:45)
+- Η επιλογή γλώσσας είναι το βήμα 0 των αρχικών ερωτήσεων (προεπιλεγμένη από το κινητό), διακόπτης ΕΛ/EN
+  στην Αρχική και στις Ρυθμίσεις, test πληρότητας i18n (3 tests) ώστε κανένα κείμενο να μη βγαίνει μόνο σε
+  μία γλώσσα.
+- UI/UX: Fira Sans Condensed στο κεντρικό ποσό και στις κάρτες με εναλλακτική του συστήματος, γραμματοσειρές
+  σε cache από τον worker κατά τη χρήση· κλίμακα αποστάσεων 4px· λεζάντες καρτών 3 λέξεων· άδειες καταστάσεις
+  με μία ενέργεια· κλιμακωτή εμφάνιση μία φορά ανά εκκίνηση (ο agent βρήκε και διόρθωσε ένα τρεμόπαιγμα όταν
+  επέστρεφες στην Αρχική)· κουμπιά πλοήγησης με ονόματα· αντίθεση ≥ 4.5 σε όλα τα θέματα.
+- Αρχικές ερωτήσεις: παράλειψη σε κάθε βήμα, βήμα σύνοψης με αλλαγή ανά γραμμή.
+- Ξενάγηση: 6 βήματα με επισημάνσεις και spotlight, υποστήριξη πληκτρολογίου και αναγνώστη οθόνης, ξαναξεκινά
+  από τα Περισσότερα.
+- Δοκιμαστικά δεδομένα: ~3 εβδομάδες ρεαλιστικές βάρδιες με σήμανση `sample`, μπάρα για αφαίρεση με ένα
+  πάτημα, εκτός εξαγωγών.
+- Κοινοποίηση της εφαρμογής (μενού κοινοποίησης του κινητού, εναλλακτικά αντιγραφή link). README: δωρεάν
+  ανέβασμα online (GitHub Pages, Netlify Drop).
+- Επαλήθευση: `npm test` 30/30, smoke 25 έλεγχοι × 2 γλώσσες PASS, `tools/contrast.py` 16/16.
 
 ## 3.0.3 · 2026-09-26
-- Import control is a button; live data summary line (shifts, first date, last backup). Verified in browser at 375px.
+- Η εισαγωγή είναι κουμπί· ζωντανή γραμμή σύνοψης δεδομένων (βάρδιες, πρώτη ημερομηνία, τελευταίο backup).
+  Επαληθεύτηκε στον browser σε 375px.
 
 ## 3.0.2 · 2026-09-26
-- Update banner waits for `controllerchange` before reloading (previously reloaded into the old shell). Verified: one tap now loads the new version.
+- Η μπάρα ενημέρωσης περιμένει το `controllerchange` πριν ξαναφορτώσει (πριν ξαναφόρτωνε στον παλιό πυρήνα).
+  Επαλήθευση: ένα πάτημα φορτώνει πλέον τη νέα έκδοση.
 
 ## 3.0.1 · 2026-09-26
-- Period initialised to today's half-month; after saving a shift the view jumps to that shift's half-month.
-- Tax installments of 0.00 no longer listed as obligations.
-- Backup reminder only after 10 shifts or 7 days of history when never backed up.
-- Verified: `npm test` 26/26, smoke 9/9, hand check of net 16.46 and set-aside 278.97.
+- Η περίοδος ξεκινά στο τρέχον δεκαπενθήμερο· μετά την αποθήκευση μιας βάρδιας η προβολή πηγαίνει στο
+  δεκαπενθήμερο εκείνης της βάρδιας.
+- Οι δόσεις φόρου 0,00 δεν εμφανίζονται πια ως υποχρεώσεις.
+- Υπενθύμιση backup μόνο μετά από 10 βάρδιες ή 7 μέρες ιστορικού, όταν δεν έχει γίνει ποτέ backup.
+- Επαλήθευση: `npm test` 26/26, smoke 9/9, έλεγχος με το χέρι: καθαρά 16,46 και «βάλε στην άκρη» 278,97.
 
-## 3.0.0 · 2026-09-26 (rebuild from original-v2.html)
-- New tax engine `js/tax.js` for tax year 2026 (Law 5246/2025, EFKA circ. 6/2026): brackets 9/20/26/34/39/44,
-  youth and child rates, presumed income from year 4, prepayment 27.5% first 3 years, due-date helpers.
-- Split into ES modules: app / calc (pure) / csv (pure) / store (adapter, schema v3 with ids, updatedAt, tombstones) / i18n.
-- Onboarding (VAT, age + children, years active, EFKA category, days per week). No hard-coded city; weather off by default.
-- Bottom-nav mobile layout, obligations with paid toggles and custom debts, savings goals, CSV import with preview,
-  JSON backup/import (also the original app's v2 format), PWA manifest + service worker + icons.
-- Dropped: claude.ai runtime coupling, Google Fonts (round 2 brings fonts back with runtime caching).
-- Verified: `npm test` 26/26, `tools/smoke.py` 9/9 at 390x844.
+## 3.0.0 · 2026-09-26 (ξαναχτίσιμο από το original-v2.html)
+- Νέα φορολογική μηχανή `js/tax.js` για το φορολογικό έτος 2026 (Ν. 5246/2025, εγκ. ΕΦΚΑ 6/2026): κλίμακα
+  9/20/26/34/39/44, συντελεστές νέων και παιδιών, τεκμαρτό εισόδημα από το 4ο έτος, προκαταβολή 27,5% τα
+  πρώτα 3 χρόνια, βοηθητικές συναρτήσεις για ημερομηνίες λήξης.
+- Χωρισμός σε ES modules: app / calc (καθαρό) / csv (καθαρό) / store (adapter, σχήμα v3 με ids, updatedAt,
+  tombstones) / i18n.
+- Αρχικές ερωτήσεις (ΦΠΑ, ηλικία + παιδιά, χρόνια δραστηριότητας, κατηγορία ΕΦΚΑ, μέρες την εβδομάδα).
+  Καμία πόλη γραμμένη στον κώδικα· ο καιρός κλειστός από προεπιλογή.
+- Διάταξη για κινητό με κάτω πλοήγηση, υποχρεώσεις με διακόπτες «πληρώθηκε» και δικά σου χρέη, στόχοι
+  αποταμίευσης, εισαγωγή CSV με προεπισκόπηση, backup/εισαγωγή JSON (και στη μορφή v2 της αρχικής
+  εφαρμογής), PWA manifest + service worker + εικονίδια.
+- Αφαιρέθηκαν: η εξάρτηση από το runtime του claude.ai, τα Google Fonts (ο 2ος γύρος φέρνει πίσω τις
+  γραμματοσειρές με cache κατά τη χρήση).
+- Επαλήθευση: `npm test` 26/26, `tools/smoke.py` 9/9 σε 390x844.
 
-## 2.1 · original (operator's file `pososa-krataw-v2_1.html`)
-Audit findings: 2025 tax table labelled 2026, no youth or presumed-income rules, VAT on by default, first shift
-shows a large negative number, not installable outside claude.ai, Thessaloniki hard-coded, no measurement.
+## 2.1 · αρχική (αρχείο του ιδιοκτήτη `pososa-krataw-v2_1.html`)
+Ευρήματα ελέγχου: φορολογική κλίμακα του 2025 με ετικέτα 2026, χωρίς κανόνες για νέους ή για τεκμαρτό
+εισόδημα, ΦΠΑ ενεργό από προεπιλογή, η πρώτη βάρδια δείχνει μεγάλο αρνητικό ποσό, δεν εγκαθίσταται έξω από
+το claude.ai, Θεσσαλονίκη γραμμένη στον κώδικα, καμία μέτρηση.
