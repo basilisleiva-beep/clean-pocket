@@ -5,8 +5,12 @@
 
 **Last verified:** 2026-09-26 23:45 (Athens)
 **Version:** 3.1.2 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
-**Location:** this folder · original single-file app kept as `original-v2.html`
-**Deployed:** nowhere yet · **Users:** 0 · **Revenue:** EUR 0
+**Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
+handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
+`docs/original-v2.html`
+**Deployed:** 2026-09-27, GitHub Pages from `main` (root): https://basilisleiva-beep.github.io/clean-pocket/
+(`npm test` 30/30 before deploy; live page loaded with 0 console errors and SW registered) · **Users:** 0 ·
+**Revenue:** EUR 0
 
 ## What it is
 Mobile-first offline PWA for Greek freelance food-delivery couriers, in Greek or English by the user's choice.

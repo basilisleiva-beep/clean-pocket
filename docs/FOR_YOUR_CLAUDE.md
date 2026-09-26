@@ -1,8 +1,12 @@
 # Clean Pocket · Brief for the Claude (or developer) who continues this
 
-You are picking up a working, verified v3.1.2. Read `progress/STATUS.md` for the current truth and
-`progress/CHANGELOG.md` for what changed per version. Then read `app/README.md`. This file holds the
-rules and context that are not obvious from the code.
+You are picking up a working, verified v3.1.2. Read `docs/progress/STATUS.md` for the current truth and
+`docs/progress/CHANGELOG.md` for what changed per version. Then read `README.md` at the repository root.
+This file holds the rules and context that are not obvious from the code.
+
+**Layout:** the handoff package had the app in `app/`. In this repository the app is at the **repository
+root** and the handoff material is in `docs/`. All app paths below are relative to the root. The live site is
+GitHub Pages from `main`, root: https://basilisleiva-beep.github.io/clean-pocket/
 
 ## What it is, in one paragraph
 Mobile-first offline PWA for Greek freelance food-delivery couriers (efood/Wolt style, paid per half-month,
@@ -13,7 +17,7 @@ VAT shown separately (never deducted from net). Obligations: EFKA monthly (due e
 quarter (due end of the month after the quarter), income tax in 8 installments from July of the next year,
 custom debts. Goals: annual net (with hours still needed) and savings goals.
 
-## Architecture (app/)
+## Architecture (repository root)
 - `js/tax.js`: the ONLY place with tax law. Pure. Tax year 2026: brackets 9/20/26/34/39/44 at 10k/20k/30k/40k/60k;
   age ≤ 25 pays 0% on the first 20k, 26–30 pays 9%; child reductions on brackets 1–3; prepayment 55%, or 27.5%
   for the first 3 years; presumed minimum income applies from year 4 when higher than real profit; EFKA
@@ -45,7 +49,7 @@ custom debts. Goals: annual net (with hours still needed) and savings goals.
 8. Touch targets ≥ 44px, focus-visible everywhere, contrast ≥ 4.5 (`python tools/contrast.py`), reduced-motion respected.
 9. Verify claims by running things, not by reading reports. A screenshot or raw test output, or it did not happen.
 
-## How to verify (from `app/`)
+## How to verify (from the repository root)
 ```
 npm test                                                  # 30 tests: tax 7, calc 13, csv 7, i18n 3
 python -m http.server 8791 --directory .                  # serve
@@ -58,14 +62,15 @@ Playwright for Python and Pillow are needed for the tools; the app itself needs 
 ## Open work, in order
 1. **Accountant validation**: three profiles (age 24 / years 1–3 / EFKA special; age 35 / years 6 / VAT normal /
    presumed income set; VAT exempt). Compare annual tax, prepayment, VAT per quarter, EFKA. Fix `tax.js` with tests.
-2. **Deploy** (HTTPS static host; steps in `HANDOFF.md` and `README.md`). Zero spend.
+2. **Deploy**: done. GitHub Pages from `main`, repository root (see `docs/HANDOFF.md`). Push to `main` to
+   redeploy, and bump `CACHE_VERSION` in `sw.js` first. Zero spend.
 3. **Measurement**: anonymous counts only (shifts logged per device, 7/14-day return) and a feedback link. No
    personal data. Success signal: riders logging 8+ shifts in 14 days.
 4. **Name and identity** before public distribution; update `manifest.webmanifest`, `<title>`, About, icons.
 5. Later, SaaS path: a `RemoteAdapter` in `store.js` (same interface as `LocalStorageAdapter`), sign-in, merge by
    `updatedAt` with tombstones. `tax.js` and `calc.js` run unchanged on a server.
 
-## Known gaps (from `progress/STATUS.md`)
+## Known gaps (from `docs/progress/STATUS.md`)
 - Weather picker is best-effort and untested by automation.
 - Tour spotlight uses a large box-shadow; re-check on a low-end Android.
 - One unexplained wiped-profile observation during review, not reproduced; both user paths (reload, update)
