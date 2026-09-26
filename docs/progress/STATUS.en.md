@@ -7,7 +7,7 @@
 > Keep this file and the Greek `STATUS.md` in sync.
 
 **Last verified:** 2026-09-26 23:45 (Athens)
-**Version:** 3.1.3 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
+**Version:** 3.1.4 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
 **Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
 handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
 `docs/original-v2.html`

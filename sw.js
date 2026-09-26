@@ -2,7 +2,7 @@
 // cache-first (runtime, opaque responses allowed) for the Google Fonts CSS + font files so the
 // app still renders in Fira Sans/Fira Sans Condensed offline after the first online load.
 // Bump CACHE_VERSION on every release; the app shows a refresh banner when a new one installs.
-var CACHE_VERSION = "clean-pocket-v3.1.3";
+var CACHE_VERSION = "clean-pocket-v3.1.4";
 var FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 var SHELL = [
   "./",
@@ -24,7 +24,11 @@ var SHELL = [
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.open(CACHE_VERSION).then(function (cache) { return cache.addAll(SHELL); })
+    // cache: "reload" skips the browser's HTTP cache (GitHub Pages sends max-age=600), otherwise a
+    // new worker can precache stale files next to fresh ones and ship a mixed-version shell.
+    caches.open(CACHE_VERSION).then(function (cache) {
+      return cache.addAll(SHELL.map(function (u) { return new Request(u, { cache: "reload" }); }));
+    })
   );
 });
 

@@ -5,6 +5,13 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.4 · 2026-09-27
+- Update fix: the service worker fetched the shell through the browser's HTTP cache (GitHub Pages sends
+  max-age=600), so a new version could precache a fresh `index.html` next to a stale `app.js`. Found while
+  deploying 3.1.3 (the privacy-policy link rendered without text). The shell is now always fetched from the
+  server (`cache: "reload"`).
+- Verified: in the browser, after the 3.1.3 → 3.1.4 update the cached `app.js` contains the new changes.
+
 ## 3.1.3 · 2026-09-27 (Google Play preparation)
 - New `privacy.html` (privacy policy, Greek and English) linked from More → "About"; the page is precached by
   the service worker.
