@@ -7,7 +7,7 @@
 > Keep this file and the Greek `STATUS.md` in sync.
 
 **Last verified:** 2026-09-26 23:45 (Athens)
-**Version:** 3.1.4 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
+**Version:** 3.1.5 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
 **Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
 handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
 `docs/original-v2.html`
@@ -15,7 +15,7 @@ handoff package), this file and the rest of the handoff material in `docs/`; ori
 (`npm test` 30/30 before deploy; live page loaded with 0 console errors and SW registered) · **Users:** 0 ·
 **Revenue:** EUR 0
 **Google Play:** signed `.aab` ready (2026-09-27, in the `clean-pocket-android` folder, outside the repo), not
-uploaded yet; developer account, contact email and the Play App Signing SHA-256 are pending. All steps in
+uploaded yet; developer account and the Play App Signing SHA-256 are pending (contact email: cleanpockethr@gmail.com). All steps in
 `docs/play-store/PLAY-STORE.md`.
 
 ## What it is

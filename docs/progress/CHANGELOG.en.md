@@ -5,6 +5,9 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.5 · 2026-09-27
+- The privacy policy now lists a contact email (cleanpockethr@gmail.com) instead of GitHub Issues.
+
 ## 3.1.4 · 2026-09-27
 - Update fix: the service worker fetched the shell through the browser's HTTP cache (GitHub Pages sends
   max-age=600), so a new version could precache a fresh `index.html` next to a stale `app.js`. Found while

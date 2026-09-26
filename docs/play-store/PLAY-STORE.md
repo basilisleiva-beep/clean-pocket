@@ -15,6 +15,7 @@
 | Upload key SHA-256 | `58:AD:52:66:58:52:EA:C6:B0:64:CC:B7:01:FC:69:A1:25:33:C3:7D:32:F8:E3:18:9E:F7:99:FB:70:8A:FF:B2` |
 | Asset links | https://basilisleiva-beep.github.io/.well-known/assetlinks.json (repo `basilisleiva-beep.github.io`) |
 | Πολιτική απορρήτου | https://basilisleiva-beep.github.io/clean-pocket/privacy.html |
+| Email επικοινωνίας | cleanpockethr@gmail.com |
 
 ## Γραφικά
 
@@ -142,8 +143,8 @@ Important: all figures are estimates for information, not tax advice. Check them
 ## Βήματα με σειρά
 
 1. [ ] **Λογαριασμός Google Play Developer** (εσύ): https://play.google.com/console · 25$ εφάπαξ ·
-   επαλήθευση ταυτότητας. Δήλωσε το νέο email επικοινωνίας της εφαρμογής· η πολιτική απορρήτου έχει
-   προσωρινά ως επικοινωνία τα GitHub Issues και πρέπει να ενημερωθεί με το ίδιο email.
+   επαλήθευση ταυτότητας. Email επικοινωνίας της εφαρμογής: **cleanpockethr@gmail.com** (το ίδιο με την
+   πολιτική απορρήτου).
 2. [ ] **Create app**: όνομα Clean Pocket, προεπιλεγμένη γλώσσα Ελληνικά, App, Free.
 3. [ ] Συμπλήρωσε τις φόρμες με τις απαντήσεις παραπάνω και τη σελίδα store με τα κείμενα και τα γραφικά.
 4. [ ] **Testing → Closed testing**: ανέβασε το `app-release-bundle.aab`. Δέξου το **Play App Signing**.
