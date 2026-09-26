@@ -4,10 +4,35 @@ A mobile-first, installable, offline PWA for Greek freelance food-delivery couri
 riders on a freelance registration). Shows what a shift really leaves after expenses, EFKA,
 income tax and VAT, plus upcoming debts and goals.
 
-## Run it
+**Live:** https://basilisleiva-beep.github.io/clean-pocket/ (GitHub Pages, `main` branch, repository root).
+Open it on a phone and install it: Android (Chrome) offers "Install", iPhone (Safari) Share → "Add to Home Screen".
+
+## Repository layout
 
 ```
-npm test                                              # tax + calc + csv unit tests (node --test)
+index.html, manifest.webmanifest, sw.js   the app shell (served as-is by GitHub Pages)
+js/, css/, icons/                         app modules, styles and icons
+tests/                                    unit tests (npm test)
+tools/                                    smoke test, contrast check, icon generator (Python)
+package.json                              version and the npm test script
+docs/                                     handoff notes, progress reports, screenshots (not part of the app)
+  HANDOFF.md                              owner's guide: install, first minute, what is still unchecked
+  FOR_YOUR_CLAUDE.md                      rules and context for whoever continues the build
+  progress/                               STATUS.md (verified truth), CHANGELOG.md, review reports
+  screenshots/                            phone-size screenshots, Greek and English
+  original-v2.html                        the single-file v2 app this was rebuilt from
+```
+
+The app has no build step: every file at the root is what gets deployed. All commands below run
+from the repository root.
+
+## Run it
+
+Needs [Node.js](https://nodejs.org) 22 LTS or newer for the tests (on Windows, `npm test` relies on
+Node expanding the `tests/*.test.js` glob itself) and Python 3 for the local server and tools.
+
+```
+npm test                                              # 30 unit tests: tax, calc, csv, i18n (node --test)
 python -m http.server 8790 --directory .              # serve the app
 ```
 
@@ -56,17 +81,26 @@ The app is static (no server, no build step) and only needs HTTPS for the servic
 register (installable PWAs and `serviceWorker.register` both require a secure origin; plain
 `http://` only works on `localhost`).
 
-**GitHub Pages**
-1. Push this folder to a GitHub repo (root, or a `/docs` folder on `main`).
-2. Repo Settings → Pages → Source → the branch/folder above.
-3. GitHub serves it over HTTPS at `https://<user>.github.io/<repo>/` within a minute or two.
-4. Re-push after bumping `CACHE_VERSION` in `sw.js` for every release, or installed users keep
-   seeing the old cached shell until the "new version" banner appears and they tap it.
+**GitHub Pages (current deployment)**
+1. This repository is already set up: Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
+   Keep it on the root. `docs/` holds the handoff notes, not the app, so do not point Pages at it.
+2. Every push to `main` redeploys to https://basilisleiva-beep.github.io/clean-pocket/ within a minute or two.
+3. Bump `CACHE_VERSION` in `sw.js` before every release push, or installed users keep seeing the
+   old cached shell.
+
+For your own copy: fork or clone this repository and enable Pages the same way; it will be served at
+`https://<user>.github.io/<repo>/`. All paths in the app are relative, so it works under any sub-path.
 
 **Netlify Drop**
 1. Open [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Drag the whole `clean-pocket` folder onto the page. No account or build command needed.
+2. Drag the repository folder onto the page (the app is at its root). No account or build command needed.
 3. Netlify gives back an HTTPS URL immediately; drag the folder again for every release.
+
+## Moving data from the old v2 app
+
+v3 stores its data under a new key, so records from the single-file v2 app do not appear on their own
+(they are not deleted either). In the old app make a backup (JSON), then in v3 open
+More → My data → Import. The importer reads v2 backups.
 
 ## Releasing a new version
 
@@ -126,3 +160,4 @@ in `js/app.js`. Nothing else in the app touches storage directly.
 
 All figures are an estimate for information, not tax advice (see the About panel, which surfaces
 `tax.RULES.source`). Verify with AADE/EFKA or an accountant before making decisions.
+The open items before riders rely on a number are listed in `docs/progress/STATUS.md`.
