@@ -1,163 +1,179 @@
 # Clean Pocket
 
-A mobile-first, installable, offline PWA for Greek freelance food-delivery couriers (efood/Wolt
-riders on a freelance registration). Shows what a shift really leaves after expenses, EFKA,
-income tax and VAT, plus upcoming debts and goals.
+Εφαρμογή για το κινητό (PWA: εγκαθίσταται από τον browser και δουλεύει χωρίς σύνδεση) για ελεύθερους
+επαγγελματίες διανομείς φαγητού στην Ελλάδα (διανομείς efood/Wolt με μπλοκάκι). Δείχνει τι πραγματικά
+αφήνει μια βάρδια μετά από έξοδα, ΕΦΚΑ, φόρο εισοδήματος και ΦΠΑ, μαζί με τις επόμενες υποχρεώσεις και
+τους στόχους.
 
-**Live:** https://basilisleiva-beep.github.io/clean-pocket/ (GitHub Pages, `main` branch, repository root).
-Open it on a phone and install it: Android (Chrome) offers "Install", iPhone (Safari) Share → "Add to Home Screen".
+**Online:** https://basilisleiva-beep.github.io/clean-pocket/ (GitHub Pages, branch `main`, ρίζα του repo).
+Άνοιξέ τη στο κινητό και εγκατάστησέ τη: στο Android (Chrome) εμφανίζεται «Εγκατάσταση», στο iPhone (Safari)
+Κοινοποίηση → «Προσθήκη στην οθόνη Αφετηρίας».
 
-## Repository layout
+## Δομή του repo
 
 ```
-index.html, manifest.webmanifest, sw.js   the app shell (served as-is by GitHub Pages)
-js/, css/, icons/                         app modules, styles and icons
+index.html, manifest.webmanifest, sw.js   ο πυρήνας της εφαρμογής (το GitHub Pages τον σερβίρει ως έχει)
+js/, css/, icons/                         modules, στυλ και εικονίδια της εφαρμογής
 tests/                                    unit tests (npm test)
-tools/                                    smoke test, contrast check, icon generator (Python)
-package.json                              version and the npm test script
-docs/                                     handoff notes, progress reports, screenshots (not part of the app)
-  HANDOFF.md                              owner's guide: install, first minute, what is still unchecked
-  FOR_YOUR_CLAUDE.md                      rules and context for whoever continues the build
-  progress/                               STATUS.md (verified truth), CHANGELOG.md, review reports
-  screenshots/                            phone-size screenshots, Greek and English
-  original-v2.html                        the single-file v2 app this was rebuilt from
+tools/                                    smoke test, έλεγχος αντίθεσης, δημιουργία εικονιδίων (Python)
+package.json                              έκδοση και το script του npm test
+docs/                                     σημειώσεις παράδοσης, αναφορές προόδου, screenshots (όχι μέρος της εφαρμογής)
+  HANDOFF.md                              οδηγός για τον ιδιοκτήτη: εγκατάσταση, πρώτο λεπτό, τι δεν έχει ελεγχθεί
+  FOR_YOUR_CLAUDE.md                      κανόνες και πλαίσιο για όποιον συνεχίσει την ανάπτυξη
+  progress/                               STATUS.md (επαληθευμένη κατάσταση), CHANGELOG.md, αναφορές ελέγχου
+  screenshots/                            screenshots σε μέγεθος κινητού, ελληνικά και αγγλικά
+  original-v2.html                        η παλιά έκδοση v2 (ένα αρχείο) από την οποία ξαναχτίστηκε
 ```
 
-The app has no build step: every file at the root is what gets deployed. All commands below run
-from the repository root.
+Η εφαρμογή δεν έχει βήμα build: ό,τι βρίσκεται στη ρίζα είναι αυτό που ανεβαίνει online. Όλες οι
+παρακάτω εντολές τρέχουν από τη ρίζα του repo.
 
-## Run it
+## Εκτέλεση
 
-Needs [Node.js](https://nodejs.org) 22 LTS or newer for the tests (on Windows, `npm test` relies on
-Node expanding the `tests/*.test.js` glob itself) and Python 3 for the local server and tools.
+Χρειάζεται [Node.js](https://nodejs.org) 22 LTS ή νεότερο για τα tests (στα Windows το `npm test`
+βασίζεται στο ότι το ίδιο το Node αναπτύσσει το μοτίβο `tests/*.test.js`) και Python 3 για τον τοπικό
+server και τα εργαλεία.
 
 ```
 npm test                                              # 30 unit tests: tax, calc, csv, i18n (node --test)
-python -m http.server 8790 --directory .              # serve the app
+python -m http.server 8790 --directory .              # σερβίρει την εφαρμογή
 ```
 
-Then open `http://localhost:8790/index.html` on a phone-width viewport (or resize your browser).
-It works fully offline after the first load (service worker precaches the app shell).
+Μετά άνοιξε το `http://localhost:8790/index.html` σε πλάτος κινητού (ή μίκρυνε το παράθυρο του browser).
+Μετά την πρώτη φόρτωση δουλεύει εντελώς χωρίς σύνδεση (το service worker αποθηκεύει εκ των προτέρων τον
+πυρήνα της εφαρμογής).
 
-Smoke test (Playwright, needs a server running on port 8791, run twice: Greek then English):
+Smoke test (Playwright, χρειάζεται server στη θύρα 8791, τρέχει δύο φορές: ελληνικά και μετά αγγλικά):
 
 ```
 python -m http.server 8791 --directory .
 python tools/smoke.py
 ```
 
-Contrast check (prints a table, exits 1 if any theme's muted text fails 4.5:1):
+Έλεγχος αντίθεσης (τυπώνει πίνακα και τερματίζει με κωδικό 1 αν το αχνό κείμενο κάποιου θέματος πέφτει
+κάτω από 4.5:1):
 
 ```
 python tools/contrast.py
 ```
 
-Regenerate icons (Pillow):
+Δημιουργία εικονιδίων από την αρχή (Pillow):
 
 ```
 python tools/make_icons.py
 ```
 
-## First run: language, onboarding, tour
+## Πρώτη εκκίνηση: γλώσσα, αρχικές ερωτήσεις, ξενάγηση
 
-- The very first screen is a language choice (Ελληνικά / English), preselected from the
-  browser's `navigator.language`. Every later screen, including the rest of onboarding, renders
-  in the chosen language immediately. An EL/EN toggle is always reachable in the Home top bar
-  and in Settings.
-- Onboarding asks VAT regime, age/children, years active, EFKA category and days/week, with a
-  "Παράλειψη" (skip) link on every step that jumps straight to a summary step applying whatever
-  defaults were not yet answered. The summary repeats every choice with an "Αλλαγή" (change) link
-  per row that jumps back into that step.
-- Finishing onboarding offers a one-minute guided tour (coach marks over the period switcher,
-  hero, + button, calendar, obligations/goals and My data). It can be replayed any time from
-  Περισσότερα → "Ξενάγηση". "Δοκίμασε με δείγμα" loads about three weeks of sample shifts
-  (flagged `sample: true`) so the tour has something to show; a thin banner lets you remove just
-  the sample records later. Sample shifts never appear in a JSON/CSV export or in the shift
-  counts shown in the backup banner (see `realEntries` in `js/calc.js`).
+- Η πρώτη οθόνη είναι επιλογή γλώσσας (Ελληνικά / English), προεπιλεγμένη από το `navigator.language`
+  του browser. Κάθε επόμενη οθόνη, μαζί με τις υπόλοιπες αρχικές ερωτήσεις, εμφανίζεται αμέσως στη
+  γλώσσα που επέλεξες. Ο διακόπτης ΕΛ/EN είναι πάντα διαθέσιμος στην πάνω μπάρα της Αρχικής και στις
+  Ρυθμίσεις.
+- Οι αρχικές ερωτήσεις αφορούν καθεστώς ΦΠΑ, ηλικία/παιδιά, χρόνια δραστηριότητας, κατηγορία ΕΦΚΑ και
+  μέρες την εβδομάδα. Σε κάθε βήμα υπάρχει σύνδεσμος «Παράλειψη» που πηγαίνει κατευθείαν στη σύνοψη,
+  βάζοντας τις προεπιλογές σε ό,τι δεν απαντήθηκε. Η σύνοψη δείχνει ξανά κάθε επιλογή, με σύνδεσμο
+  «Αλλαγή» σε κάθε γραμμή που γυρίζει σε εκείνο το βήμα.
+- Στο τέλος προτείνεται ξενάγηση ενός λεπτού (επισημάνσεις πάνω στην επιλογή περιόδου, το κεντρικό
+  ποσό, το κουμπί +, το ημερολόγιο, τις υποχρεώσεις/στόχους και τα «Τα δεδομένα μου»). Ξαναπαίζει όποτε
+  θέλεις από Περισσότερα → «Ξενάγηση». Το «Δοκίμασε με δείγμα» φορτώνει περίπου τρεις εβδομάδες
+  δοκιμαστικές βάρδιες (με σήμανση `sample: true`) ώστε η ξενάγηση να έχει κάτι να δείξει· μια λεπτή
+  μπάρα σε αφήνει αργότερα να σβήσεις μόνο τα δοκιμαστικά. Οι δοκιμαστικές βάρδιες δεν εμφανίζονται
+  ποτέ σε εξαγωγή JSON/CSV ούτε στο πλήθος βαρδιών της υπενθύμισης backup (βλ. `realEntries` στο
+  `js/calc.js`).
 
-## Deploy for free
+## Δωρεάν ανέβασμα online
 
-The app is static (no server, no build step) and only needs HTTPS for the service worker to
-register (installable PWAs and `serviceWorker.register` both require a secure origin; plain
-`http://` only works on `localhost`).
+Η εφαρμογή είναι στατική (χωρίς server, χωρίς build) και χρειάζεται μόνο HTTPS για να καταχωρηθεί το
+service worker (η εγκατάσταση PWA και το `serviceWorker.register` απαιτούν ασφαλή προέλευση· σκέτο
+`http://` δουλεύει μόνο στο `localhost`).
 
-**GitHub Pages (current deployment)**
-1. This repository is already set up: Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
-   Keep it on the root. `docs/` holds the handoff notes, not the app, so do not point Pages at it.
-2. Every push to `main` redeploys to https://basilisleiva-beep.github.io/clean-pocket/ within a minute or two.
-3. Bump `CACHE_VERSION` in `sw.js` before every release push, or installed users keep seeing the
-   old cached shell.
+**GitHub Pages (τρέχουσα εγκατάσταση)**
+1. Αυτό το repo είναι ήδη ρυθμισμένο: Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
+   Άφησέ το στη ρίζα. Ο φάκελος `docs/` έχει τις σημειώσεις παράδοσης, όχι την εφαρμογή, οπότε μην
+   ρυθμίσεις το Pages να σερβίρει από εκεί.
+2. Κάθε push στο `main` ανεβάζει ξανά την εφαρμογή στο https://basilisleiva-beep.github.io/clean-pocket/
+   σε ένα με δύο λεπτά.
+3. Ανέβασε το `CACHE_VERSION` στο `sw.js` πριν από κάθε push νέας έκδοσης, αλλιώς όσοι την έχουν
+   εγκατεστημένη θα συνεχίσουν να βλέπουν την παλιά από την cache.
 
-For your own copy: fork or clone this repository and enable Pages the same way; it will be served at
-`https://<user>.github.io/<repo>/`. All paths in the app are relative, so it works under any sub-path.
+Για δικό σου αντίγραφο: κάνε fork ή clone αυτό το repo και ενεργοποίησε το Pages με τον ίδιο τρόπο· θα
+σερβίρεται στο `https://<user>.github.io/<repo>/`. Όλες οι διαδρομές μέσα στην εφαρμογή είναι σχετικές,
+οπότε δουλεύει κάτω από οποιαδήποτε υποδιαδρομή.
 
 **Netlify Drop**
-1. Open [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Drag the repository folder onto the page (the app is at its root). No account or build command needed.
-3. Netlify gives back an HTTPS URL immediately; drag the folder again for every release.
+1. Άνοιξε το [app.netlify.com/drop](https://app.netlify.com/drop).
+2. Σύρε τον φάκελο του repo πάνω στη σελίδα (η εφαρμογή είναι στη ρίζα του). Δεν χρειάζεται λογαριασμός
+   ούτε εντολή build.
+3. Το Netlify δίνει αμέσως ένα HTTPS link· για κάθε νέα έκδοση σέρνεις ξανά τον φάκελο.
 
-## Moving data from the old v2 app
+## Μεταφορά δεδομένων από την παλιά έκδοση v2
 
-v3 stores its data under a new key, so records from the single-file v2 app do not appear on their own
-(they are not deleted either). In the old app make a backup (JSON), then in v3 open
-More → My data → Import. The importer reads v2 backups.
+Η v3 αποθηκεύει τα δεδομένα σε νέο κλειδί, οπότε οι καταχωρίσεις της παλιάς v2 (ένα αρχείο) δεν
+εμφανίζονται μόνες τους (ούτε όμως έχουν σβηστεί). Στην παλιά εφαρμογή κάνε αντίγραφο ασφαλείας (JSON)
+και μετά στη v3 άνοιξε Περισσότερα → Τα δεδομένα μου → Εισαγωγή αρχείου. Η εισαγωγή διαβάζει τα backup
+της v2.
 
-## Releasing a new version
+## Κυκλοφορία νέας έκδοσης
 
-Bump `CACHE_VERSION` in `sw.js` on every deploy. Installed apps keep serving the cached shell
-until a new worker installs; the page then shows "Νέα έκδοση, πάτα για ανανέωση" and reloads
-after the new worker takes control. Forgetting the bump means users never see the update.
+Ανέβαζε το `CACHE_VERSION` στο `sw.js` σε κάθε ανέβασμα. Οι εγκατεστημένες εφαρμογές συνεχίζουν να
+σερβίρουν τον πυρήνα από την cache μέχρι να εγκατασταθεί νέο service worker· τότε η σελίδα δείχνει
+«Νέα έκδοση, πάτα για ανανέωση» και ξαναφορτώνει μόλις το νέο worker αναλάβει. Αν ξεχάσεις να το
+ανεβάσεις, οι χρήστες δεν βλέπουν ποτέ την ενημέρωση.
 
-## Architecture
+## Αρχιτεκτονική
 
-Vanilla ES modules, no build step, no npm dependencies.
+Σκέτα ES modules, χωρίς build, χωρίς εξαρτήσεις από npm.
 
-- `js/tax.js` - the 2026 Greek tax/EFKA/VAT engine (given, untouched, still covered by its own
-  7 tests). Pure functions, no DOM, no storage.
-- `js/calc.js` - pure calculation engine: period totals (half-month/month/year), the annual
-  profit projection (with its two fallback paths), EFKA proration for the period you're viewing,
-  the obligations list (EFKA/VAT/income-tax/custom debts) with stable keys, "set aside", the
-  annual goal and savings-goal math. Takes `(db, todayISO)`, returns numbers. No DOM.
-- `js/csv.js` - pure CSV parser for the shift importer (delimiter/decimal/date auto-detection,
-  Greek/English header mapping, duplicate detection).
-- `js/store.js` - the storage adapter (`LocalStorageAdapter`) behind a small interface
-  (`load/save/exportJSON/importJSON`) so a `RemoteAdapter` can be swapped in later for a SaaS
-  backend without touching the UI. Schema v3: every entry/fixed cost/debt/goal has a stable
-  `id` and `updatedAt`; deletes leave a `deleted: true` tombstone so a future sync can merge.
-  Import accepts both this app's v3 backup and the original app's v2 backup format.
-- `js/i18n.js` - the EL/EN dictionary (`t(key, vars)`) plus locale-aware number/date formatting.
-- `js/app.js` - UI only. Renders the four views (Home, Calendar, Obligations & Goals, More),
-  the bottom nav, the new-shift bottom sheet, the CSV import preview, the onboarding flow
-  (language → profile questions → summary), the tour prompt, the coach-mark guided tour and the
-  sample-data demo. Talks to the modules above; no tax/EFKA/VAT/date math lives here.
-- `css/app.css` - mobile-first "night-shift dashboard" styling, four themes (forest default,
-  graphite, black, light), a 4px spacing scale, bottom navigation, bottom sheets, the guided
-  tour's spotlight overlay. Fira Sans / Fira Sans Condensed from Google Fonts with a system
-  fallback stack, tabular numerals on every value that can change width.
-- `manifest.webmanifest`, `sw.js` - PWA install + offline shell caching (cache-first for the
-  shell, network-only for open-meteo, cache-first with opaque responses for the Google Fonts CSS
-  and font files so the chosen typeface still renders offline; a "new version" banner appears on
-  update).
-- `tests/` - `calc.test.js`, `csv.test.js`, `i18n.test.js` (this app) and `tax.test.js` (given).
-  `i18n.test.js` checks every dictionary key has both languages and scans `index.html`/`js/app.js`
-  for hard-coded Greek text outside `I.t(...)` calls, markup attributes and the settings city
-  list. `tests/fixtures/` holds the CSV smoke fixture.
-- `tools/make_icons.py` - draws the pocket/banknote/€ icon at the four required sizes.
-- `tools/contrast.py` - prints the WCAG contrast ratio of `--muted`/`--ink` against
-  `--surface`/`--bg` for every theme, straight out of `css/app.css`.
-- `tools/smoke.py` - Playwright end-to-end smoke test at 390x844, run twice (Greek, English):
-  language choice, skip-to-summary, the guided tour, sample data add/remove, the first-shift
-  explainer, CSV import, obligations, persistence and the service worker.
+- `js/tax.js` - η μηχανή φόρου/ΕΦΚΑ/ΦΠΑ για το 2026 (δόθηκε έτοιμη, δεν έχει αλλάξει, καλύπτεται από τα
+  δικά της 7 tests). Καθαρές συναρτήσεις, χωρίς DOM, χωρίς αποθήκευση.
+- `js/calc.js` - καθαρή μηχανή υπολογισμών: σύνολα περιόδου (δεκαπενθήμερο/μήνας/έτος), πρόβλεψη
+  ετήσιου κέρδους (με τους δύο εναλλακτικούς τρόπους υπολογισμού), αναλογικό ΕΦΚΑ για την περίοδο που
+  βλέπεις, λίστα υποχρεώσεων (ΕΦΚΑ/ΦΠΑ/φόρος εισοδήματος/δικά σου χρέη) με σταθερά κλειδιά, το «βάλε
+  στην άκρη», και οι υπολογισμοί του ετήσιου στόχου και των στόχων αποταμίευσης. Παίρνει
+  `(db, todayISO)` και επιστρέφει αριθμούς. Χωρίς DOM.
+- `js/csv.js` - καθαρός parser CSV για την εισαγωγή βαρδιών (αυτόματη αναγνώριση διαχωριστικού,
+  δεκαδικών και ημερομηνιών, αντιστοίχιση ελληνικών/αγγλικών επικεφαλίδων, εντοπισμός διπλοεγγραφών).
+- `js/store.js` - ο adapter αποθήκευσης (`LocalStorageAdapter`) πίσω από ένα μικρό interface
+  (`load/save/exportJSON/importJSON`), ώστε αργότερα να μπει ένας `RemoteAdapter` για backend SaaS χωρίς
+  να αλλάξει το UI. Σχήμα v3: κάθε βάρδια/πάγιο/χρέος/στόχος έχει σταθερό `id` και `updatedAt`· οι
+  διαγραφές αφήνουν σημάδι `deleted: true` ώστε ένας μελλοντικός συγχρονισμός να μπορεί να συγχωνεύσει.
+  Η εισαγωγή δέχεται και τα backup της v3 και τη μορφή backup της αρχικής v2.
+- `js/i18n.js` - το λεξικό ΕΛ/EN (`t(key, vars)`) και μορφοποίηση αριθμών/ημερομηνιών ανά γλώσσα.
+- `js/app.js` - μόνο UI. Σχεδιάζει τις τέσσερις οθόνες (Αρχική, Ημερολόγιο, Υποχρεώσεις & Στόχοι,
+  Περισσότερα), την κάτω πλοήγηση, το φύλλο νέας βάρδιας, την προεπισκόπηση εισαγωγής CSV, τις αρχικές
+  ερωτήσεις (γλώσσα → ερωτήσεις προφίλ → σύνοψη), την πρόταση ξενάγησης, την ίδια την ξενάγηση και τα
+  δοκιμαστικά δεδομένα. Μιλάει με τα παραπάνω modules· εδώ δεν υπάρχει κανένας υπολογισμός
+  φόρου/ΕΦΚΑ/ΦΠΑ/ημερομηνιών.
+- `css/app.css` - στυλ «ταμπλό νυχτερινής βάρδιας» με προτεραιότητα στο κινητό, τέσσερα θέματα (forest
+  προεπιλογή, graphite, black, light), κλίμακα αποστάσεων 4px, κάτω πλοήγηση, φύλλα που ανοίγουν από κάτω,
+  το overlay επισήμανσης της ξενάγησης. Fira Sans / Fira Sans Condensed από Google Fonts με εναλλακτικές
+  γραμματοσειρές συστήματος, και αριθμούς σταθερού πλάτους σε κάθε τιμή που αλλάζει.
+- `manifest.webmanifest`, `sw.js` - εγκατάσταση PWA και cache για χρήση χωρίς σύνδεση (πρώτα cache για
+  τον πυρήνα, μόνο δίκτυο για το open-meteo, πρώτα cache με opaque απαντήσεις για το CSS και τα αρχεία
+  των Google Fonts ώστε η γραμματοσειρά να φαίνεται και offline· σε ενημέρωση εμφανίζεται μπάρα «νέα
+  έκδοση»).
+- `tests/` - `calc.test.js`, `csv.test.js`, `i18n.test.js` (αυτής της εφαρμογής) και `tax.test.js`
+  (δόθηκε έτοιμο). Το `i18n.test.js` ελέγχει ότι κάθε κλειδί του λεξικού έχει και τις δύο γλώσσες και
+  ψάχνει στα `index.html`/`js/app.js` για ελληνικό κείμενο γραμμένο απευθείας έξω από κλήσεις `I.t(...)`,
+  attributes του markup και τη λίστα πόλεων των ρυθμίσεων. Ο φάκελος `tests/fixtures/` έχει το CSV του
+  smoke test.
+- `tools/make_icons.py` - σχεδιάζει το εικονίδιο (τσέπη/χαρτονόμισμα/€) στα τέσσερα απαιτούμενα μεγέθη.
+- `tools/contrast.py` - τυπώνει τον λόγο αντίθεσης WCAG του `--muted`/`--ink` πάνω σε
+  `--surface`/`--bg` για κάθε θέμα, διαβάζοντας απευθείας το `css/app.css`.
+- `tools/smoke.py` - end-to-end smoke test με Playwright σε 390x844, δύο φορές (ελληνικά, αγγλικά):
+  επιλογή γλώσσας, παράλειψη ως τη σύνοψη, ξενάγηση, προσθήκη/αφαίρεση δοκιμαστικών, εξήγηση πρώτης
+  βάρδιας, εισαγωγή CSV, υποχρεώσεις, διατήρηση δεδομένων και service worker.
 
-## SaaS path
+## Δρόμος προς SaaS
 
-The storage layer is already behind an adapter interface. To move to a backend: implement a
-`RemoteAdapter` with the same four methods, sync on the `id`/`updatedAt`/`deleted` fields already
-present on every record (last-write-wins or a proper CRDT merge), and swap the adapter instance
-in `js/app.js`. Nothing else in the app touches storage directly.
+Η αποθήκευση είναι ήδη πίσω από ένα interface adapter. Για μετάβαση σε backend: φτιάξε έναν
+`RemoteAdapter` με τις ίδιες τέσσερις μεθόδους, συγχρόνισε με βάση τα πεδία `id`/`updatedAt`/`deleted`
+που ήδη έχει κάθε εγγραφή (κερδίζει η πιο πρόσφατη εγγραφή, ή κανονική συγχώνευση CRDT), και άλλαξε το
+instance του adapter στο `js/app.js`. Τίποτε άλλο στην εφαρμογή δεν αγγίζει απευθείας την αποθήκευση.
 
-## Tax/EFKA/VAT disclaimer
+## Αποποίηση ευθύνης για φόρο/ΕΦΚΑ/ΦΠΑ
 
-All figures are an estimate for information, not tax advice (see the About panel, which surfaces
-`tax.RULES.source`). Verify with AADE/EFKA or an accountant before making decisions.
-The open items before riders rely on a number are listed in `docs/progress/STATUS.md`.
+Όλα τα ποσά είναι εκτίμηση για ενημέρωση, όχι φορολογική συμβουλή (βλ. την ενότητα «Σχετικά» στην
+εφαρμογή, που δείχνει το `tax.RULES.source`). Επιβεβαίωσέ τα με ΑΑΔΕ/ΕΦΚΑ ή λογιστή πριν πάρεις
+αποφάσεις. Τα ανοιχτά θέματα πριν οι διανομείς βασιστούν σε κάποιο ποσό είναι στο
+`docs/progress/STATUS.md`.
