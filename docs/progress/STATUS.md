@@ -18,7 +18,7 @@
 **Χρήστες:** 0 · **Έσοδα:** EUR 0
 **Google Play:** υπογεγραμμένο `.aab` έτοιμο (2026-09-27, στον φάκελο `clean-pocket-android`, εκτός repo),
 δεν έχει ανέβει ακόμα· λογαριασμός developer και SHA-256 του Play App Signing
-εκκρεμούν. Όλα τα βήματα στο `docs/play-store/PLAY-STORE.md`.
+εκκρεμούν (email επικοινωνίας: cleanpockethr@gmail.com). Όλα τα βήματα στο `docs/play-store/PLAY-STORE.md`.
 
 ## Τι είναι
 Offline PWA με προτεραιότητα στο κινητό για ελεύθερους επαγγελματίες διανομείς φαγητού στην Ελλάδα, στα
