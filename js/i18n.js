@@ -178,6 +178,9 @@ export const STRINGS = {
   "onb.step4.first": { el: "1η κατηγορία 250,77 €", en: "1st category €250.77" },
   "onb.step4.other": { el: "Άλλο ποσό", en: "Other amount" },
   "onb.step5.title": { el: "Μέρες εργασίας ανά εβδομάδα", en: "Days worked per week" },
+  "onb.step6.title": { el: "Πώς εργάζεσαι;", en: "How do you work?" },
+  "onb.step6.freelancer": { el: "Μόνο ελεύθερος επαγγελματίας", en: "Freelancer only" },
+  "onb.step6.salariedFreelancer": { el: "Μισθωτός και ελεύθερος επαγγελματίας", en: "Salaried employee and freelancer" },
 
   "install.text": { el: "Πρόσθεσε το Clean Pocket στην αρχική οθόνη.", en: "Add Clean Pocket to your home screen." },
   "install.btn": { el: "Εγκατάσταση", en: "Install" },
