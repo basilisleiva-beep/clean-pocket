@@ -31,6 +31,7 @@ export function emptyDB() {
       presumedIncome: 0,
       efkaCategory: "special",       // "special" | "first" | "other"
       efkaCustomAmount: 0,
+      employmentType: "freelancer",  // "freelancer" | "salariedFreelancer"
       daysPerWeek: 5,
       annualOverride: 0,
       weather: { mode: "off", city: null, lat: null, lon: null },
