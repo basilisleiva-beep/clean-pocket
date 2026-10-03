@@ -35,9 +35,13 @@ export function activeSavingsGoals(db) { return (db.savingsGoals || []).filter(f
 
 export function efkaMonthly(settings) {
   var s = settings || {};
-  if (s.efkaCategory === "first") return RULES.efka.first;
-  if (s.efkaCategory === "special") return RULES.efka.special;
-  return n(s.efkaCustomAmount);
+  var amount;
+  if (s.efkaCategory === "first") amount = RULES.efka.first;
+  else if (s.efkaCategory === "special") amount = RULES.efka.special;
+  else amount = n(s.efkaCustomAmount);
+  // Salaried + freelancer: the salaried job's contributions cover the special-category amount
+  if (s.employmentType === "salariedFreelancer") amount = Math.max(0, amount - RULES.efka.special);
+  return amount;
 }
 
 // Maps the onboarding "1-3" / "4+" answer to a numeric years-active value tax.js understands.

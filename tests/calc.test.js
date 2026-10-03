@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { emptyDB, importInto } from "../js/store.js";
 import {
   projectedAnnual, efkaShareForKey, obligationsList, setAside, periodTotalsHalf,
-  annualGoalStats, hoursForGoal, activeEntries, realEntries
+  annualGoalStats, hoursForGoal, activeEntries, realEntries, efkaMonthly
 } from "../js/calc.js";
 
 const near = (a, b, eps) => assert.ok(Math.abs(a - b) < (eps || 0.5), a + " != " + b);
@@ -174,3 +174,18 @@ test("import: accepts the original app's v2 backup format and skips duplicates",
   assert.equal(db.off["2026-01-03"], true);
   assert.equal(db.goals["2026"], 20000);
 });
+
+test("EFKA: salaried + freelancer in the first 5 years owes no EFKA", () => {
+  var s = emptyDB().settings;
+  s.employmentType = "salariedFreelancer";
+  s.efkaCategory = "special";
+  assert.equal(efkaMonthly(s), 0);
+});
+
+test("EFKA: salaried + freelancer after 5 years pays the difference from the special amount", () => {
+  var s = emptyDB().settings;
+  s.employmentType = "salariedFreelancer";
+  s.efkaCategory = "first";
+  near(efkaMonthly(s), 90.31, 0.01);
+});
+
