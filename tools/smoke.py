@@ -71,7 +71,7 @@ def run_for_lang(lang):
         page.click("#onbSkip")
         page.wait_for_selector(".onb-summary-row", timeout=5000)
         rows = page.locator(".onb-summary-row")
-        check("skip applies defaults and lands on the summary (6 rows)", rows.count() == 6)
+        check("skip applies defaults and lands on the summary (7 rows)", rows.count() == 7)
         summary_text = page.text_content("#onbBody") or ""
         expected_lang_label = "Ελληνικά" if lang == "el" else "English"
         check("summary lists the chosen language", expected_lang_label in summary_text)

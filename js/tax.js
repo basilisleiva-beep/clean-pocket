@@ -45,6 +45,12 @@ export function isNewPro(profile) {
   return isFinite(y) && y > 0 && y <= RULES.newProYears;
 }
 
+// Monthly EFKA after the employment type. Salaried + freelancer: the salaried job's
+// contributions cover the special-category amount, so only the difference is owed.
+export function efkaForEmployment(monthly, employmentType) {
+  return employmentType === "salariedFreelancer" ? Math.max(0, monthly - RULES.efka.special) : monthly;
+}
+
 // annualProfit: income + tips - expenses - fixed costs, BEFORE EFKA.
 // EFKA is deductible. Minimum presumed income (τεκμαρτό) applies after the first
 // 3 years when the accountant-provided amount is higher than the real result.

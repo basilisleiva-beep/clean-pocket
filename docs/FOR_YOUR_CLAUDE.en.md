@@ -23,7 +23,8 @@ custom debts. Goals: annual net (with hours still needed) and savings goals.
 - `js/tax.js`: the ONLY place with tax law. Pure. Tax year 2026: brackets 9/20/26/34/39/44 at 10k/20k/30k/40k/60k;
   age ≤ 25 pays 0% on the first 20k, 26–30 pays 9%; child reductions on brackets 1–3; prepayment 55%, or 27.5%
   for the first 3 years; presumed minimum income applies from year 4 when higher than real profit; EFKA
-  160.46 (special category, first 5 years) or 250.77 (1st category). Sources: Ν. 5246/2025 art. 15 ΚΦΕ,
+  160.46 (special category, first 5 years) or 250.77 (1st category); for salaried + freelancer EFKA is reduced
+  by the special-category amount (`efkaForEmployment`, confirmed by an accountant). Sources: Ν. 5246/2025 art. 15 ΚΦΕ,
   ΕΦΚΑ εγκ. 6/2026. Re-verify every January.
 - `js/calc.js`: pure `(db, todayISO) → numbers`. Period totals, projection (average of completed half-months × 24,
   or profit-per-shift × daysPerWeek × 48 when fewer than 2 completed), EFKA proration, obligations with stable
@@ -34,7 +35,7 @@ custom debts. Goals: annual net (with hours still needed) and savings goals.
 - `js/csv.js`: pure CSV parser (delimiter, decimal comma, 4 date formats, EL/EN headers).
 - `js/i18n.js`: every user-visible string, `{ el, en }`. `tests/i18n.test.js` fails if a key lacks a language or
   if Greek is hard-coded in `index.html`/`js/app.js` outside `I.t(...)`.
-- `js/app.js`: UI only. Bottom nav (Home, Calendar, +, Debts & Goals, More), onboarding (language first, 5
+- `js/app.js`: UI only. Bottom nav (Home, Calendar, +, Debts & Goals, More), onboarding (language first, 6
   skippable questions, summary), 6-step coach-mark tour, sample data, banners (install, update, backup, sample).
 - `sw.js`: cache-first app shell, runtime caching of Google Fonts, network-only for open-meteo.
 
@@ -53,7 +54,7 @@ custom debts. Goals: annual net (with hours still needed) and savings goals.
 
 ## How to verify (from the repository root)
 ```
-npm test                                                  # 30 tests: tax 7, calc 13, csv 7, i18n 3
+npm test                                                  # 33 tests: tax 7, calc 16, csv 7, i18n 3
 python -m http.server 8791 --directory .                  # serve
 CP_BASE_URL=http://localhost:8791 python tools/smoke.py   # Playwright, 25 checks × el/en, screenshots to _shots/round2/
 python tools/contrast.py                                  # 16 contrast rows, all ≥ 4.5

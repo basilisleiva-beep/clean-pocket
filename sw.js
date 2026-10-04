@@ -2,7 +2,7 @@
 // cache-first (runtime, opaque responses allowed) for the Google Fonts CSS + font files so the
 // app still renders in Fira Sans/Fira Sans Condensed offline after the first online load.
 // Bump CACHE_VERSION on every release; the app shows a refresh banner when a new one installs.
-var CACHE_VERSION = "clean-pocket-v3.1.6";
+var CACHE_VERSION = "clean-pocket-v3.1.7";
 var FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 var SHELL = [
   "./",

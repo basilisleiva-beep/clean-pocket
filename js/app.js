@@ -1073,9 +1073,10 @@ $("reonboardBtn").addEventListener("click", function () { openOnboarding(true); 
 // onboarding
 // ---------------------------------------------------------------------------------------
 // Step 0 is the language choice, steps 1-5 are the original profile questions (shifted by
-// one), step 6 is a summary card that repeats every choice with a per-row "Αλλαγή" link.
+// one), step 6 asks the employment type (freelancer only, or salaried + freelancer), and
+// step 7 is a summary card that repeats every choice with a per-row "Αλλαγή" link.
 var onbStep = 0;
-var ONB_STEPS = 7;
+var ONB_STEPS = 8;
 function openOnboarding(reopen) {
   onbStep = 0;
   $("onbBackdrop").hidden = false;
@@ -1201,6 +1202,10 @@ function renderOnbStep() {
     f.querySelector("input").addEventListener("input", function () { db.settings.daysPerWeek = Math.max(1, Math.min(7, +this.value || 5)); });
     body.appendChild(f);
   } else if (onbStep === 6) {
+    $("onbTitle").textContent = I.t("onb.step6.title");
+    body.appendChild(opt("a", "onb.step6.freelancer", "employmentType", "freelancer"));
+    body.appendChild(opt("b", "onb.step6.salariedFreelancer", "employmentType", "salariedFreelancer"));
+  } else if (onbStep === 7) {
     $("onbTitle").textContent = I.t("onb.summary.title");
     onbSummaryRow(body, "more.language", db.settings.lang === "en" ? I.t("onb.langEn") : I.t("onb.langEl"), 0);
     onbSummaryRow(body, "onb.step1.title", I.t("onb.step1." + (db.settings.vatRegime || "unknown")), 1);
@@ -1208,6 +1213,7 @@ function renderOnbStep() {
     onbSummaryRow(body, "onb.step3.title", I.t(db.settings.yearsActive === "4+" ? "onb.step3.b" : "onb.step3.a"), 3);
     onbSummaryRow(body, "onb.step4.title", I.t("onb.step4." + (db.settings.efkaCategory || "special")), 4);
     onbSummaryRow(body, "onb.step5.title", I.t("onb.summary.days", { d: db.settings.daysPerWeek || 5 }), 5);
+    onbSummaryRow(body, "onb.step6.title", I.t("onb.step6." + (db.settings.employmentType || "freelancer")), 6);
   }
 }
 $("onbNext").addEventListener("click", function () {

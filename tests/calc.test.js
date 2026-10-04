@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { emptyDB, importInto } from "../js/store.js";
 import {
   projectedAnnual, efkaShareForKey, obligationsList, setAside, periodTotalsHalf,
-  annualGoalStats, hoursForGoal, activeEntries, realEntries
+  annualGoalStats, hoursForGoal, activeEntries, realEntries, efkaMonthly
 } from "../js/calc.js";
 
 const near = (a, b, eps) => assert.ok(Math.abs(a - b) < (eps || 0.5), a + " != " + b);
@@ -173,4 +173,32 @@ test("import: accepts the original app's v2 backup format and skips duplicates",
   assert.equal(db.extra["2026-01-1"], 5);
   assert.equal(db.off["2026-01-03"], true);
   assert.equal(db.goals["2026"], 20000);
+});
+
+test("EFKA: salaried + freelancer in the first 5 years owes no EFKA", () => {
+  var s = emptyDB().settings;
+  s.employmentType = "salariedFreelancer";
+  s.efkaCategory = "special";
+  assert.equal(efkaMonthly(s), 0);
+});
+
+test("EFKA: salaried + freelancer after 5 years pays the difference from the special amount", () => {
+  var s = emptyDB().settings;
+  s.employmentType = "salariedFreelancer";
+  s.efkaCategory = "first";
+  near(efkaMonthly(s), 90.31, 0.01);
+});
+
+
+test("obligations: no EFKA cards when the monthly EFKA is 0, cards with the difference otherwise", () => {
+  var entries = [{ id: "1", date: "2026-07-10", income: 100, tips: 0, hours: 8, exp: 0 }];
+  var db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "special" });
+  var list = obligationsList(db, "2026-09-15");
+  assert.equal(list.filter(o => o.type === "efka").length, 0);
+  assert.equal(list.filter(o => o.type === "tax").length, 8);
+
+  db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "first" });
+  var efka = obligationsList(db, "2026-09-15").filter(o => o.type === "efka");
+  assert.equal(efka.length, 3);
+  near(efka[0].amount, 90.31, 0.01);
 });

@@ -41,7 +41,8 @@ app must raise the version in `sw.js` (`CACHE_VERSION`) or installed phones will
 
 ## First minute in the app
 1. Choose language.
-2. Five quick questions: VAT status, age and children, years active, EFKA category, days per week. Skip
+2. Six quick questions: VAT status, age and children, years active, EFKA category, days per week, how you
+   work. Skip
    anything you are not sure about; defaults are safe (VAT is counted until an accountant says otherwise).
 3. Say yes to the one-minute tour, or tap "Try with sample data" to see it full.
 4. Log a shift with the big + button. The date moves forward by itself for the next one.
