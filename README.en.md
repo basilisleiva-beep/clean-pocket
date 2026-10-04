@@ -35,7 +35,7 @@ Needs [Node.js](https://nodejs.org) 22 LTS or newer for the tests (on Windows, `
 Node expanding the `tests/*.test.js` glob itself) and Python 3 for the local server and tools.
 
 ```
-npm test                                              # 30 unit tests: tax, calc, csv, i18n (node --test)
+npm test                                              # 33 unit tests: tax, calc, csv, i18n (node --test)
 python -m http.server 8790 --directory .              # serve the app
 ```
 
@@ -67,7 +67,8 @@ python tools/make_icons.py
   browser's `navigator.language`. Every later screen, including the rest of onboarding, renders
   in the chosen language immediately. An EL/EN toggle is always reachable in the Home top bar
   and in Settings.
-- Onboarding asks VAT regime, age/children, years active, EFKA category and days/week, with a
+- Onboarding asks VAT regime, age/children, years active, EFKA category, days/week and employment type
+  (freelancer only, or salaried employee and freelancer), with a
   "Παράλειψη" (skip) link on every step that jumps straight to a summary step applying whatever
   defaults were not yet answered. The summary repeats every choice with an "Αλλαγή" (change) link
   per row that jumps back into that step.
@@ -115,8 +116,8 @@ after the new worker takes control. Forgetting the bump means users never see th
 
 Vanilla ES modules, no build step, no npm dependencies.
 
-- `js/tax.js` - the 2026 Greek tax/EFKA/VAT engine (given, untouched, still covered by its own
-  7 tests). Pure functions, no DOM, no storage.
+- `js/tax.js` - the 2026 Greek tax/EFKA/VAT engine (given, covered by its own 7 tests; the only
+  addition is `efkaForEmployment`, tested in `calc.test.js`). Pure functions, no DOM, no storage.
 - `js/calc.js` - pure calculation engine: period totals (half-month/month/year), the annual
   profit projection (with its two fallback paths), EFKA proration for the period you're viewing,
   the obligations list (EFKA/VAT/income-tax/custom debts) with stable keys, "set aside", the

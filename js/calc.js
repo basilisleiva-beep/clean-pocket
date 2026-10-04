@@ -2,7 +2,7 @@
 // and returns numbers. Safe to run in the browser, in tests, or on a server.
 import {
   incomeTax, annualEstimate, vatSplit, efkaDue, vatQuarterDue, quarterOf,
-  taxInstallmentDates, RULES
+  taxInstallmentDates, efkaForEmployment, RULES
 } from "./tax.js";
 
 export function pad(v) { return String(v).padStart(2, "0"); }
@@ -39,9 +39,7 @@ export function efkaMonthly(settings) {
   if (s.efkaCategory === "first") amount = RULES.efka.first;
   else if (s.efkaCategory === "special") amount = RULES.efka.special;
   else amount = n(s.efkaCustomAmount);
-  // Salaried + freelancer: the salaried job's contributions cover the special-category amount
-  if (s.employmentType === "salariedFreelancer") amount = Math.max(0, amount - RULES.efka.special);
-  return amount;
+  return efkaForEmployment(amount, s.employmentType);
 }
 
 // Maps the onboarding "1-3" / "4+" answer to a numeric years-active value tax.js understands.
@@ -233,7 +231,8 @@ export function obligationsList(db, today) {
   var entries = activeEntries(db);
   var paidMap = db.obligationsPaid || {};
 
-  if (entries.length) {
+  // No EFKA cards when nothing is owed (e.g. salaried + freelancer in the special category).
+  if (entries.length && monthlyEfka > 0) {
     var firstDate = entries.reduce(function (a, e) { return e.date < a ? e.date : a; }, entries[0].date);
     var y = +firstDate.slice(0, 4), m = +firstDate.slice(5, 7);
     var todayY = +today.slice(0, 4), todayM = +today.slice(5, 7);

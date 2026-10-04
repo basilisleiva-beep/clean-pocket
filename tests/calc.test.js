@@ -189,3 +189,16 @@ test("EFKA: salaried + freelancer after 5 years pays the difference from the spe
   near(efkaMonthly(s), 90.31, 0.01);
 });
 
+
+test("obligations: no EFKA cards when the monthly EFKA is 0, cards with the difference otherwise", () => {
+  var entries = [{ id: "1", date: "2026-07-10", income: 100, tips: 0, hours: 8, exp: 0 }];
+  var db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "special" });
+  var list = obligationsList(db, "2026-09-15");
+  assert.equal(list.filter(o => o.type === "efka").length, 0);
+  assert.equal(list.filter(o => o.type === "tax").length, 8);
+
+  db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "first" });
+  var efka = obligationsList(db, "2026-09-15").filter(o => o.type === "efka");
+  assert.equal(efka.length, 3);
+  near(efka[0].amount, 90.31, 0.01);
+});

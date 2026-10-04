@@ -1201,7 +1201,7 @@ function renderOnbStep() {
     f.querySelector("input").value = db.settings.daysPerWeek || 5;
     f.querySelector("input").addEventListener("input", function () { db.settings.daysPerWeek = Math.max(1, Math.min(7, +this.value || 5)); });
     body.appendChild(f);
-      } else if (onbStep === 6) {
+  } else if (onbStep === 6) {
     $("onbTitle").textContent = I.t("onb.step6.title");
     body.appendChild(opt("a", "onb.step6.freelancer", "employmentType", "freelancer"));
     body.appendChild(opt("b", "onb.step6.salariedFreelancer", "employmentType", "salariedFreelancer"));
@@ -1213,7 +1213,7 @@ function renderOnbStep() {
     onbSummaryRow(body, "onb.step3.title", I.t(db.settings.yearsActive === "4+" ? "onb.step3.b" : "onb.step3.a"), 3);
     onbSummaryRow(body, "onb.step4.title", I.t("onb.step4." + (db.settings.efkaCategory || "special")), 4);
     onbSummaryRow(body, "onb.step5.title", I.t("onb.summary.days", { d: db.settings.daysPerWeek || 5 }), 5);
-     onbSummaryRow(body, "onb.step6.title", I.t("onb.step6." + (db.settings.employmentType || "freelancer")), 6);
+    onbSummaryRow(body, "onb.step6.title", I.t("onb.step6." + (db.settings.employmentType || "freelancer")), 6);
   }
 }
 $("onbNext").addEventListener("click", function () {

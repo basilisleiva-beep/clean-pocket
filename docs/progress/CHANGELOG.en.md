@@ -5,6 +5,20 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.7 · 2026-10-04
+- New onboarding step, "How do you work?": freelancer only (default) or salaried employee and freelancer.
+  The summary now has 7 rows.
+- For salaried + freelancer the monthly EFKA is reduced by the special-category amount (special category:
+  0.00; 1st category: 90.31). The rule lives in `js/tax.js` (`efkaForEmployment`). Confirmed by an
+  accountant. Income tax does not take the salary into account yet.
+- When the monthly EFKA is 0, no EFKA cards are created in the obligations.
+- `package.json` follows the `sw.js` version again.
+- Verified: `npm test` 33/33 (tax 7, calc 16, csv 7, i18n 3), smoke 25 checks × 2 languages PASS (7-row
+  summary), `tools/contrast.py` 16/16.
+
+## 3.1.6 · 2026-09-28
+- `mobile-web-app-capable` meta and `crossorigin="use-credentials"` on the manifest link.
+
 ## 3.1.5 · 2026-09-27
 - The privacy policy now lists a contact email (cleanpockethr@gmail.com) instead of GitHub Issues.
 
