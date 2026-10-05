@@ -1360,11 +1360,10 @@ function renderBanners() {
   var lastBackup = db.lastBackup;
   var hasData = C.realEntries(db).length > 0;
   if (!hasData) { $("backupBar").hidden = true; $("lastBackupNote").textContent = I.t("more.dataEmpty"); return; }
-  // never backed up: nag only once there is something worth losing (10+ shifts or a week of history)
+  // never backed up: remind from the first shift; after a backup, remind again every 7 days
   var ents = C.realEntries(db);
   var firstDate = ents.reduce(function (a, e) { return e.date < a ? e.date : a; }, today());
-  var worthIt = ents.length >= 10 || (Date.now() - new Date(firstDate).getTime()) > 7 * 86400000;
-  var stale = lastBackup ? (Date.now() - new Date(lastBackup).getTime()) > 14 * 86400000 : worthIt;
+  var stale = lastBackup ? (Date.now() - new Date(lastBackup).getTime()) > 7 * 86400000 : true;
   $("lastBackupNote").textContent = I.t("more.dataSummary", { n: ents.length, first: I.fmtDateShort(firstDate), last: lastBackup ? I.fmtDateShort(lastBackup) : I.t("more.never") });
   var snoozeUntil = +(localStorage.getItem("cp_backup_snooze") || 0);
   $("backupBar").hidden = !stale || Date.now() < snoozeUntil;
