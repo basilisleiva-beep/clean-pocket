@@ -22,7 +22,7 @@ var LABELS = {
   installBtn: "install.btn", installLater: "install.later", updateBtn: "sw.update",
   backupNowBtn: "backup.now", backupLaterBtn: "backup.later",
   navHomeLbl: "nav.home", navCalLbl: "nav.calendar", navOblLbl: "nav.obligations", navMoreLbl: "nav.more",
-  "h-last7": "home.last7", "h-breakdown": "home.breakdown", "h-nextdue": "home.nextDue",
+  "h-last7": "home.last7", "h-breakdown": "home.breakdown",
   lblTotHours: "home.hours", lblPerHour: "home.perHour", lblPerShift: "home.perShift",
   "h-cal-title-top": "nav.calendar", lgDone: "cal.done", lgMissing: "cal.missing", lgOff: "cal.off", lgVat: "cal.vat",
   "h-obl-top": "nav.obligations", "h-obl": "obl.title", "h-setaside": "home.setaside", "h-add-debt": "obl.addDebtBtn",
@@ -421,28 +421,8 @@ function renderHome() {
   }
 
   renderFirstShiftExplainer();
-  renderNextDue();
   renderGoalMini();
   renderWeek();
-}
-
-function renderNextDue() {
-  var list = C.obligationsList(db, today()).filter(function (o) { return !o.paid; }).slice(0, 3);
-  var ul = $("nextDueList"); ul.innerHTML = "";
-  if (!list.length) {
-    var li = document.createElement("li"); li.textContent = I.t("home.noDue"); ul.appendChild(li);
-    return;
-  }
-  list.forEach(function (o) {
-    var li = document.createElement("li");
-    var late = o.due < today();
-    li.innerHTML = '<span><span class="oname"></span><br><span class="odue' + (late ? " late" : "") + '"></span></span><span class="oamt"></span>';
-    li.querySelector(".oname").textContent = obligationLabel(o);
-    var cb = li.querySelector(".opaid input"); if (cb) cb.setAttribute("aria-label", I.t("obl.paidLabel", { o: obligationLabel(o) }));
-    li.querySelector(".odue").textContent = (late ? I.t("obl.overdue") + " · " : "") + I.fmtDateShort(o.due);
-    li.querySelector(".oamt").textContent = I.fmtEUR(o.amount);
-    ul.appendChild(li);
-  });
 }
 
 function obligationLabel(o) {
