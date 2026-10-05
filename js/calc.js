@@ -1,7 +1,7 @@
 // Clean Pocket: pure calculation engine. No DOM, no storage - takes (db, todayISO)
 // and returns numbers. Safe to run in the browser, in tests, or on a server.
 import {
-  incomeTax, annualEstimate, vatSplit, efkaDue, vatQuarterDue, quarterOf,
+  incomeTax, annualEstimate, vatSplit, efkaDue, vatMonthDue,
   taxInstallmentDates, efkaForEmployment, RULES
 } from "./tax.js";
 
@@ -263,22 +263,15 @@ export function obligationsList(db, today) {
   }
 
   if (vatConfig(db).on) {
-    var quarters = {};
-    entries.forEach(function (e) {
-      var ey = +e.date.slice(0, 4), em = +e.date.slice(5, 7), q = quarterOf(em);
-      quarters[ey + "-Q" + q] = { y: ey, q: q };
-    });
-    Object.keys(quarters).sort().forEach(function (qk) {
-      var q = quarters[qk];
-      var months = [(q.q - 1) * 3 + 1, (q.q - 1) * 3 + 2, (q.q - 1) * 3 + 3];
-      var t = { vatOut: 0, vatInShift: 0, vatInFixed: 0 };
-      months.forEach(function (mm) {
-        var mt = periodTotals(db, q.y + "-" + pad(mm) + "-0");
-        t.vatOut += mt.vatOut; t.vatInShift += mt.vatInShift; t.vatInFixed += mt.vatInFixed;
-      });
-      var amount = t.vatOut - t.vatInShift - t.vatInFixed;
-      var key = "vat-" + q.y + "-Q" + q.q;
-      out.push({ key: key, type: "vat", label: "ΦΠΑ Q" + q.q + " " + q.y, amount: amount, due: vatQuarterDue(q.y, q.q), paid: !!paidMap[key] });
+    // One VAT obligation per month with shifts, reminded on the 1st of the next month.
+    var vatMonths = {};
+    entries.forEach(function (e) { vatMonths[e.date.slice(0, 7)] = true; });
+    Object.keys(vatMonths).sort().forEach(function (ym) {
+      var vy = +ym.slice(0, 4), vm = +ym.slice(5, 7);
+      var mt = periodTotals(db, ym + "-0");
+      var amount = mt.vatOut - mt.vatInShift - mt.vatInFixed;
+      var key = "vat-" + ym;
+      out.push({ key: key, type: "vat", label: "ΦΠΑ " + pad(vm) + "/" + vy, amount: amount, due: vatMonthDue(vy, vm), paid: !!paidMap[key] });
     });
   }
 
@@ -324,8 +317,6 @@ export function incomeTaxReserveYTD(db, today) {
 export function setAside(db, today) {
   var obligations = obligationsList(db, today);
   var todayYM = today.slice(0, 7);
-  var todayYear = +today.slice(0, 4);
-  var todayMonth = +today.slice(5, 7);
   var efka = 0, vat = 0;
   obligations.forEach(function (o) {
     if (o.paid) return;
@@ -333,11 +324,7 @@ export function setAside(db, today) {
       var ym = o.key.slice(5);
       if (ym <= todayYM) efka += o.amount;
     } else if (o.type === "vat") {
-      var m = /^vat-(\d+)-Q(\d)$/.exec(o.key);
-      if (m) {
-        var qy = +m[1], q = +m[2], qStartMonth = (q - 1) * 3 + 1;
-        if (qy < todayYear || (qy === todayYear && qStartMonth <= todayMonth)) vat += o.amount;
-      }
+      if (o.key.slice(4) <= todayYM) vat += o.amount;
     }
   });
   var tax = incomeTaxReserveYTD(db, today);

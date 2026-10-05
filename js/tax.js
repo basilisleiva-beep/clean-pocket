@@ -94,6 +94,9 @@ export function efkaDue(y, m) { var n = addMonths(y, m, 1); return iso(n[0], n[1
 
 // Single-entry books (most riders): VAT is filed per quarter, due by the end of the next month.
 export function vatQuarterDue(y, q) { var n = addMonths(y, q * 3, 1); return iso(n[0], n[1], lastDay(n[0], n[1])); }
+
+// Riders remit VAT every month; the app reminds them on the 1st of the next month.
+export function vatMonthDue(y, m) { var n = addMonths(y, m, 1); return iso(n[0], n[1], 1); }
 export function quarterOf(m) { return Math.floor((m - 1) / 3) + 1; }
 
 // Income tax of taxYear (plus next year's prepayment) is paid in 8 installments, July to February.

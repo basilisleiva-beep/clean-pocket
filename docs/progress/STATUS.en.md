@@ -7,7 +7,7 @@
 > Keep this file and the Greek `STATUS.md` in sync.
 
 **Last verified:** 2026-10-05 (Athens): `npm test`, smoke; contrast is from 2026-10-04, the manual rows from 2026-09-26
-**Version:** 3.1.11 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
+**Version:** 3.1.12 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
 **Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
 handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
 `docs/original-v2.html`
@@ -21,7 +21,7 @@ uploaded yet; developer account and the Play App Signing SHA-256 are pending (co
 ## What it is
 Mobile-first offline PWA for Greek freelance food-delivery couriers, in Greek or English by the user's choice.
 Shows what a shift really leaves after expenses, EFKA, income tax and VAT, per half-month / month / year, plus
-upcoming obligations (EFKA monthly, VAT quarterly, 8 income-tax installments once there are three months of shifts, custom debts) and goals (annual net,
+upcoming obligations (EFKA monthly, VAT monthly with a reminder on the 1st of the next month, 8 income-tax installments once there are three months of shifts, custom debts) and goals (annual net,
 savings). First run: language, 6 setup questions (all skippable), summary, then an optional 6-step guided tour
 and "try with sample data".
 
@@ -67,8 +67,7 @@ localStorage before and after.
 1. **Accountant check** of three sample riders against the app before any stranger relies on a number. Not started.
    For salaried + freelancer (3.1.7) the EFKA reduction by the special-category amount was confirmed by an
    accountant; income tax is still computed without the salary, so it may come out lower than the real one.
-2. **Monthly VAT.** Riders remit VAT every month; the app still computes it per quarter, so each obligation
-   has the wrong amount and due date. Waiting on the accountant for the monthly due day.
+2. **Monthly VAT.** Done in 3.1.12: reminder on the 1st of the next month.
 3. **"Net for you" relies on the projection.** Since 3.1.11 tax installments are hidden for the first three
    months because the projection from a few shifts is unreliable, yet the tax subtracted from "Net" comes from
    the same projection. Needs a decision.

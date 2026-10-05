@@ -427,7 +427,7 @@ function renderHome() {
 
 function obligationLabel(o) {
   if (o.type === "efka") { var p = o.key.split("-"); return I.t("obl.efka", { m: p[1] + "/" + p[2] }); }
-  if (o.type === "vat") { var m = /^vat-(\d+)-Q(\d)$/.exec(o.key); return I.t("obl.vat", { q: "Q" + m[2] + " " + m[1] }); }
+  if (o.type === "vat") { var v = o.key.split("-"); return I.t("obl.vat", { q: v[2] + "/" + v[1] }); }
   if (o.type === "tax") { var idx = +o.key.split("-")[2] + 1; return I.t("obl.tax", { i: idx, n: RULES.taxInstallments }) + " (" + I.t("obl.estimate") + ")"; }
   return o.label;
 }
