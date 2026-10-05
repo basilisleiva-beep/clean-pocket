@@ -558,6 +558,10 @@ function renderObligations() {
   $("setAsideNote").textContent = I.t("obl.setAsideNote");
   $("setAsideBig").textContent = I.fmtEUR(sa.total);
 
+  var taxNote = $("taxPendingNote");
+  taxNote.textContent = I.t("obl.taxPending");
+  taxNote.hidden = !C.realEntries(db).length || C.taxEstimateReady(db, today());
+
   var list = C.obligationsList(db, today());
   var ul = $("oblList"); ul.innerHTML = "";
   $("oblEmptyAddBtn").hidden = list.length > 0;

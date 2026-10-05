@@ -29,7 +29,7 @@ export const STRINGS = {
   "home.perHour": { el: "καθαρά/ώρα", en: "net/hour" },
   "home.perShift": { el: "καθαρά/βάρδια", en: "net/shift" },
   "home.hours": { el: "ώρες", en: "hours" },
-  "home.explainer": { el: "Από αυτή τη βάρδια κράτα {amt} για ΕΦΚΑ και φόρο.", en: "From this shift, set aside {amt} for EFKA and tax." },
+  "home.explainer": { el: "Από αυτή τη βάρδια, περίπου {amt} αντιστοιχούν σε ΕΦΚΑ και φόρο.", en: "From this shift, about {amt} goes to EFKA and tax." },
   "home.presumedWarning": { el: "Χωρίς το ελάχιστο τεκμαρτό εισόδημα από τον λογιστή σου, ο πραγματικός φόρος μπορεί να είναι μεγαλύτερος.", en: "Without the minimum presumed income from your accountant, the real tax may be higher." },
   "home.taxRateNote": { el: "Εκτιμώμενος φορολογικός συντελεστής: {r}%, με βάση ετήσιο κέρδος περίπου {p}.", en: "Estimated tax rate: {r}%, based on an annual profit of about {p}." },
 
@@ -87,7 +87,8 @@ export const STRINGS = {
   "obl.repeatNone": { el: "Καμία", en: "None" },
   "obl.repeatMonthly": { el: "Μηνιαία", en: "Monthly" },
   "obl.addDebtBtn": { el: "Προσθήκη χρέους", en: "Add debt" },
-  "obl.setAsideNote": { el: "Το ΕΦΚΑ που δεν έχεις πληρώσει μέχρι τώρα, συν τον φόρο που έχεις μαζέψει φέτος. Ο ΦΠΑ δεν μπαίνει εδώ: τον δίνει η πλατφόρμα ξεχωριστά, και τον βλέπεις στη δική του κάρτα πιο κάτω.", en: "Unpaid EFKA so far, plus the tax reserve you have built up this year. VAT is not included: the platform pays it to you separately, and it has its own card below." },
+  "obl.setAsideNote": { el: "Το ΕΦΚΑ που δεν έχεις πληρώσει μέχρι τώρα. Ο ΦΠΑ και ο φόρος εισοδήματος δεν μπαίνουν εδώ· τους βλέπεις ως υποχρεώσεις πιο κάτω.", en: "Unpaid EFKA so far. VAT and income tax are not included; you see them as obligations below." },
+  "obl.taxPending": { el: "Η εκτίμηση του φόρου θα εμφανιστεί όταν καταγράψεις βάρδιες για τρεις μήνες. Μέχρι τότε δεν υπάρχουν αρκετά στοιχεία για αξιόπιστο υπολογισμό.", en: "The tax estimate will appear once you have logged shifts for three months. Until then there is not enough data for a reliable figure." },
 
   "goal.title": { el: "Ετήσιος στόχος καθαρών {y}", en: "{y} annual net goal" },
   "goal.placeholder": { el: "π.χ. 20000", en: "e.g. 20000" },
@@ -256,7 +257,7 @@ export const STRINGS = {
   "home.emptyAdd": { el: "Πρόσθεσε την πρώτη", en: "Add your first" },
   "home.earnedCaption": { el: "μαζί με tips", en: "with tips" },
   "home.yoursCaption": { el: "μετά από όλα", en: "after everything" },
-  "home.setasideCaption": { el: "ΕΦΚΑ + φόρος", en: "EFKA + tax" },
+  "home.setasideCaption": { el: "ΕΦΚΑ", en: "EFKA" },
 
   "cal.emptyNote": { el: "Δεν έχεις καταχωρίσεις ακόμη.", en: "You have no entries yet." },
   "obl.emptyAction": { el: "Προσθήκη βάρδιας", en: "Add shift" },

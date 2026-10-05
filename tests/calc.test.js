@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { emptyDB, importInto } from "../js/store.js";
 import {
-  projectedAnnual, efkaShareForKey, obligationsList, setAside, periodTotalsHalf,
+  completedHalves, taxEstimateReady, projectedAnnual, efkaShareForKey, obligationsList, setAside, periodTotalsHalf,
   annualGoalStats, hoursForGoal, activeEntries, realEntries, efkaMonthly
 } from "../js/calc.js";
 
@@ -71,6 +71,7 @@ test("obligations: stable keys and correct due dates for EFKA and VAT", () => {
   var db = emptyDB();
   db.settings.vatRegime = "normal";
   db.entries = [{ id: "1", date: "2026-07-10", income: 100, tips: 0, hours: 8, exp: 0 }];
+  db.settings.annualOverride = 15000; // one shift is too little history for tax installments otherwise
   var list = obligationsList(db, "2026-09-15");
   var efkaKeys = list.filter(o => o.type === "efka").map(o => o.key);
   assert.deepEqual(efkaKeys, ["efka-2026-07", "efka-2026-08", "efka-2026-09"]);
@@ -98,7 +99,7 @@ test("obligations: custom debts appear with a stable key, monthly repeat generat
   assert.equal(monthly[1].due, "2026-10-10");
 });
 
-test("set aside: sums unpaid EFKA to date and the YTD income-tax reserve; VAT stays out of the total", () => {
+test("set aside: only unpaid EFKA to date; VAT and income tax stay out of the total", () => {
   var db = emptyDB();
   db.settings.vatRegime = "normal";
   db.settings.efkaCategory = "first";
@@ -112,7 +113,7 @@ test("set aside: sums unpaid EFKA to date and the YTD income-tax reserve; VAT st
   assert.ok(sa.efka > 0);
   assert.ok(sa.tax >= 0);
   assert.ok(sa.vat > 0); // still computed, the VAT obligation card uses it
-  near(sa.total, sa.efka + sa.tax, 0.01);
+  near(sa.total, sa.efka, 0.01);
 });
 
 test("set aside: marking an obligation paid removes it from the total", () => {
@@ -196,10 +197,28 @@ test("obligations: no EFKA cards when the monthly EFKA is 0, cards with the diff
   var db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "special" });
   var list = obligationsList(db, "2026-09-15");
   assert.equal(list.filter(o => o.type === "efka").length, 0);
-  assert.equal(list.filter(o => o.type === "tax").length, 8);
 
   db = dbWithEntries(entries, { employmentType: "salariedFreelancer", efkaCategory: "first" });
   var efka = obligationsList(db, "2026-09-15").filter(o => o.type === "efka");
   assert.equal(efka.length, 3);
   near(efka[0].amount, 90.31, 0.01);
+});
+
+test("obligations: tax installments appear only after shifts in 6 completed half-months", () => {
+  var dates = ["2026-01-05", "2026-01-20", "2026-02-05", "2026-02-20", "2026-03-05", "2026-03-20"];
+  var entries = dates.map(function (d, i) { return { id: String(i), date: d, income: 800, tips: 0, hours: 30, exp: 0 }; });
+  var db = dbWithEntries(entries, {});
+  // On 25/3 the second half of March is still running, so only 5 half-months are complete.
+  assert.equal(completedHalves(db, "2026-03-25"), 5);
+  assert.equal(taxEstimateReady(db, "2026-03-25"), false);
+  assert.equal(obligationsList(db, "2026-03-25").filter(o => o.type === "tax").length, 0);
+  // On 2/4 it is over: 6 complete half-months, the installments appear.
+  assert.equal(taxEstimateReady(db, "2026-04-02"), true);
+  assert.ok(obligationsList(db, "2026-04-02").filter(o => o.type === "tax").length > 0);
+});
+
+test("obligations: a hand-entered annual income shows the tax installments right away", () => {
+  var db = dbWithEntries([{ id: "1", date: "2026-09-01", income: 80, tips: 0, hours: 6, exp: 0 }], { annualOverride: 15000 });
+  assert.equal(taxEstimateReady(db, "2026-09-10"), true);
+  assert.ok(obligationsList(db, "2026-09-10").filter(o => o.type === "tax").length > 0);
 });

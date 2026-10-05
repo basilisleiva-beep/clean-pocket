@@ -146,6 +146,22 @@ export function yearTotals(db, year) {
 
 // ---- annual profit projection ----
 
+// Tax installments are only shown once there is enough history to project a whole year:
+// shifts in at least 6 half-months that are already over (about three months of work),
+// or an annual income the user entered by hand.
+var TAX_ESTIMATE_MIN_HALVES = 6;
+
+// Half-months that have at least one shift and are already over (the current one is still filling up).
+export function completedHalves(db, today) {
+  var todayKey = halfKeyOf(today), keys = {};
+  activeEntries(db).forEach(function (e) { keys[halfKeyOf(e.date)] = true; });
+  return Object.keys(keys).filter(function (k) { return k !== todayKey; }).length;
+}
+
+export function taxEstimateReady(db, today) {
+  return n(db.settings && db.settings.annualOverride) > 0 || completedHalves(db, today) >= TAX_ESTIMATE_MIN_HALVES;
+}
+
 export function projectedAnnual(db, today) {
   var manual = n(db.settings && db.settings.annualOverride);
   if (manual > 0) return manual;
@@ -269,7 +285,7 @@ export function obligationsList(db, today) {
   var year = +today.slice(0, 4);
   var est = annualTaxEstimate(db, today);
   var perInstallment = (est.tax + est.prepay) / RULES.taxInstallments;
-  if (perInstallment > 0.005) taxInstallmentDates(year).forEach(function (d, i) {
+  if (perInstallment > 0.005 && taxEstimateReady(db, today)) taxInstallmentDates(year).forEach(function (d, i) {
     var key = "tax-" + year + "-" + i;
     out.push({ key: key, type: "tax", label: "Δόση φόρου " + (i + 1) + "/" + RULES.taxInstallments, amount: perInstallment, due: d, estimate: true, paid: !!paidMap[key] });
   });
@@ -325,7 +341,7 @@ export function setAside(db, today) {
     }
   });
   var tax = incomeTaxReserveYTD(db, today);
-  return { efka: efka, vat: vat, tax: tax, total: efka + tax };
+  return { efka: efka, vat: vat, tax: tax, total: efka };
 }
 
 // ---- annual goal ----
