@@ -22,8 +22,6 @@ export const STRINGS = {
   "home.earned": { el: "Κέρδισες", en: "You earned" },
   "home.yours": { el: "Δικά σου", en: "Yours" },
   "home.setaside": { el: "Κράτα στην άκρη", en: "Set aside" },
-  "home.nextDue": { el: "Επόμενες υποχρεώσεις", en: "Coming up" },
-  "home.noDue": { el: "Καμία εκκρεμότητα προς το παρόν.", en: "Nothing due right now." },
   "home.goalMini": { el: "Στόχος έτους {y}", en: "{y} annual goal" },
   "home.last7": { el: "Τελευταίες 7 ημέρες", en: "Last 7 days" },
   "home.last7empty": { el: "Δεν υπάρχουν καταχωρίσεις τις τελευταίες 7 ημέρες.", en: "No entries in the last 7 days." },

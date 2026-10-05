@@ -411,18 +411,17 @@ td.r, th.r { text-align: right; }
    without this the cards would replay their fade-in every time you leave Home and come back
    (via the bottom nav) instead of just once on first load. */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-body.boot-reveal #heroCard, body.boot-reveal #firstShiftExplainer, body.boot-reveal #nextDueCard,
+body.boot-reveal #heroCard, body.boot-reveal #firstShiftExplainer,
 body.boot-reveal #goalMiniCard, body.boot-reveal #last7Card, body.boot-reveal #breakdownCard {
   animation: fadeInUp .45s ease both;
 }
 body.boot-reveal #heroCard { animation-delay: 0ms; }
 body.boot-reveal #firstShiftExplainer { animation-delay: 60ms; }
-body.boot-reveal #nextDueCard { animation-delay: 120ms; }
 body.boot-reveal #goalMiniCard { animation-delay: 180ms; }
-body.boot-reveal #last7Card { animation-delay: 240ms; }
+body.boot-reveal #last7Card { animation-delay: 120ms; }
 body.boot-reveal #breakdownCard { animation-delay: 300ms; }
 @media (prefers-reduced-motion: reduce) {
-  body.boot-reveal #heroCard, body.boot-reveal #firstShiftExplainer, body.boot-reveal #nextDueCard,
+  body.boot-reveal #heroCard, body.boot-reveal #firstShiftExplainer,
   body.boot-reveal #goalMiniCard, body.boot-reveal #last7Card, body.boot-reveal #breakdownCard { animation: none; }
 }
 
