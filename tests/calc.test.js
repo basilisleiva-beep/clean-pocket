@@ -67,7 +67,7 @@ test("EFKA proration: the very first shift does not produce a scary negative num
   assert.ok(net > 0, "net should stay positive on day 1: " + net + " (efka share " + efkaShare + ")");
 });
 
-test("obligations: stable keys and correct due dates for EFKA and VAT", () => {
+test("obligations: stable keys and correct due dates for EFKA and monthly VAT", () => {
   var db = emptyDB();
   db.settings.vatRegime = "normal";
   db.entries = [{ id: "1", date: "2026-07-10", income: 100, tips: 0, hours: 8, exp: 0 }];
@@ -77,9 +77,11 @@ test("obligations: stable keys and correct due dates for EFKA and VAT", () => {
   assert.deepEqual(efkaKeys, ["efka-2026-07", "efka-2026-08", "efka-2026-09"]);
   var efkaJuly = list.find(o => o.key === "efka-2026-07");
   assert.equal(efkaJuly.due, "2026-08-31");
-  var vatQ3 = list.find(o => o.key === "vat-2026-Q3");
-  assert.ok(vatQ3, "expected a Q3 VAT obligation");
-  assert.equal(vatQ3.due, "2026-10-31");
+  var vatKeys = list.filter(o => o.type === "vat").map(o => o.key);
+  assert.deepEqual(vatKeys, ["vat-2026-07"]); // only months with shifts
+  var vatJuly = list.find(o => o.key === "vat-2026-07");
+  assert.equal(vatJuly.due, "2026-08-01");
+  near(vatJuly.amount, 24, 0.01); // 24% of the 100 EUR shift
   var taxKeys = list.filter(o => o.type === "tax").map(o => o.key);
   assert.equal(taxKeys.length, 8);
   assert.equal(taxKeys[0], "tax-2026-0");

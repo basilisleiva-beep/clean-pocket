@@ -5,6 +5,12 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.12 · 2026-10-06
+- VAT is now computed **per month** (was: per quarter), because riders remit it every month. One obligation for
+  each month with shifts, reminded on the 1st of the next month, also shown on the calendar. Keys change from
+  `vat-2026-Q3` to `vat-2026-07`, so anyone who had ticked "Paid" on a quarterly VAT needs to tick the months.
+- Verified: `npm test` (tax: `vatMonthDue`; calc: keys, due date and amount of the monthly VAT).
+
 ## 3.1.11 · 2026-10-05
 - Income-tax installments appear in the obligations only once there are shifts in 6 completed half-months
   (about three months), or when the user has entered an annual income by hand. Until then an information note

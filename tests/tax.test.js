@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { incomeTax, annualEstimate, vatSplit, efkaDue, vatQuarterDue, taxInstallmentDates } from "../js/tax.js";
+import { incomeTax, annualEstimate, vatSplit, efkaDue, vatQuarterDue, vatMonthDue, taxInstallmentDates } from "../js/tax.js";
 
 const near = (a, b) => assert.ok(Math.abs(a - b) < 0.01, a + " != " + b);
 
@@ -61,6 +61,8 @@ test("due dates", () => {
   assert.equal(efkaDue(2026, 12), "2027-01-31");
   assert.equal(vatQuarterDue(2026, 1), "2026-04-30");
   assert.equal(vatQuarterDue(2026, 4), "2027-01-31");
+  assert.equal(vatMonthDue(2026, 9), "2026-10-01");
+  assert.equal(vatMonthDue(2026, 12), "2027-01-01");
   const t = taxInstallmentDates(2026);
   assert.equal(t.length, 8);
   assert.equal(t[0], "2027-07-31");
