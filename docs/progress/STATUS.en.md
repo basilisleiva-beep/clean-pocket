@@ -6,8 +6,8 @@
 > Conventions: verification means a command or a browser run whose raw output was seen, not a report.
 > Keep this file and the Greek `STATUS.md` in sync.
 
-**Last verified:** 2026-10-04 (Athens): `npm test`, smoke, contrast; the manual rows date from 2026-09-26
-**Version:** 3.1.7 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
+**Last verified:** 2026-10-05 (Athens): `npm test`, smoke; contrast is from 2026-10-04, the manual rows from 2026-09-26
+**Version:** 3.1.11 (sw.js CACHE_VERSION) · **Rounds done:** 1 (rebuild), 2 (UI/UX, language, onboarding, tour)
 **Location:** GitHub repo `basilisleiva-beep/clean-pocket`: app at the repository root (was `app/` in the
 handoff package), this file and the rest of the handoff material in `docs/`; original single-file app kept as
 `docs/original-v2.html`
@@ -21,7 +21,7 @@ uploaded yet; developer account and the Play App Signing SHA-256 are pending (co
 ## What it is
 Mobile-first offline PWA for Greek freelance food-delivery couriers, in Greek or English by the user's choice.
 Shows what a shift really leaves after expenses, EFKA, income tax and VAT, per half-month / month / year, plus
-upcoming obligations (EFKA monthly, VAT quarterly, 8 income-tax installments, custom debts) and goals (annual net,
+upcoming obligations (EFKA monthly, VAT quarterly, 8 income-tax installments once there are three months of shifts, custom debts) and goals (annual net,
 savings). First run: language, 6 setup questions (all skippable), summary, then an optional 6-step guided tour
 and "try with sample data".
 
@@ -29,10 +29,10 @@ and "try with sample data".
 | Claim | How verified | Result |
 |---|---|---|
 | Tax engine matches Law 5246/2025 + EFKA circ. 6/2026 | `npm test` (tests/tax.test.js) | 7/7 |
-| Period totals, projection fallback, EFKA proration, obligations, v2 import, sample data excluded from real counts, EFKA for salaried + freelancer, no EFKA cards when the amount is 0 | `npm test` (tests/calc.test.js) | 16/16 (2026-10-05) |
+| Period totals, projection fallback, EFKA proration, obligations, v2 import, sample data excluded from real counts, EFKA for salaried + freelancer, no EFKA cards when the amount is 0, VAT and income tax out of "Set aside", tax installments only after 6 completed half-months or a hand-entered annual income | `npm test` (tests/calc.test.js) | 17/17 (2026-10-05, 3.1.11) |
 | CSV parser: delimiters, decimal comma, 4 date formats, EL/EN headers | `npm test` (tests/csv.test.js) | 7/7 |
 | Every i18n key has el + en; no hard-coded Greek in index.html or app.js outside i18n | `npm test` (tests/i18n.test.js) | 3/3 |
-| Full flow in Greek AND English at 390x844: language step, skip → summary (7 rows), tour 1/6 → 6/6 → close, sample add/remove, first-shift explainer, 2 shifts → hero + set-aside, CSV import via preview, custom debt, reload persists, SW registered, share button, 0 console errors | `python tools/smoke.py` (25 checks × 2) | PASS, PASS (2026-10-04, 3.1.7, the summary now has 7 rows) |
+| Full flow in Greek AND English at 390x844: language step, skip → summary (7 rows), tour 1/6 → 6/6 → close, sample add/remove, first-shift explainer, 2 shifts → hero + set-aside, CSV import via preview, custom debt, reload persists, SW registered, share button, 0 console errors | `python tools/smoke.py` (25 checks × 2) | PASS, PASS (2026-10-04, 3.1.7). 2026-10-05, 3.1.11: every functional check PASS; the console check failed only on Google Fonts, unreachable from the test environment |
 | Contrast of --muted and --ink on --surface and --bg, 4 themes | `python tools/contrast.py` | 16/16 ≥ 4.5 (min 5.10, 2026-10-04) |
 | Hand run at 375px: language switch live on the same screen, summary, tour prompt, sample load, tour steps, obligations paid toggles, More/data | manual in the in-app browser | OK |
 | Data survives 2 plain reloads and a service-worker version update with the banner (3.1.1 → 3.1.2) | manual, 16 sample entries before/after | 16 / 16 |
@@ -67,20 +67,25 @@ localStorage before and after.
 1. **Accountant check** of three sample riders against the app before any stranger relies on a number. Not started.
    For salaried + freelancer (3.1.7) the EFKA reduction by the special-category amount was confirmed by an
    accountant; income tax is still computed without the salary, so it may come out lower than the real one.
-2. **Deploy** to free static HTTPS hosting. Done 2026-09-27 (GitHub Pages, see above). Zero spend.
-3. **Measurement** before the 20-30 rider test: anonymous counts (shifts logged per device, 7/14-day return) + feedback link.
-4. **Brand decision**: the app needs its own name and public identity before it ships (the reviewer's own brand
+2. **Monthly VAT.** Riders remit VAT every month; the app still computes it per quarter, so each obligation
+   has the wrong amount and due date. Waiting on the accountant for the monthly due day.
+3. **"Net for you" relies on the projection.** Since 3.1.11 tax installments are hidden for the first three
+   months because the projection from a few shifts is unreliable, yet the tax subtracted from "Net" comes from
+   the same projection. Needs a decision.
+4. **Deploy** to free static HTTPS hosting. Done 2026-09-27 (GitHub Pages, see above). Zero spend.
+5. **Measurement** before the 20-30 rider test: anonymous counts (shifts logged per device, 7/14-day return) + feedback link.
+6. **Brand decision**: the app needs its own name and public identity before it ships (the reviewer's own brand
    cannot carry a Greece-market product). Owner's decision.
-5. Weather picker untested by automation (best-effort, silent on failure).
-6. Tour spotlight uses a 9999px box-shadow; fine on modern phones, re-check on a low-end Android.
-7. Re-verify tax constants every January against ΑΑΔΕ/ΕΦΚΑ.
+7. Weather picker untested by automation (best-effort, silent on failure).
+8. Tour spotlight uses a 9999px box-shadow; fine on modern phones, re-check on a low-end Android.
+9. Re-verify tax constants every January against ΑΑΔΕ/ΕΦΚΑ.
 
 ## Success signal for the market test
 Share of riders who log 8+ shifts in 14 days. Installs do not count.
 
 ## How to work on it
 ```
-npm test                                   # 33 unit tests
+npm test                                   # 35 unit tests
 python -m http.server 8791 --directory .   # serve (launch.json entry "clean-pocket", port 8791)
 CP_BASE_URL=http://localhost:8791 python tools/smoke.py    # both languages, screenshots to _shots/round2/
 python tools/contrast.py

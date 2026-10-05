@@ -5,6 +5,37 @@
 Versions follow `CACHE_VERSION` in `sw.js`. Every entry names how it was verified.
 Keep this file and the Greek `CHANGELOG.md` in sync.
 
+## 3.1.11 · 2026-10-05
+- Income-tax installments appear in the obligations only once there are shifts in 6 completed half-months
+  (about three months), or when the user has entered an annual income by hand. Until then an information note
+  is shown. Before, the projection from a single shift produced installments that did not hold up (e.g. 184 a
+  month from one 60 EUR shift).
+- "Set aside" is now only the unpaid EFKA. "Net for you" still subtracts the estimated tax: the app informs,
+  it does not tell the rider how to manage their money.
+- The first-shift explainer is now informational ("about X goes to EFKA and tax").
+- Verified: `npm test` 35/35 (tax 7, calc 17, csv 8, i18n 3; 2 new tests for the 6 half-month threshold and
+  the hand-entered income). Smoke: every functional check PASS; the "0 console errors" check failed only on
+  loading Google Fonts, which the test environment could not reach.
+
+## 3.1.10 · 2026-10-05
+- The "Coming up" card left the home screen; obligations stay on the "Obligations & Goals" page. "Last 7
+  days" moved up in its place.
+- The GitHub Pages deploy of 3.1.9 was cancelled by GitHub (no runner available); its changes went live
+  together with 3.1.10.
+- Verified: `npm test` 33/33, smoke as in 3.1.11; live `sw.js` = 3.1.10.
+
+## 3.1.9 · 2026-10-05
+- VAT is no longer part of "Set aside": the platform pays it to the rider separately, so it stays only as an
+  obligation card with amount and due date. New note on the onboarding VAT question explaining when to pick
+  "Without VAT".
+- Verified: `npm test` 33/33.
+
+## 3.1.8 · 2026-10-05
+- The backup reminder appears from the first shift (was: after 10 shifts or a week) and again every 7 days
+  after a backup (was: 14), matching "Later". Prompted by a rider who lost his whole history after clearing
+  browser data.
+- Verified: `npm test` 33/33; in a private window, one shift → the bar appears, "Back up now" → it hides.
+
 ## 3.1.7 · 2026-10-04
 - New onboarding step, "How do you work?": freelancer only (default) or salaried employee and freelancer.
   The summary now has 7 rows.
