@@ -1152,6 +1152,8 @@ function renderOnbStep() {
     var lbl = document.createElement("label"); lbl.textContent = I.t("onb.step1.withVat"); body.appendChild(lbl);
     body.appendChild(opt("d", "onb.step1.withVatNo", "platformIncludesVat", false));
     body.appendChild(opt("e", "onb.step1.withVatYes", "platformIncludesVat", true));
+    var vatNote = document.createElement("p"); vatNote.className = "onb-note"; vatNote.textContent = I.t("onb.step1.withVatNote");
+    body.appendChild(vatNote);
   } else if (onbStep === 2) {
     $("onbTitle").textContent = I.t("onb.step2.title");
     var f1 = document.createElement("div"); f1.className = "field";
