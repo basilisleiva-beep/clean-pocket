@@ -325,7 +325,7 @@ export function setAside(db, today) {
     }
   });
   var tax = incomeTaxReserveYTD(db, today);
-  return { efka: efka, vat: vat, tax: tax, total: efka + vat + tax };
+  return { efka: efka, vat: vat, tax: tax, total: efka + tax };
 }
 
 // ---- annual goal ----

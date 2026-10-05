@@ -98,7 +98,7 @@ test("obligations: custom debts appear with a stable key, monthly repeat generat
   assert.equal(monthly[1].due, "2026-10-10");
 });
 
-test("set aside: sums unpaid EFKA to date, unpaid VAT to date and the YTD income-tax reserve", () => {
+test("set aside: sums unpaid EFKA to date and the YTD income-tax reserve; VAT stays out of the total", () => {
   var db = emptyDB();
   db.settings.vatRegime = "normal";
   db.settings.efkaCategory = "first";
@@ -111,7 +111,8 @@ test("set aside: sums unpaid EFKA to date, unpaid VAT to date and the YTD income
   // and only counted once its month has started, which it has -> 3 months of EFKA due to date.
   assert.ok(sa.efka > 0);
   assert.ok(sa.tax >= 0);
-  near(sa.total, sa.efka + sa.vat + sa.tax, 0.01);
+  assert.ok(sa.vat > 0); // still computed, the VAT obligation card uses it
+  near(sa.total, sa.efka + sa.tax, 0.01);
 });
 
 test("set aside: marking an obligation paid removes it from the total", () => {

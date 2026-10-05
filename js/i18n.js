@@ -89,7 +89,7 @@ export const STRINGS = {
   "obl.repeatNone": { el: "Καμία", en: "None" },
   "obl.repeatMonthly": { el: "Μηνιαία", en: "Monthly" },
   "obl.addDebtBtn": { el: "Προσθήκη χρέους", en: "Add debt" },
-  "obl.setAsideNote": { el: "Άθροισμα ΕΦΚΑ και ΦΠΑ που δεν έχεις πληρώσει μέχρι τώρα, συν τον φόρο που έχεις μαζέψει φέτος.", en: "Unpaid EFKA and VAT so far, plus the tax reserve you have built up this year." },
+  "obl.setAsideNote": { el: "Το ΕΦΚΑ που δεν έχεις πληρώσει μέχρι τώρα, συν τον φόρο που έχεις μαζέψει φέτος. Ο ΦΠΑ δεν μπαίνει εδώ: τον δίνει η πλατφόρμα ξεχωριστά, και τον βλέπεις στη δική του κάρτα πιο κάτω.", en: "Unpaid EFKA so far, plus the tax reserve you have built up this year. VAT is not included: the platform pays it to you separately, and it has its own card below." },
 
   "goal.title": { el: "Ετήσιος στόχος καθαρών {y}", en: "{y} annual net goal" },
   "goal.placeholder": { el: "π.χ. 20000", en: "e.g. 20000" },
@@ -165,6 +165,7 @@ export const STRINGS = {
   "onb.step1.withVat": { el: "Τα ποσά που καταχωρώ από την πλατφόρμα:", en: "The platform amounts I enter are:" },
   "onb.step1.withVatYes": { el: "Περιλαμβάνουν ΦΠΑ", en: "Include VAT" },
   "onb.step1.withVatNo": { el: "Χωρίς ΦΠΑ", en: "Without VAT" },
+  "onb.step1.withVatNote": { el: "Αν στις παραγγελίες βλέπεις τα ποσά χωρίς ΦΠΑ και η πλατφόρμα σού βάζει τον ΦΠΑ ξεχωριστά στην τράπεζα, διάλεξε «Χωρίς ΦΠΑ». Ο ΦΠΑ δεν αφαιρείται από τα καθαρά σου ούτε μπαίνει στο «Κράτα στην άκρη»· τον βλέπεις μόνο ως υποχρέωση, με το ποσό και την ημερομηνία πληρωμής.", en: "If the order amounts you see do not include VAT and the platform pays the VAT to your bank separately, choose \"Without VAT\". VAT is not taken from your net and is not part of \"Set aside\"; you only see it as an obligation, with the amount and the due date." },
   "onb.step2.title": { el: "Ηλικία και εξαρτώμενα τέκνα", en: "Age and dependent children" },
   "onb.step2.age": { el: "Ηλικία", en: "Age" },
   "onb.step2.children": { el: "Εξαρτώμενα τέκνα", en: "Dependent children" },
@@ -257,7 +258,7 @@ export const STRINGS = {
   "home.emptyAdd": { el: "Πρόσθεσε την πρώτη", en: "Add your first" },
   "home.earnedCaption": { el: "μαζί με tips", en: "with tips" },
   "home.yoursCaption": { el: "μετά από όλα", en: "after everything" },
-  "home.setasideCaption": { el: "ΕΦΚΑ + ΦΠΑ + φόρος", en: "EFKA + VAT + tax" },
+  "home.setasideCaption": { el: "ΕΦΚΑ + φόρος", en: "EFKA + tax" },
 
   "cal.emptyNote": { el: "Δεν έχεις καταχωρίσεις ακόμη.", en: "You have no entries yet." },
   "obl.emptyAction": { el: "Προσθήκη βάρδιας", en: "Add shift" },
