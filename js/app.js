@@ -368,8 +368,7 @@ function renderHome() {
     $("tSetAsideLbl").textContent = I.t("home.setaside");
     $("tEarned").textContent = I.fmtEUR(gross);
     $("tYours").textContent = I.fmtEUR(net);
-    var sa = C.setAside(db, today());
-    $("tSetAside").textContent = I.fmtEUR(sa.total);
+    $("tSetAside").textContent = I.fmtEUR(efkaShare);
 
     if (gross > 0) {
       var pct = function (v) { return Math.max(0, Math.min(100, (v / gross) * 100)); };
